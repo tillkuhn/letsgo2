@@ -1,0 +1,58 @@
+{
+  "generator-jhipster-kotlin": {
+    "promptValues": {
+      "packageName": "net.timafe.letsgo2"
+    },
+    "jhipsterVersion": "6.4.1",
+    "applicationType": "monolith",
+    "baseName": "letsgo2",
+    "packageName": "net.timafe.letsgo2",
+    "packageFolder": "net/timafe/letsgo2",
+    "serverPort": "8080",
+    "authenticationType": "oauth2",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "postgresql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "gradle",
+    "enableSwaggerCodegen": false,
+    "embeddableLaunchScript": false
+  },
+  "generator-jhipster": {
+    "promptValues": {
+      "nativeLanguage": "en"
+    },
+    "jhipsterVersion": "6.4.1",
+    "applicationType": "monolith",
+    "baseName": "letsgo2",
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "clientFramework": "angularX",
+    "clientTheme": "cosmo",
+    "clientThemeVariant": "primary",
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [
+      {
+        "name": "generator-jhipster-kotlin",
+        "version": "1.3.0"
+      }
+    ],
+    "enableTranslation": true,
+    "nativeLanguage": "en",
+    "languages": ["en", "de"],
+    "blueprints": [
+      {
+        "name": "generator-jhipster-kotlin",
+        "version": "1.3.0"
+      }
+    ]
+  }
+}

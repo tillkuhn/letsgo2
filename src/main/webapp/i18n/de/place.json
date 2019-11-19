@@ -1,0 +1,23 @@
+{
+  "letsgo2App": {
+    "place": {
+      "home": {
+        "title": "Places",
+        "createLabel": "Place erstellen",
+        "createOrEditLabel": "Place erstellen oder bearbeiten",
+        "notFound": "No Places found"
+      },
+      "created": "Place erstellt mit ID {{ param }}",
+      "updated": "Place aktualisiert mit ID {{ param }}",
+      "deleted": "Place gelöscht mit ID {{ param }}",
+      "delete": {
+        "question": "Soll Place {{ id }} wirklich dauerhaft gelöscht werden?"
+      },
+      "detail": {
+        "title": "Place"
+      },
+      "name": "Name",
+      "summary": "Summary"
+    }
+  }
+}

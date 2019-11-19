@@ -1,0 +1,11 @@
+version: '2'
+services:
+  letsgo2-postgresql:
+    image: postgres:11.5
+    # volumes:
+    #     - ~/volumes/jhipster/letsgo2/postgresql/:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=letsgo2
+      - POSTGRES_PASSWORD=
+    ports:
+      - 5432:5432

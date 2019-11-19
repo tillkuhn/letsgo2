@@ -1,0 +1,30 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "summary",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "imageUrl",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20191119085923",
+    "dto": "no",
+    "searchEngine": false,
+    "service": "no",
+    "entityTableName": "place",
+    "databaseType": "sql",
+    "jpaMetamodelFiltering": false,
+    "pagination": "no"
+}

@@ -1,0 +1,23 @@
+{
+  "letsgo2App": {
+    "region": {
+      "home": {
+        "title": "Regions",
+        "createLabel": "Region erstellen",
+        "createOrEditLabel": "Region erstellen oder bearbeiten",
+        "notFound": "No Regions found"
+      },
+      "created": "Region erstellt mit ID {{ param }}",
+      "updated": "Region aktualisiert mit ID {{ param }}",
+      "deleted": "Region gelöscht mit ID {{ param }}",
+      "delete": {
+        "question": "Soll Region {{ id }} wirklich dauerhaft gelöscht werden?"
+      },
+      "detail": {
+        "title": "Region"
+      },
+      "code": "Code",
+      "name": "Name"
+    }
+  }
+}
