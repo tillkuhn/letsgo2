@@ -2,7 +2,7 @@
 
 package net.timafe.letsgo2.security
 
-import java.util.Optional
+import java.util.*
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -58,13 +58,13 @@ fun isAuthenticated(): Boolean {
  * @return true if the current user has the authority, false otherwise.
  */
 fun isCurrentUserInRole(authority: String): Boolean {
-  val authentication = SecurityContextHolder.getContext().authentication
+    val authentication = SecurityContextHolder.getContext().authentication
 
-  if (authentication != null) {
-      return getAuthorities(authentication).any { it == authority }
-  }
+    if (authentication != null) {
+        return getAuthorities(authentication).any { it == authority }
+    }
 
-  return false
+    return false
 }
 
 fun getAuthorities(authentication: Authentication): List<String> {
@@ -78,17 +78,17 @@ fun getAuthorities(authentication: Authentication): List<String> {
         .map(GrantedAuthority::getAuthority)
 }
 
-    fun extractAuthorityFromClaims(claims: Map<String, Any>): List<GrantedAuthority> {
-        return mapRolesToGrantedAuthorities(getRolesFromClaims(claims))
-    }
+fun extractAuthorityFromClaims(claims: Map<String, Any>): List<GrantedAuthority> {
+    return mapRolesToGrantedAuthorities(getRolesFromClaims(claims))
+}
 
-    @Suppress("UNCHECKED_CAST")
-    fun getRolesFromClaims(claims: Map<String, Any>): Collection<String> {
-        return claims.getOrDefault("groups", claims.getOrDefault("roles", listOf<String>())) as Collection<String>
-    }
+@Suppress("UNCHECKED_CAST")
+fun getRolesFromClaims(claims: Map<String, Any>): Collection<String> {
+    return claims.getOrDefault("groups", claims.getOrDefault("roles", listOf<String>())) as Collection<String>
+}
 
-    fun mapRolesToGrantedAuthorities(roles: Collection<String>): List<GrantedAuthority> {
-        return roles
-            .filter { it.startsWith("ROLE_") }
-            .map { SimpleGrantedAuthority(it) }
-    }
+fun mapRolesToGrantedAuthorities(roles: Collection<String>): List<GrantedAuthority> {
+    return roles
+        .filter { it.startsWith("ROLE_") }
+        .map { SimpleGrantedAuthority(it) }
+}
