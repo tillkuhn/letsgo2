@@ -38,7 +38,7 @@ class SecurityConfiguration(
     private val problemSupport: SecurityProblemSupport
 ) : WebSecurityConfigurerAdapter() {
 
-    @Value("\${spring.security.oauth2.client.provider.oidc.issuer-uri}")
+    @Value("\${spring.security.oauth2.client.provider.cognito.issuer-uri}")
     private lateinit var issuerUri: String
 
     override fun configure(web: WebSecurity?) {
@@ -106,7 +106,10 @@ class SecurityConfiguration(
                 val oidcUserAuthority = authority as OidcUserAuthority
                 mappedAuthorities.addAll(
                     extractAuthorityFromClaims(
-                        oidcUserAuthority.userInfo.claims))
+                        // TODO Cognito specific
+                        oidcUserAuthority.idToken.claims
+                        // oidcUserAuthority.userInfo.claims
+                    ))
             }
             mappedAuthorities
         }

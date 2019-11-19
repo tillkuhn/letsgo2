@@ -84,7 +84,9 @@ fun extractAuthorityFromClaims(claims: Map<String, Any>): List<GrantedAuthority>
 
 @Suppress("UNCHECKED_CAST")
 fun getRolesFromClaims(claims: Map<String, Any>): Collection<String> {
-    return claims.getOrDefault("groups", claims.getOrDefault("roles", listOf<String>())) as Collection<String>
+    // TODO Cognito Specific
+    return listOf<String>("ROLE_USER", "ROLE_ADMIN")
+    // return claims.getOrDefault("groups", claims.getOrDefault("roles", listOf<String>())) as Collection<String>
 }
 
 fun mapRolesToGrantedAuthorities(roles: Collection<String>): List<GrantedAuthority> {
