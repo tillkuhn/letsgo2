@@ -104,6 +104,7 @@ spring:
   security:
     ## https://www.baeldung.com/spring-security-oauth-cognito
     ## https://stackoverflow.com/questions/48327369/amazon-cognito-oauth2-with-spring-security
+    ## https://docs.spring.io/spring-security/site/docs/current/reference/html/oauth2.html
     oauth2:
       client:
         registration:
