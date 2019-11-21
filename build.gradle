@@ -35,9 +35,9 @@ plugins {
 }
 
 group = "net.timafe.letsgo2"
-version = "0.0.1-SNAPSHOT"
+version = "0.0.2-SNAPSHOT"
 
-description = ""
+description = "Let's go to nice places ..."
 
 sourceCompatibility=1.8
 targetCompatibility=1.8
@@ -275,6 +275,13 @@ task cleanResources(type: Delete) {
 
 wrapper {
     gradleVersion = "5.6.2"
+}
+
+// create predictable app.jar artifact so we can use this generic name in Dockerfile ...
+// https://stackoverflow.com/questions/53123012/spring-boot-2-change-jar-name
+bootJar {
+    // archiveFileName = "${archiveBaseName.get()}.${archiveExtension.get()}"
+    archiveFileName = "app.${archiveExtension.get()}"
 }
 
 if (project.hasProperty("nodeInstall")) {
