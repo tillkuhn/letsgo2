@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api")
 class AuthInfoResource(
-    @Value("\${spring.security.oauth2.client.provider.oidc.issuer-uri:}")
+    @Value("\${spring.security.oauth2.client.provider.cognito.issuer-uri:}")
     private var issuer: String?,
-    @Value("\${spring.security.oauth2.client.registration.oidc.client-id:}")
+    @Value("\${spring.security.oauth2.client.registration.cognito.client-id:}")
     private var clientId: String?
 ) {
 

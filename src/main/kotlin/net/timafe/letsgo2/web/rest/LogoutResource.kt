@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController
  */
 @RestController
 class LogoutResource(registrations: ClientRegistrationRepository) {
-    private val registration: ClientRegistration = registrations.findByRegistrationId("oidc")
+    private val registration: ClientRegistration = registrations.findByRegistrationId("cognito")
 
     /**
      * `POST  /api/logout` : logout the current user.
