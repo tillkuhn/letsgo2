@@ -12,7 +12,7 @@ resource "local_file" "installscript" {
         domain_name=var.domain_name,
         bucket_name=aws_s3_bucket.data.bucket,
         appdir = "/opt/${var.appid}",
-        appid = "${var.appid}"
+        appid = var.appid
     })
     filename = "${path.module}/local/cloud-init.sh"
 }
@@ -27,11 +27,22 @@ resource "local_file" "nginxconf" {
 
 resource "local_file" "appservice" {
     content =  templatefile("${path.module}/files/app.service", {
+        domain_name=var.domain_name,
         appdir = "/opt/${var.appid}",
-        appid = "${var.appid}"
+        appid = var.appid,
+        oauth2_client_id = var.oauth2_client_id,
+        oauth2_client_secret= var.oauth2_client_secret,
+        oauth2_issuer_uri = var.oauth2_issuer_uri
     })
     filename = "${path.module}/local/${var.appid}.service"
 }
+
+//resource "local_file" "login" {
+//    content =  templatefile("${path.module}/files/login", { domain_name=var.domain_name})
+//    filename = "${path.module}/local/login"
+//    file_permission = "0755"
+//}
+
 resource "aws_s3_bucket_object" "installscript" {
     depends_on = ["local_file.installscript"]
     bucket = aws_s3_bucket.data.bucket

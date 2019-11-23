@@ -45,7 +45,7 @@ cp  ${appdir}/nginx.conf /etc/nginx/nginx.conf
 # curl http://169.254.169.254/latest/user-data
 
 ##
-echo "[INFO] Registering ${appid}.service as systemd service ..."
+echo "[INFO] Registering and starting ${appid}.service as systemd service"
 cp  ${appdir}/${appid}.service /etc/systemd/system
 systemctl enable ${appid}
-#systemctl start ${appid}
+systemctl start ${appid}

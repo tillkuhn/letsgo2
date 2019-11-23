@@ -64,3 +64,16 @@ variable "certbot_mail" {
   description = "mail for certbot interaction"
 }
 
+## oauth
+variable oauth2_issuer_uri {
+    type = "string"
+    description = "e.g. https://cognito-idp.eu-central-1.amazonaws.com/eu-central-somepool"
+}
+
+variable oauth2_client_id {
+    type = "string"
+}
+
+variable oauth2_client_secret {
+    type = "string"
+}
