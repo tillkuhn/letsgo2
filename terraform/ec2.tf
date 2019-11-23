@@ -1,42 +1,4 @@
 
-provider "aws" {
-  region = "eu-central-1"
-  version = "~> 2.34"
-}
-
-## see terraform-backend.tf.tmpl for s3 backend terraform state
-
-data "aws_vpc" "vpc" {
-  filter {
-    name = "tag:Name"
-    values = [
-      var.aws_vpc_name]
-  }
-}
-
-data "aws_subnet" "app_onea" {
-  filter {
-    name = "tag:Name"
-    values = [
-      var.aws_subnet_name]
-  }
-  vpc_id = data.aws_vpc.vpc.id
-}
-
-data "aws_security_group" "ssh" {
-  filter {
-    name = "tag:Name"
-    values = [
-      var.aws_ssh_security_group_name]
-  }
-}
-## SSH key for instance (BYOK)
-resource "aws_key_pair" "ssh_key" {
-  key_name    = var.appid
-  public_key  = file(var.ssh_pubkey_file)
-}
-
-
 ## security group for ec2
 resource "aws_security_group" "instance_sg" {
   name        = "${var.appid}-instance-sg"
@@ -97,12 +59,10 @@ resource "aws_instance" "instance" {
   key_name                = aws_key_pair.ssh_key.key_name
   ## User data is limited to 16 KB, in raw form, before it is base64-encoded.
   ## The size of a string of length n after base64-encoding is ceil(n/3)*4.
-  ## curl http://169.254.169.254/latest/user-data
-  ## cat cat /var/log/cloud-init-output.log
-  #user_data =  templatefile("${path.module}/files/user-data.sh", {
-  #  bucket_name=aws_s3_bucket.data.bucket,
-  #  appdir = "/opt/${var.appid}"
-  #})
+  user_data =  templatefile("${path.module}/files/user-data.sh", {
+    bucket_name=aws_s3_bucket.data.bucket,
+    appdir = "/opt/${var.appid}"
+  })
   tags = map("Name", "${var.appid}-instance", "appid", var.appid, "managedBy", "terraform")
   lifecycle {
     ignore_changes = [ "ami" ]

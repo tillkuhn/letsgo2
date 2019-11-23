@@ -4,7 +4,7 @@ APPID=letsgo2
 .ONESHELL:
 .SHELL := /usr/bin/bash
 #A phony target is one that is not really the name of a file; rather it is just a name for a recipe to be executed when you make an explicit request. There are two reasons to use a phony target: to avoid a conflict with a file of the same name, and to improve performance.
-.PHONY: help init plan build docker docker-run ui-build json-server localstack clean
+.PHONY: help tfinit tfplan tfapply build docker docker-run ui-build json-server localstack clean
 .SILENT: help ## no @s needed
 .EXPORT_ALL_VARIABLES:
 AWS_PROFILE = timafe
@@ -15,9 +15,9 @@ APPID=letsgo2
 help:
 	echo "Usage: make [target]"
 	echo "Targets:"
-	echo "  init        Inits infrastructure in infra with terraform"
-	echo "  plan        Plans infrastructure in infra with terraform"
-	echo "  apply       Applies infrastructure in infra with terraform"
+	echo "  tfinit      Inits infrastructure in infra with terraform"
+	echo "  tfplan      Plans infrastructure in infra with terraform"
+	echo "  tfapply     Applies infrastructure in infra with terraform (auto-approve)"
 	echo "  docker      docker build"
 	echo "  docker-run  docker run"
 	echo "  build       Creates runnable prod optimized jar with gradle"
@@ -30,9 +30,9 @@ help:
 	echo "  json-server Runs json-server to mock rest api for ui"
 	echo "  clean       Cleanup build / dist directories"
 
-init: ; cd infra; terraform init
-plan: ; cd infra; terraform plan
-apply: ; cd infra; terraform apply --auto-approve
+tfinit: ; cd terraform; terraform init
+tfplan: ; cd terraform; terraform plan
+tfapply: ; cd terraform; terraform apply --auto-approve
 build: ; gradle -Pprod bootJar
 docker: ; docker build -t $(APPID):latest .
 docker-run: ; docker run -p 8080:8080 --env-file local/env.list --name $(APPID) $(APPID):latest

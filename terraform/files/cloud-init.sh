@@ -1,45 +1,51 @@
 #!/usr/bin/env bash
+echo "[INFO] Running cloud-init custom script"
 if [ "$EUID" -ne 0 ]
-  then echo "Please run with sudo"
+  then echo "[FATAL] Detected UID $UID, please run with sudo"
   exit
 fi
-echo "Running cloud-init custom script ..."
-yum update -y
-amazon-linux-extras install java-openjdk11 -y
-amazon-linux-extras install nginx1 -y
+
+echo "[INFO] Updating packages, installing openjdk11 and nginx"
+yum install -y -q deltarpm
+yum update -y -q
+amazon-linux-extras install  -y -q java-openjdk11
+amazon-linux-extras install  -y -q nginx1
+
 wget -r --no-parent -A 'epel-release-*.rpm' http://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/
 rpm -Uvh dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-*.rpm
 yum-config-manager --enable epel*
-yum install -y certbot python2-certbot-nginx unzip
+yum install -y -q certbot python2-certbot-nginx unzip
 
+echo "[INFO] Creating ${appdir}, unpacking webapp "
 mkdir -p ${appdir}
 unzip -o ${appdir}/webapp.zip -d /usr/share/nginx/html
 
+echo "[INFO] Checking letsencrypt status "
 if [ -d /etc/letsencrypt/live ]; then
-  echo "/etc/letsencrypt already exists with contend, nothing do do"
+  echo "[INFO] /etc/letsencrypt already exists with contend, nothing do do"
 elif aws s3api head-object --bucket ${bucket_name} --key letsencrypt/letsencrypt.tar.gz; then
-  echo "local /etc/letsencrypt missing, downloading letsencrypt config from sr"
+  echo "[INFO] local /etc/letsencrypt missing, downloading letsencrypt config from sr"
   aws s3 cp s3://${bucket_name}/letsencrypt/letsencrypt.tar.gz ${appdir}/
   cd /etc
   tar -xvf ${appdir}/letsencrypt.tar.gz
 else
-  echo "not local or remote letsencrypt  nginx config found, new one will be requested"
+  echo "[INFO] No local or remote letsencrypt  nginx config found, new one will be requested"
 fi
-echo "Launching nginx and certbot ...."
+echo "[INFO] Launching nginx via systemd and start certbot for ${domain_name}"
 systemctl enable nginx
-systemctl stop nginx
+systemctl start nginx
 certbot --nginx -m ${certbot_mail} --agree-tos --redirect -n -d ${domain_name}
 
-echo "Sync letsencrypt with s3"
+echo "[INFO] Backup /etc/letsencrypt to s3://${bucket_name}"
 tar -C /etc -zcf /tmp/letsencrypt.tar.gz letsencrypt
 aws s3 cp --sse=AES256 /tmp/letsencrypt.tar.gz s3://${bucket_name}/letsencrypt/letsencrypt.tar.gz
 
-echo "Replacing nginx.conf with enhanced version ..."
+echo "[INFO] Replacing system nginx.conf with enhanced version ..."
 cp  ${appdir}/nginx.conf /etc/nginx/nginx.conf
 # curl http://169.254.169.254/latest/user-data
 
 ##
-echo "Registering ${appid}.service as systemd service ..."
+echo "[INFO] Registering ${appid}.service as systemd service ..."
 cp  ${appdir}/${appid}.service /etc/systemd/system
 systemctl enable ${appid}
-systemctl start ${appid}
+#systemctl start ${appid}
