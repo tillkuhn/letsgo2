@@ -4,7 +4,7 @@ APPID=letsgo2
 .ONESHELL:
 .SHELL := /usr/bin/bash
 #A phony target is one that is not really the name of a file; rather it is just a name for a recipe to be executed when you make an explicit request. There are two reasons to use a phony target: to avoid a conflict with a file of the same name, and to improve performance.
-.PHONY: help tfinit tfplan tfapply build docker docker-run ui-build json-server localstack clean
+.PHONY: help init plan apply stop start status login build docker deployjar deployui json-server localstack clean
 .SILENT: help ## no @s needed
 .EXPORT_ALL_VARIABLES:
 AWS_PROFILE = timafe
@@ -14,43 +14,53 @@ APPID=letsgo2
 # https://github.com/localstack/localstack/blob/master/Makefile get inspired
 help:
 	echo "Usage: make [target]"
-	echo "Targets:"
-	echo "  tfinit      Inits infrastructure in infra with terraform"
-	echo "  tfplan      Plans infrastructure in infra with terraform"
-	echo "  tfapply     Applies infrastructure in infra with terraform (auto-approve)"
-	echo "  docker      docker build"
-	echo "  docker-run  docker run"
-	echo "  build       Creates runnable prod optimized jar with gradle"
-	echo "  api-deploy  Deploys app.jar to s3"
-	echo "  api-run     Runs spring boot app in api"
-	echo "  ui-build    Creates frontend package in ui with yarn"
-	echo "  ui-deploy   Deploys webapp artifacts to s3"
-	echo "  ui-run      Runs user interface"
+	echo
+	echo "Terraform Targets:"
+	echo "  init        Inits infrastructure in infra with terraform"
+	echo "  plan        Plans infrastructure in infra with terraform"
+	echo "  apply       Applies infrastructure in infra with terraform (auto-approve)"
+	echo
+	echo "EC2 Targets:"
+	echo "  stop        Stops the EC2 instance"
+	echo "  start       Starts the EC2 instance"
+	echo "  status      Current Status of ec2 instance"
+	echo "  login       ssh login to instance"
+	echo
+	echo "Gradle / Docker Build Targets:"
+	echo "  docker      Run docker build"
+	echo "  build       Clean build production jar"
+	echo "  deployjar   Deploys app.jar to s3"
+	echo "  deployui    Runs spring boot app in api"
+	echo
+	echo "Mock / Local Dev Targets:"
 	echo "  localstack  Runs dynambodb / s3 mocks for spring boot"
 	echo "  json-server Runs json-server to mock rest api for ui"
 	echo "  clean       Cleanup build / dist directories"
+	echo
 
-tfinit: ; cd terraform; terraform init
-tfplan: ; cd terraform; terraform plan
-tfapply: ; cd terraform; terraform apply --auto-approve
-build: ; gradle -Pprod bootJar
+init: ; cd terraform; terraform init
+plan: ; cd terraform; terraform plan
+apply: ; cd terraform; terraform apply --auto-approve
+
+stop: ; aws ec2 stop-instances --instance-ids $(shell grep "^instance_id" terraform/local/setenv.sh |cut -d= -f2)
+start: ; aws ec2 start-instances --instance-ids $(shell grep "^instance_id" terraform/local/setenv.sh |cut -d= -f2)
+status: ; aws ec2 describe-instances --instance-ids $(shell grep "^instance_id" terraform/local/setenv.sh |cut -d= -f2) --query 'Reservations[].Instances[].State[].Name' --output text
+login: ; ssh -i mykey.pem -o StrictHostKeyChecking=no ec2-user@$(shell grep "^public_ip" terraform/local/setenv.sh |cut -d= -f2)
+
+build: ; gradle -Pprod clean bootJar
 docker: ; docker build -t $(APPID):latest .
-docker-run: ; docker run -p 8080:8080 --env-file local/env.list --name $(APPID) $(APPID):latest
-api-run: ; cd api; gradle bootRun
-ui-build: ; cd ui; yarn build:prod
-ui-run: ; cd ui; yarn start --open
 localstack: ; docker-compose -f api/docker-compose.yml up
+# docker-run: ; docker run -p 8080:8080 --env-file local/env.list --name $(APPID) $(APPID):latest
 json-server: ; cd ui; ./mock.sh
-ui-deploy:
+deployui:
 	$(AWS_CMD) s3 sync ui/dist/webapp s3://${S3_BUCKET_LOCATION}/deploy/webapp  --delete --size-only
 	$(AWS_CMD) s3 cp ui/dist/webapp/index.html s3://${S3_BUCKET_LOCATION}/deploy//webapp/index.html
     ## size-only is not good for index.html as the size may not change but the checksum of included scripts does
 
-api-deploy:
+deployjar:
 	$(AWS_CMD) s3 sync api/build/libs/app.jar s3://${S3_BUCKET_LOCATION}/deploy/app.jar
 
 #todo aws ec2 describe-instances --filters "Name=tag:Name,Values=MyInstance"
 #  aws ec2 describe-instances --filters "Name=tag:appid,Values=$APPID" --query "Reservations[].Instances[].InstanceId"
 clean:             ## Clean up (gradle + npm artifacts)
-	rm -rf ui/dist
-	rm -rf api/build
+	rm -rf build
