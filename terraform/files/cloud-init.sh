@@ -46,6 +46,6 @@ cp  ${appdir}/nginx.conf /etc/nginx/nginx.conf
 
 ##
 echo "[INFO] Registering and starting ${appid}.service as systemd service"
-cp  ${appdir}/${appid}.service /etc/systemd/system
+cp  ${appdir}/app.service /etc/systemd/system/${appid}.service
 systemctl enable ${appid}
 systemctl start ${appid}

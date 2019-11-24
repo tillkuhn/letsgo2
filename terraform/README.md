@@ -1,8 +1,13 @@
-### Certbot
+### Certbot + auto security updates
 
 * [Certbot Renewal](https://www.jhipster.tech/production/) Configure auto-renewal of SSL certificates: add 10 3 * * * /usr/bin/certbot renew --quiet in your crontab
+*  yum update --security -y
+* [cron d entries](https://stackoverflow.com/questions/878600/how-to-create-a-cron-job-using-bash-automatically-without-the-interactive-editor)
+### when lauch user-data?
+[How can I execute user data to automatically create a file with every restart of my Amazon EC2 instance?](https://aws.amazon.com/de/premiumsupport/knowledge-center/execute-user-data-ec2/)
+By default, user data scripts and cloud-init directives run only during the first boot cycle when an instance is launched. However, you can configure your user data script and cloud-init directives with a mime multi-part file. A mime multi-part file allows your script to override how frequently user data is executed in the cloud-init package. Then, the file executes the user script.
 
-### Useful
+### Useful commands
 ```
    curl http://169.254.169.254/latest/user-data
    cat cat /var/log/cloud-init-output.log

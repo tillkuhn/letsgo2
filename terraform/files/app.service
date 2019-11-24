@@ -10,17 +10,7 @@ SuccessExitStatus=143
 SyslogIdentifier=${appid}
 #StandardOutput=file:${appdir}/logs/stdout.log
 #StandardError=file:${appdir}/logs/stderr.log
-## check out EnvironmentFile=/run/metadata/coreos
-Environment=SPRING_DATASOURCE_URL=jdbc:h2:file:${appdir}/db/letsgo2;DB_CLOSE_DELAY=-1
-Environment=SPRING_PROFILES_ACTIVE=dev
-Environment=SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_COGNITO_ISSUER_URI=${oauth2_issuer_uri}
-Environment=SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_COGNITO_CLIENT_SECRET=${oauth2_client_secret}
-Environment=SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_COGNITO_CLIENT_ID=${oauth2_client_id}
-Environment=SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_COGNITO_REDIRECT_URI_TEMPLATE=https://${domain_name}/login/oauth2/code/cognito
-Environment=SPRING_MAIN_BANNER_MODE=off
-Environment=SERVER_USE_FORWARD_HEADERS=true
-Environment=JAVA_OPTS="--Xmx300m"
-
+EnvironmentFile=${appdir}/app.service.env
 
 [Install]
 WantedBy=multi-user.target

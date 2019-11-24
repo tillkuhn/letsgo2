@@ -5,27 +5,25 @@ resource "aws_s3_bucket" "data" {
   tags = map("Name", "${var.appid}-data", "appid", var.appid, "managedBy", "terraform")
 }
 
-## convert files first to substitute variables
-resource "local_file" "installscript" {
-    content =  templatefile("${path.module}/files/cloud-init.sh", {
-        certbot_mail = var.certbot_mail,
+## bucket object resources from /files
+resource "aws_s3_bucket_object" "appserviceenv" {
+    bucket = aws_s3_bucket.data.bucket
+    key    = "deploy/app.service.env"
+    content =  templatefile("${path.module}/files/app.service.env", {
         domain_name=var.domain_name,
-        bucket_name=aws_s3_bucket.data.bucket,
         appdir = "/opt/${var.appid}",
-        appid = var.appid
+        appid = var.appid,
+        oauth2_client_id = var.oauth2_client_id,
+        oauth2_client_secret= var.oauth2_client_secret,
+        oauth2_issuer_uri = var.oauth2_issuer_uri
     })
-    filename = "${path.module}/local/cloud-init.sh"
+    storage_class = "REDUCED_REDUNDANCY"
 }
 
-resource "local_file" "nginxconf" {
-    content =  templatefile("${path.module}/files/nginx.conf", {
-        domain_name=var.domain_name,
-        appdir = "/opt/${var.appid}"
-    })
-    filename = "${path.module}/local/nginx.conf"
-}
 
-resource "local_file" "appservice" {
+resource "aws_s3_bucket_object" "appservice" {
+    bucket = aws_s3_bucket.data.bucket
+    key    = "deploy/app.service"
     content =  templatefile("${path.module}/files/app.service", {
         domain_name=var.domain_name,
         appdir = "/opt/${var.appid}",
@@ -34,43 +32,33 @@ resource "local_file" "appservice" {
         oauth2_client_secret= var.oauth2_client_secret,
         oauth2_issuer_uri = var.oauth2_issuer_uri
     })
-    filename = "${path.module}/local/${var.appid}.service"
+    storage_class = "REDUCED_REDUNDANCY"
 }
 
-//resource "local_file" "login" {
-//    content =  templatefile("${path.module}/files/login", { domain_name=var.domain_name})
-//    filename = "${path.module}/local/login"
-//    file_permission = "0755"
-//}
-
 resource "aws_s3_bucket_object" "installscript" {
-    depends_on = ["local_file.installscript"]
     bucket = aws_s3_bucket.data.bucket
     key    = "deploy/cloud-init.sh"
-    source = local_file.installscript.filename
+    content =  templatefile("${path.module}/files/cloud-init.sh", {
+        certbot_mail = var.certbot_mail,
+        domain_name=var.domain_name,
+        bucket_name=aws_s3_bucket.data.bucket,
+        appdir = "/opt/${var.appid}",
+        appid = var.appid
+    })
     storage_class = "REDUCED_REDUNDANCY"
-    etag = filemd5("${path.module}/files/cloud-init.sh")
 }
 
 resource "aws_s3_bucket_object" "nginxconf" {
-    depends_on = ["local_file.nginxconf"]
     bucket = aws_s3_bucket.data.bucket
     key    = "deploy/nginx.conf"
-    source = local_file.nginxconf.filename
+    content =  templatefile("${path.module}/files/nginx.conf", {
+        domain_name=var.domain_name,
+        appdir = "/opt/${var.appid}"
+    })
     storage_class = "REDUCED_REDUNDANCY"
-    etag = filemd5( "${path.module}/files/nginx.conf" )
 }
 
-resource "aws_s3_bucket_object" "appservice" {
-    depends_on = ["local_file.appservice"]
-    bucket = aws_s3_bucket.data.bucket
-    key    = "deploy/${var.appid}.service"
-    source = local_file.appservice.filename
-    storage_class = "REDUCED_REDUNDANCY"
-    etag = filemd5( "${path.module}/files/app.service" )
-}
-
-
+## bucket object resources from generated app artifacts
 resource "aws_s3_bucket_object" "bootjar" {
     bucket = aws_s3_bucket.data.bucket
     key    = "deploy/app.jar"
@@ -83,11 +71,6 @@ data "archive_file" "webapp" {
     type        = "zip"
     output_path = "${path.module}/local/webapp.zip"
     source_dir = "${path.module}/../build/resources/main/static"
-    // source_dir = "lambda/node_modules"
-    //source {
-    //  content  = "${data.template_file.config_json.rendered}"
-    //  filename = "config.json"
-    //}
 }
 
 resource "aws_s3_bucket_object" "webapp" {
