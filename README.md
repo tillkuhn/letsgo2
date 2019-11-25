@@ -1,5 +1,6 @@
 ![kotlin-ci](https://github.com/tillkuhn/letsgo2-khipster/workflows/kotlin-ci/badge.svg)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+![angular-ci](https://github.com/tillkuhn/letsgo2-khipster/workflows/angular-ci/badge.svg)
+![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 # Let's go to ...
 
