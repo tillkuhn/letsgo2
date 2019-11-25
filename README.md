@@ -1,4 +1,6 @@
-# letsgo2
+![](https://github.com/tillkuhn/letsgo2-khipster/workflows/kotlin-ci/badge.svg)
+
+# Let's go to ...
 
 This application was generated using JHipster 6.4.1, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v6.4.1](https://www.jhipster.tech/documentation-archive/v6.4.1).
 
