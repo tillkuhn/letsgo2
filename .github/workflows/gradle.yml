@@ -15,7 +15,4 @@ jobs:
         java-version: 11
     - name: Build with Gradle
       run: |
-        mkdir -p gradle/wrapper
-        curl -s https://raw.githubusercontent.com/gradle/gradle/master/gradle/wrapper/gradle-wrapper.jar -o gradle/wrapper/gradle-wrapper.jar
-        curl -s https://raw.githubusercontent.com/gradle/gradle/master/gradle/wrapper/gradle-wrapper.properties -o gradle/wrapper/gradle-wrapper.properties
         ./gradlew compileKotlin
