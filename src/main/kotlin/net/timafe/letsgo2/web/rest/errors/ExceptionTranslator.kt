@@ -1,7 +1,7 @@
 package net.timafe.letsgo2.web.rest.errors
 
 import io.github.jhipster.web.util.HeaderUtil
-import java.util.NoSuchElementException
+import java.util.*
 import javax.servlet.http.HttpServletRequest
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.dao.ConcurrencyFailureException

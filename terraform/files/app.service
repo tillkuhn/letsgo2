@@ -8,6 +8,7 @@ ExecStart=/usr/bin/java -Duser.timezone=UTC -Djava.security.egd=file:/dev/./uran
 SuccessExitStatus=143
 ## loging see https://stackoverflow.com/questions/37585758/how-to-redirect-output-of-systemd-service-to-a-file
 SyslogIdentifier=${appid}
+## we only have systemd 219, this was added in 236 https://unix.stackexchange.com/questions/321709/redirect-systemd-service-logs-to-file
 #StandardOutput=file:${appdir}/logs/stdout.log
 #StandardError=file:${appdir}/logs/stderr.log
 EnvironmentFile=${appdir}/app.service.env

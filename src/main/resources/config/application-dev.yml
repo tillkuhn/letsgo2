@@ -23,8 +23,9 @@ spring:
   profiles:
     active: dev
     include:
-      - swagger
-      # Uncomment to activate TLS for the dev profile
+      ## disable swagger for the time being
+      #- swagger
+      # Uncomment to activate TLS for t2e dev profile
       #- tls
   devtools:
     restart:
@@ -45,7 +46,7 @@ spring:
       auto-commit: false
   h2:
     console:
-      enabled: false
+      enabled: true
   jpa:
     database-platform: io.github.jhipster.domain.util.FixedH2Dialect
     database: H2

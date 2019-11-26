@@ -3,7 +3,7 @@ package net.timafe.letsgo2.service
 import io.github.jhipster.config.JHipsterProperties
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-import java.util.Optional
+import java.util.*
 import net.timafe.letsgo2.config.audit.AuditEventConverter
 import net.timafe.letsgo2.repository.PersistenceAuditEventRepository
 import org.slf4j.LoggerFactory

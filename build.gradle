@@ -244,6 +244,10 @@ dependencies {
     implementation "org.postgresql:postgresql"
     liquibaseRuntime "org.postgresql:postgresql"
     implementation "org.mapstruct:mapstruct:${mapstruct_version}"
+
+    // manually added
+    implementation  "com.github.derjust:spring-data-dynamodb:${spring_data_dynamodb_version}"
+
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
     annotationProcessor "org.hibernate:hibernate-jpamodelgen:${hibernate_version}"
     annotationProcessor "org.glassfish.jaxb:jaxb-runtime:${jaxb_runtime_version}"
@@ -266,6 +270,7 @@ dependencies {
     testImplementation "org.hamcrest:hamcrest-library"
     testImplementation "com.h2database:h2"
     liquibaseRuntime "com.h2database:h2"
+
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 

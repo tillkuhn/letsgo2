@@ -2,6 +2,7 @@ package net.timafe.letsgo2.config
 
 import io.github.jhipster.config.JHipsterProperties
 import java.time.Duration
+import net.timafe.letsgo2.repository.UserRepository
 import org.ehcache.config.builders.CacheConfigurationBuilder
 import org.ehcache.config.builders.ExpiryPolicyBuilder
 import org.ehcache.config.builders.ResourcePoolsBuilder
@@ -33,8 +34,8 @@ class CacheConfiguration(jHipsterProperties: JHipsterProperties) {
     @Bean
     fun cacheManagerCustomizer(): JCacheManagerCustomizer {
         return JCacheManagerCustomizer { cm ->
-            createCache(cm, net.timafe.letsgo2.repository.UserRepository.USERS_BY_LOGIN_CACHE)
-            createCache(cm, net.timafe.letsgo2.repository.UserRepository.USERS_BY_EMAIL_CACHE)
+            createCache(cm, UserRepository.USERS_BY_LOGIN_CACHE)
+            createCache(cm, UserRepository.USERS_BY_EMAIL_CACHE)
             createCache(cm, net.timafe.letsgo2.domain.User::class.java.name)
             createCache(cm, net.timafe.letsgo2.domain.Authority::class.java.name)
             createCache(cm, net.timafe.letsgo2.domain.User::class.java.name + ".authorities")

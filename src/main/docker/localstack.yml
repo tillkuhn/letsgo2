@@ -1,0 +1,34 @@
+version: '2.1'
+services:
+  localstack:
+    image: localstack/localstack
+    ports:
+      # S3 at http://localhost:4572
+      # SNS at http://localhost:4575
+      # SQS at http://localhost:4576
+      # DynamoDB at http://localhost:4569
+      # host-port:container-port
+      - "4572:4572"
+      - "8000:8000" ## default is 4569 but see SERVICES
+      - "9000:${PORT_WEB_UI-8080}"
+    environment:
+      - SERVICES=s3,dynamodb:8000
+      - DEBUG=${DEBUG- }
+      - DATA_DIR=/tmp/localstack/data
+      - PORT_WEB_UI=${PORT_WEB_UI- }
+   #   - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR- }
+   #   - KINESIS_ERROR_PROBABILITY=${KINESIS_ERROR_PROBABILITY- }
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - "/private$TMPDIR:/tmp/localstack"
+
+## AWS_PROFILE=localstack aws dynamodb --endpoint-url  http://localhost:8000 scan --table-name letsgo2-place
+## AWS_PROFILE=localstack aws s3 --endpoint-url http://localhost:4572  mb s3://letsgo2-data
+## http://localhost:9000/#!/infra
+
+## export import
+##!/usr/bin/env bash
+#export AWS_PROFILE=localstack
+#aws dynamodb scan --limit 25 --table-name origin-place |  jq '{"new-place": [.Items[] | {PutRequest: {Item: .}}]}' >new-place.json
+#aws dynamodb create-table --endpoint-url http://localhost:8000 --table-name new-place --attribute-definitions AttributeName=id,AttributeType=S --key-schema AttributeName=id,KeyType=HASH --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1
+#aws dynamodb batch-write-item --endpoint-url http://localhost:8000 --request-items file://new-place.json
