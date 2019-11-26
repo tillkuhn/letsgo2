@@ -16,7 +16,9 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.socialsignin.spring.data.dynamodb.repository.config.EnableDynamoDBRepositories
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.context.annotation.*
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 
 @Configuration
 // see https://github.com/derjust/spring-data-dynamodb-examples/blob/master/README-multirepo.md
@@ -25,7 +27,7 @@ class DynamoDBConfiguration {
 
     private val log: Logger = LoggerFactory.getLogger(this.javaClass)
 
-    @Profile("!dev")
+    @Profile("!localstack")
     @Bean("amazonDynamoDB")
     fun dynamoDb(): AmazonDynamoDB {
         val client = AmazonDynamoDBClientBuilder.defaultClient()
@@ -33,7 +35,7 @@ class DynamoDBConfiguration {
         return client
     }
 
-    @Profile("dev")
+    @Profile("localstack")
     @Bean("amazonDynamoDB")
     // http://localhost:8000/
     fun dynamoDbLocal(@Value("\${aws.dynamodb.endpoint:http://localhost:8000}") amazonDynamoDBEndpoint: String): AmazonDynamoDB {

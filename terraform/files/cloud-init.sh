@@ -17,7 +17,8 @@ yum install -y -q certbot python2-certbot-nginx unzip
 
 echo "[INFO] Downloading all deploy artifacts from s3://${bucket_name}/deploy to ${appdir}"
 mkdir -p ${appdir}
-sudo aws s3 sync s3://${bucket_name}/deploy ${appdir}
+aws s3 sync s3://${bucket_name}/deploy ${appdir}
+chown -R ec2-user:ec2-user /opt/letsgo2/
 unzip -o ${appdir}/webapp.zip -d /usr/share/nginx/html
 
 echo "[INFO] Checking letsencrypt status "

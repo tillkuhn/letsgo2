@@ -3,7 +3,6 @@ package net.timafe.letsgo2.config
 import io.github.jhipster.config.JHipsterConstants
 import io.github.jhipster.config.h2.H2ConfigurationHelper
 import java.sql.SQLException
-import net.timafe.letsgo2.repository.jpa.*
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

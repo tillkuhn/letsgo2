@@ -59,7 +59,7 @@ upload: ; cd terraform; terraform apply -target=aws_s3_bucket_object.appservicee
           -target=aws_s3_bucket_object.nginxconf -target=aws_s3_bucket_object.webapp \
           -target=aws_s3_bucket_object.bootjar --auto-approve
 
-localstack: ; docker-compose -f api/docker-compose.yml up
+localstack: ; docker-compose -f src/main/docker/localstack.yml up
 # docker-run: ; docker run -p 8080:8080 --env-file local/env.list --name $(APPID) $(APPID):latest
 json-server: ; cd ui; ./mock.sh
 deployui:

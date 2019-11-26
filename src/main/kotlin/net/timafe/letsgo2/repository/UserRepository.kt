@@ -1,6 +1,6 @@
 package net.timafe.letsgo2.repository
 
-import java.util.Optional
+import java.util.*
 import net.timafe.letsgo2.domain.User
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Page
