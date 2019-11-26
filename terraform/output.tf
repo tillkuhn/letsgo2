@@ -1,4 +1,3 @@
-
 ## output private ip
 output "instance_id" {
     value = "Instance Id: ${aws_instance.instance.id}"
@@ -10,6 +9,6 @@ output "ssh_string" {
 
 ## convert files first to substitute variables
 resource "local_file" "setenv_sh" {
-    content  =  "# ${var.appid} runtime variables\ninstance_id=${aws_instance.instance.id}\npublic_ip=${aws_instance.instance.public_ip}\n"
+    content = "# ${var.appid} runtime variables\ninstance_id=${aws_instance.instance.id}\npublic_ip=${aws_instance.instance.public_ip}\n"
     filename = "${path.module}/local/setenv.sh"
 }

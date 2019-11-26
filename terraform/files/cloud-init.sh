@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-echo "[INFO] Running cloud-init custom script"
+echo "[INFO] Running cloud-init custom script in $1 mode"
 if [ "$EUID" -ne 0 ]
   then echo "[FATAL] Detected UID $UID, please run with sudo"
   exit
@@ -10,14 +10,14 @@ yum install -y -q deltarpm
 yum update -y -q
 amazon-linux-extras install  -y -q java-openjdk11
 amazon-linux-extras install  -y -q nginx1
-
 wget -r --no-parent -A 'epel-release-*.rpm' http://dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/
 rpm -Uvh dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-*.rpm
 yum-config-manager --enable epel*
 yum install -y -q certbot python2-certbot-nginx unzip
 
-echo "[INFO] Creating ${appdir}, unpacking webapp "
+echo "[INFO] Downloading all deploy artifacts from s3://${bucket_name}/deploy to ${appdir}"
 mkdir -p ${appdir}
+sudo aws s3 sync s3://${bucket_name}/deploy ${appdir}
 unzip -o ${appdir}/webapp.zip -d /usr/share/nginx/html
 
 echo "[INFO] Checking letsencrypt status "

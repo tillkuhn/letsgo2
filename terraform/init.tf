@@ -1,4 +1,3 @@
-
 provider "aws" {
     region = "eu-central-1"
     version = "~> 2.34"
@@ -38,6 +37,6 @@ data "aws_security_group" "ssh" {
 ## Existing SSH Pub key for instance (BYOK)
 ## make sure you have access to the private key (and don't put it to version control)
 resource "aws_key_pair" "ssh_key" {
-    key_name    = var.appid
-    public_key  = file(var.ssh_pubkey_file)
+    key_name = var.appid
+    public_key = file(var.ssh_pubkey_file)
 }
