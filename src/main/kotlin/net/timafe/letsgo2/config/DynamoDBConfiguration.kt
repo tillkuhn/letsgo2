@@ -11,18 +11,16 @@ import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput
 import com.amazonaws.services.dynamodbv2.model.ResourceInUseException
 import kotlin.reflect.KClass
 import net.timafe.letsgo2.domain.Country
-import net.timafe.letsgo2.dynamo.CountryRepository
+import net.timafe.letsgo2.repository.CountryRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.socialsignin.spring.data.dynamodb.repository.config.EnableDynamoDBRepositories
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Profile
+import org.springframework.context.annotation.*
 
 @Configuration
 // see https://github.com/derjust/spring-data-dynamodb-examples/blob/master/README-multirepo.md
-@EnableDynamoDBRepositories(basePackageClasses = [CountryRepository::class])
+@EnableDynamoDBRepositories(basePackageClasses = [CountryRepository::class], includeFilters = [ComponentScan.Filter(value = [CountryRepository::class], type = FilterType.ASSIGNABLE_TYPE)])
 class DynamoDBConfiguration {
 
     private val log: Logger = LoggerFactory.getLogger(this.javaClass)
