@@ -22,6 +22,7 @@ logging:
     jdk.event.security: INFO
     ## Your profile name includes a 'profile ' prefix.  blabla
     com.amazonaws.auth.profile.internal.BasicProfileConfigLoader: ERROR
+    com.amazonaws.auth.AWS4Signer: INFO
 
 spring:
   profiles:

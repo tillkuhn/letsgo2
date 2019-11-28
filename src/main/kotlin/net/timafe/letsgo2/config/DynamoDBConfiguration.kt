@@ -11,7 +11,9 @@ import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput
 import com.amazonaws.services.dynamodbv2.model.ResourceInUseException
 import kotlin.reflect.KClass
 import net.timafe.letsgo2.domain.Country
+import net.timafe.letsgo2.domain.Region
 import net.timafe.letsgo2.repository.CountryRepository
+import net.timafe.letsgo2.repository.RegionRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.socialsignin.spring.data.dynamodb.repository.config.EnableDynamoDBRepositories
@@ -20,7 +22,9 @@ import org.springframework.context.annotation.*
 
 @Configuration
 // see https://github.com/derjust/spring-data-dynamodb-examples/blob/master/README-multirepo.md
-@EnableDynamoDBRepositories(basePackageClasses = [CountryRepository::class], includeFilters = [ComponentScan.Filter(value = [CountryRepository::class], type = FilterType.ASSIGNABLE_TYPE)])
+@EnableDynamoDBRepositories(basePackageClasses = [CountryRepository::class],
+    includeFilters = [ComponentScan.Filter(value = [CountryRepository::class], type = FilterType.ASSIGNABLE_TYPE),
+        ComponentScan.Filter(value = [RegionRepository::class], type = FilterType.ASSIGNABLE_TYPE)])
 class DynamoDBConfiguration {
 
     private val log: Logger = LoggerFactory.getLogger(this.javaClass)
@@ -42,7 +46,9 @@ class DynamoDBConfiguration {
             .withCredentials(AWSStaticCredentialsProvider(BasicAWSCredentials("key", "secret")))
             .withEndpointConfiguration(AwsClientBuilder.EndpointConfiguration(amazonDynamoDBEndpoint, Regions.EU_CENTRAL_1.toString()))
             .build()
+        // todo remove should be done by terraform
         createTableForEntity(client, Country::class)
+        createTableForEntity(client, Region::class)
         return client
     }
 

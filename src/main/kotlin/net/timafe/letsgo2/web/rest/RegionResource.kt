@@ -88,7 +88,8 @@ class RegionResource(
      * @return the [ResponseEntity] with status `200 (OK)` and the list of regions in body.
      */
     @GetMapping("/regions")
-    fun getAllRegions(): MutableList<Region> {
+    // fun getAllRegions(): MutableList<Region> {
+    fun getAllRegions(): MutableIterable<Region> {
         log.debug("REST request to get all Regions")
         return regionRepository.findAll()
     }
@@ -100,7 +101,7 @@ class RegionResource(
      * @return the [ResponseEntity] with status `200 (OK)` and with body the region, or with status `404 (Not Found)`.
      */
     @GetMapping("/regions/{id}")
-    fun getRegion(@PathVariable id: Long): ResponseEntity<Region> {
+    fun getRegion(@PathVariable id: String): ResponseEntity<Region> {
         log.debug("REST request to get Region : {}", id)
         val region = regionRepository.findById(id)
         return ResponseUtil.wrapOrNotFound(region)
@@ -112,7 +113,7 @@ class RegionResource(
      * @return the [ResponseEntity] with status `204 (NO_CONTENT)`.
      */
     @DeleteMapping("/regions/{id}")
-    fun deleteRegion(@PathVariable id: Long): ResponseEntity<Void> {
+    fun deleteRegion(@PathVariable id: String): ResponseEntity<Void> {
         log.debug("REST request to delete Region : {}", id)
 
         regionRepository.deleteById(id)
