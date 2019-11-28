@@ -35,7 +35,7 @@ else
 fi
 echo "[INFO] Making sure nginx is registered as nginx service and restarted if running"
 systemctl enable nginx
-systemctl restart nginx
+systemctl start nginx
 echo "[INFO] Launching certbot for ${domain_name}"
 certbot --nginx -m ${certbot_mail} --agree-tos --redirect -n -d ${domain_name}
 
@@ -45,10 +45,13 @@ aws s3 cp --sse=AES256 /tmp/letsencrypt.tar.gz s3://${bucket_name}/letsencrypt/l
 
 echo "[INFO] Replacing system nginx.conf with enhanced version ..."
 cp  ${appdir}/nginx.conf /etc/nginx/nginx.conf
-# curl http://169.254.169.254/latest/user-data
+systemctl restart nginx
 
-##
 echo "[INFO] Registering and starting ${appid}.service as systemd service"
 cp  ${appdir}/app.service /etc/systemd/system/${appid}.service
 systemctl enable ${appid}
 systemctl start ${appid}
+
+echo "[INFO] Init comlete, check out https://${domain_name}"
+# curl http://169.254.169.254/latest/user-data
+# aws s3 sync s3://${bucket_name}/deploy ${appdir}
