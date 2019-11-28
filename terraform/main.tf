@@ -1,3 +1,4 @@
+## Main Entry point for terraform infrastructure
 provider "aws" {
     region = "eu-central-1"
     version = "~> 2.34"
@@ -39,4 +40,11 @@ data "aws_security_group" "ssh" {
 resource "aws_key_pair" "ssh_key" {
     key_name = var.appid
     public_key = file(var.ssh_pubkey_file)
+}
+
+## NEW modules support
+module "dynamodb" {
+    source = "./modules/dynamodb"
+    name = "${var.appid}-country"
+    tags =  map("Name", "${var.appid}-country", "appid", var.appid, "managedBy", "terraform")
 }

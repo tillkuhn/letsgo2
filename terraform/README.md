@@ -12,6 +12,15 @@ By default, user data scripts and cloud-init directives run only during the firs
    curl http://169.254.169.254/latest/user-data
    cat cat /var/log/cloud-init-output.log
 ```
+
+## Terraform
+
+* [How to create reusable infrastructure with Terraform modules](https://blog.gruntwork.io/how-to-create-reusable-infrastructure-with-terraform-modules-25526d65f73d)
+* Run only for specific module 
+```
+AWS_PROFILE=xxx terraform apply -auto-approve  -target=module.dynamod
+```
+
 ### JHipster production optimization
 
 * [read](https://www.jhipster.tech/production/)
