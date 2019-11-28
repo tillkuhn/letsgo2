@@ -1,6 +1,6 @@
 {
   "home": {
-    "title": "Welcome, Java Hipster!",
+    "title": "Welcome, Fellow Traveller!",
     "subtitle": "This is your homepage",
     "logged": {
       "message": "You are logged in as user \"{{username}}\"."
@@ -10,6 +10,7 @@
       "homepage": "JHipster homepage",
       "stackoverflow": "JHipster on Stack Overflow",
       "bugtracker": "JHipster bug tracker",
+      "github": "Letsgo2 on github",
       "chat": "JHipster public chat room",
       "follow": "follow @jhipster on Twitter"
     },

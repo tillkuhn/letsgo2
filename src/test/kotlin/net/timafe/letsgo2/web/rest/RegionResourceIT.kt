@@ -95,6 +95,7 @@ class RegionResourceIT {
         val testRegion = regionList[regionList.size - 1]
         assertThat(testRegion.code).isEqualTo(DEFAULT_CODE)
         assertThat(testRegion.name).isEqualTo(DEFAULT_NAME)
+        assertThat(testRegion.parentCode).isEqualTo(DEFAULT_PARENT_CODE)
     }
 
     @Test
@@ -168,6 +169,7 @@ class RegionResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(region.id?.toInt())))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].parentCode").value(hasItem(DEFAULT_PARENT_CODE)))
     }
 
     @Test
@@ -186,6 +188,7 @@ class RegionResourceIT {
             .andExpect(jsonPath("$.id").value(id.toInt()))
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
+            .andExpect(jsonPath("$.parentCode").value(DEFAULT_PARENT_CODE))
     }
 
     @Test
@@ -211,6 +214,7 @@ class RegionResourceIT {
         em.detach(updatedRegion)
         updatedRegion.code = UPDATED_CODE
         updatedRegion.name = UPDATED_NAME
+        updatedRegion.parentCode = UPDATED_PARENT_CODE
 
         restRegionMockMvc.perform(
             put("/api/regions")
@@ -224,6 +228,7 @@ class RegionResourceIT {
         val testRegion = regionList[regionList.size - 1]
         assertThat(testRegion.code).isEqualTo(UPDATED_CODE)
         assertThat(testRegion.name).isEqualTo(UPDATED_NAME)
+        assertThat(testRegion.parentCode).isEqualTo(UPDATED_PARENT_CODE)
     }
 
     @Test
@@ -290,6 +295,9 @@ class RegionResourceIT {
         private const val DEFAULT_NAME: String = "AAAAAAAAAA"
         private const val UPDATED_NAME = "BBBBBBBBBB"
 
+        private const val DEFAULT_PARENT_CODE: String = "AAAAAAAAAA"
+        private const val UPDATED_PARENT_CODE = "BBBBBBBBBB"
+
         /**
          * Create an entity for this test.
          *
@@ -300,7 +308,8 @@ class RegionResourceIT {
         fun createEntity(em: EntityManager): Region {
             val region = Region(
                 code = DEFAULT_CODE,
-                name = DEFAULT_NAME
+                name = DEFAULT_NAME,
+                parentCode = DEFAULT_PARENT_CODE
             )
 
             return region
@@ -316,7 +325,8 @@ class RegionResourceIT {
         fun createUpdatedEntity(em: EntityManager): Region {
             val region = Region(
                 code = UPDATED_CODE,
-                name = UPDATED_NAME
+                name = UPDATED_NAME,
+                parentCode = UPDATED_PARENT_CODE
             )
 
             return region

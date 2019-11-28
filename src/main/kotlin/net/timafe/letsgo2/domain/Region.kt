@@ -27,7 +27,10 @@ class Region(
 
     @get: NotNull
     @Column(name = "name", nullable = false)
-    var name: String? = null
+    var name: String? = null,
+
+    @Column(name = "parent_code")
+    var parentCode: String? = null
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 ) : Serializable {
@@ -47,6 +50,7 @@ class Region(
         "id=$id" +
         ", code='$code'" +
         ", name='$name'" +
+        ", parentCode='$parentCode'" +
         "}"
 
     companion object {

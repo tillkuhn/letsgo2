@@ -18,7 +18,8 @@ export class RegionUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     code: [null, [Validators.required, Validators.minLength(2)]],
-    name: [null, [Validators.required]]
+    name: [null, [Validators.required]],
+    parentCode: []
   });
 
   constructor(protected regionService: RegionService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
@@ -34,7 +35,8 @@ export class RegionUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: region.id,
       code: region.code,
-      name: region.name
+      name: region.name,
+      parentCode: region.parentCode
     });
   }
 
@@ -57,7 +59,8 @@ export class RegionUpdateComponent implements OnInit {
       ...new Region(),
       id: this.editForm.get(['id']).value,
       code: this.editForm.get(['code']).value,
-      name: this.editForm.get(['name']).value
+      name: this.editForm.get(['name']).value,
+      parentCode: this.editForm.get(['parentCode']).value
     };
   }
 
