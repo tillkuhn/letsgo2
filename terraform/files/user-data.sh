@@ -8,9 +8,9 @@ grep -q "alias l='ls -CF'" /home/ec2-user/.bashrc || echo "alias l='ls -CF'" >>/
 grep -q "cd ${appdir}" /home/ec2-user/.bashrc || echo "cd ${appdir}" >>/home/ec2-user/.bashrc
 
 echo "[INFO] Pulling $INIT_SCRIPT from s3://${bucket_name}/deploy"
-sudo aws s3 sync s3://${bucket_name}/deploy ${appdir} --exclude "*" --include $INIT_SCRIPT
+aws s3 sync s3://${bucket_name}/deploy ${appdir} --exclude "*" --include $INIT_SCRIPT
 chmod ugo+x ${appdir}/$INIT_SCRIPT
 
 echo "[INFO] Launching ${appdir}/$INIT_SCRIPT"
-sudo ${appdir}/$INIT_SCRIPT all
+sudo ${appdir}/$INIT_SCRIPT all | tee -a ${appdir}/logs/cloud-init.log
 

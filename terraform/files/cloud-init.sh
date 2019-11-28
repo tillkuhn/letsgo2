@@ -27,14 +27,16 @@ if [ -d /etc/letsencrypt/live ]; then
 elif aws s3api head-object --bucket ${bucket_name} --key letsencrypt/letsencrypt.tar.gz; then
   echo "[INFO] local /etc/letsencrypt missing, downloading letsencrypt config from sr"
   aws s3 cp s3://${bucket_name}/letsencrypt/letsencrypt.tar.gz ${appdir}/
+  chown -R ec2-user:ec2-user ${appdir}/letsencrypt.tar.gz
   cd /etc
   tar -xvf ${appdir}/letsencrypt.tar.gz
 else
   echo "[INFO] No local or remote letsencrypt  nginx config found, new one will be requested"
 fi
-echo "[INFO] Launching nginx via systemd and start certbot for ${domain_name}"
+echo "[INFO] Making sure nginx is registered as nginx service and restarted if running"
 systemctl enable nginx
-systemctl start nginx
+systemctl restart nginx
+echo "[INFO] Launching certbot for ${domain_name}"
 certbot --nginx -m ${certbot_mail} --agree-tos --redirect -n -d ${domain_name}
 
 echo "[INFO] Backup /etc/letsencrypt to s3://${bucket_name}"
