@@ -16,6 +16,7 @@ By default, user data scripts and cloud-init directives run only during the firs
 ## Terraform
 
 * [How to create reusable infrastructure with Terraform modules](https://blog.gruntwork.io/how-to-create-reusable-infrastructure-with-terraform-modules-25526d65f73d)
+* [Multiple Instances of a Module](https://www.terraform.io/docs/configuration/modules.html#multiple-instances-of-a-module)
 * Run only for specific module 
 ```
 AWS_PROFILE=xxx terraform apply -auto-approve  -target=module.dynamod

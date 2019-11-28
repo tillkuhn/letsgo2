@@ -9,5 +9,5 @@ resource "aws_dynamodb_table" "table" {
         name = var.primary_key
         type = var.primary_key_type
     }
-    tags = var.tags
+    tags = merge({"Name": var.name},var.tags)
 }

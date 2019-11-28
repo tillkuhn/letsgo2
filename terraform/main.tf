@@ -43,8 +43,14 @@ resource "aws_key_pair" "ssh_key" {
 }
 
 ## NEW modules support
-module "dynamodb" {
+module "table_country" {
     source = "./modules/dynamodb"
     name = "${var.appid}-country"
-    tags =  map("Name", "${var.appid}-country", "appid", var.appid, "managedBy", "terraform")
+    tags =  map("appid", var.appid, "managedBy", "terraform")
+}
+
+module "table_region" {
+    source = "./modules/dynamodb"
+    name = "${var.appid}-region"
+    tags =  map("appid", var.appid, "managedBy", "terraform")
 }

@@ -42,7 +42,8 @@ help:
 	echo
 
 init: ; cd terraform; terraform init
-plan: ; cd terraform; terraform plan
+plan: init
+	 cd terraform; terraform plan
 apply: ; cd terraform; terraform apply --auto-approve
 dns: ; cd terraform; terraform apply -target=aws_route53_record.instance_dns --auto-approve
 
