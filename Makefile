@@ -4,7 +4,7 @@ APPID=letsgo2
 .ONESHELL:
 .SHELL := /usr/bin/bash
 #A phony target is one that is not really the name of a file; rather it is just a name for a recipe to be executed when you make an explicit request. There are two reasons to use a phony target: to avoid a conflict with a file of the same name, and to improve performance.
-.PHONY: help init plan apply dns stop start status login build builddev deployjar deployui upload json-server localstack clean
+.PHONY: help init plan apply dns stop start status login build webpack builddev deployjar deployui upload json-server localstack clean
 .SILENT: help ## no @s needed
 .EXPORT_ALL_VARIABLES:
 AWS_PROFILE = timafe
@@ -30,6 +30,7 @@ help:
 	echo "Gradle / Docker Build Targets:"
 	echo "  docker      Run docker build"
 	echo "  build       Create bootJar optimized for production"
+	echo "  webpack     Runs webpack build for frontend"
 	echo "  builddev    Create bootJar optimized for dev "
 	echo "  deployjar   Deploys app.jar to s3"
 	echo "  deployui    Runs spring boot app in api"
@@ -53,6 +54,7 @@ status: ; aws ec2 describe-instances --instance-ids $(shell grep "^instance_id" 
 login: ; ssh -i mykey.pem -o StrictHostKeyChecking=no ec2-user@$(shell grep "^public_ip" terraform/local/setenv.sh |cut -d= -f2)
 
 build: ; gradle -Pprod clean bootJar
+webpack: ; npm run webpack:build
 builddev: ; gradle clean bootJar
 ## not target wildcars possible yet :-(
 upload: ; cd terraform; terraform apply -target=aws_s3_bucket_object.appserviceenv \

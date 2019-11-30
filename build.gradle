@@ -11,8 +11,8 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}"
         classpath "org.jetbrains.kotlin:kotlin-allopen:${kotlin_version}"
         classpath "org.jetbrains.kotlin:kotlin-noarg:${kotlin_version}"
-        classpath "org.jlleitschuh.gradle:ktlint-gradle:9.0.0"
-        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:${detekt_version}"
+       // classpath "org.jlleitschuh.gradle:ktlint-gradle:9.0.0"
+       // classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:${detekt_version}"
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
     }
 }

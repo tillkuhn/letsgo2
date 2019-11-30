@@ -30,7 +30,6 @@ bootRun {
     args = []
 }
 
-/* disabled for performance, see profile_dev_webpack.gradle
 task webpack(type: NpmTask) {
     inputs.files("package-lock.json")
     inputs.files("build.gradle")
@@ -46,7 +45,6 @@ task webpack(type: NpmTask) {
     args = ["run", "webpack:build"]
     environment = [APP_VERSION: project.version]
 }
-*/
 
 processResources {
     inputs.property('version', version)
@@ -61,6 +59,5 @@ processResources {
     }
 }
 
-// disabled see above
-// processResources.dependsOn webpack
+processResources.dependsOn webpack
 bootJar.dependsOn processResources
