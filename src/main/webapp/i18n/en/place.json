@@ -1,4 +1,7 @@
 {
+  "map": {
+    "title": "Places Map"
+  },
   "letsgo2App": {
     "place": {
       "home": {

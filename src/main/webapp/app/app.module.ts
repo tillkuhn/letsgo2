@@ -14,6 +14,7 @@ import { FooterComponent } from './layouts/footer/footer.component';
 import { PageRibbonComponent } from './layouts/profiles/page-ribbon.component';
 import { ActiveMenuDirective } from './layouts/navbar/active-menu.directive';
 import { ErrorComponent } from './layouts/error/error.component';
+import {Letsgo2MapModule} from "./map/map.module";
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import { ErrorComponent } from './layouts/error/error.component';
     Letsgo2SharedModule,
     Letsgo2CoreModule,
     Letsgo2HomeModule,
+    Letsgo2MapModule,
     // jhipster-needle-angular-add-module JHipster will add new module here
     Letsgo2EntityModule,
     Letsgo2AppRoutingModule
