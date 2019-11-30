@@ -21,6 +21,15 @@
             <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
             <th scope="col" ><span jhiTranslate="letsgo2App.place.name">Name</span></th>
             <th scope="col" ><span jhiTranslate="letsgo2App.place.summary">Summary</span></th>
+            <th scope="col" ><span jhiTranslate="letsgo2App.place.imageUrl">Image Url</span></th>
+            <th scope="col" ><span jhiTranslate="letsgo2App.place.rating">Rating</span></th>
+            <th scope="col" ><span jhiTranslate="letsgo2App.place.lotype">Lotype</span></th>
+            <th scope="col" ><span jhiTranslate="letsgo2App.place.country">Country</span></th>
+            <th scope="col" ><span jhiTranslate="letsgo2App.place.updatedBy">Updated By</span></th>
+            <th scope="col" ><span jhiTranslate="letsgo2App.place.coordinates">Coordinates</span></th>
+            <th scope="col" ><span jhiTranslate="letsgo2App.place.notes">Notes</span></th>
+            <th scope="col" ><span jhiTranslate="letsgo2App.place.updatedAt">Updated At</span></th>
+            <th scope="col" ><span jhiTranslate="letsgo2App.place.primaryUrl">Primary Url</span></th>
             <th scope="col"></th>
             </tr>
             </thead>
@@ -29,6 +38,15 @@
                 <td><a [routerLink]="['/place', place.id, 'view' ]">{{place.id}}</a></td>
                 <td>{{place.name}}</td>
                 <td>{{place.summary}}</td>
+                <td>{{place.imageUrl}}</td>
+                <td>{{place.rating}}</td>
+                <td>{{place.lotype}}</td>
+                <td>{{place.country}}</td>
+                <td>{{place.updatedBy}}</td>
+                <td>{{place.coordinates}}</td>
+                <td>{{place.notes}}</td>
+                <td>{{place.updatedAt | date:'medium'}}</td>
+                <td>{{place.primaryUrl}}</td>
                 <td class="text-right">
                     <div class="btn-group">
                         <button type="submit"

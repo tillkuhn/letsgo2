@@ -1,10 +1,26 @@
 package net.timafe.letsgo2.domain
 
-import java.io.Serializable
-import javax.persistence.*
-import javax.validation.constraints.NotNull
 import org.hibernate.annotations.Cache
 import org.hibernate.annotations.CacheConcurrencyStrategy
+
+import javax.persistence.CascadeType
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.SequenceGenerator
+import javax.persistence.Table
+import javax.validation.constraints.DecimalMax
+import javax.validation.constraints.DecimalMin
+import javax.validation.constraints.Max
+import javax.validation.constraints.Min
+import javax.validation.constraints.NotNull
+import javax.validation.constraints.Pattern
+import javax.validation.constraints.Size
+
+import java.io.Serializable
+import java.time.Instant
 
 /**
  * A Place.
@@ -27,7 +43,31 @@ class Place(
     var summary: String? = null,
 
     @Column(name = "image_url")
-    var imageUrl: String? = null
+    var imageUrl: String? = null,
+
+    @Column(name = "rating")
+    var rating: Int? = null,
+
+    @Column(name = "lotype")
+    var lotype: String? = null,
+
+    @Column(name = "country")
+    var country: String? = null,
+
+    @Column(name = "updated_by")
+    var updatedBy: String? = null,
+
+    @Column(name = "coordinates")
+    var coordinates: String? = null,
+
+    @Column(name = "notes")
+    var notes: String? = null,
+
+    @Column(name = "updated_at")
+    var updatedAt: Instant? = null,
+
+    @Column(name = "primary_url")
+    var primaryUrl: String? = null
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 ) : Serializable {
@@ -48,7 +88,16 @@ class Place(
         ", name='$name'" +
         ", summary='$summary'" +
         ", imageUrl='$imageUrl'" +
+        ", rating=$rating" +
+        ", lotype='$lotype'" +
+        ", country='$country'" +
+        ", updatedBy='$updatedBy'" +
+        ", coordinates='$coordinates'" +
+        ", notes='$notes'" +
+        ", updatedAt='$updatedAt'" +
+        ", primaryUrl='$primaryUrl'" +
         "}"
+
 
     companion object {
         private const val serialVersionUID = 1L

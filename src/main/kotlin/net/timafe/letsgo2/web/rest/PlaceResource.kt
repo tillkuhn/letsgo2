@@ -1,20 +1,29 @@
 package net.timafe.letsgo2.web.rest
 
-import io.github.jhipster.web.util.HeaderUtil
-import io.github.jhipster.web.util.ResponseUtil
-import java.net.URI
-import java.net.URISyntaxException
-import javax.validation.Valid
 import net.timafe.letsgo2.domain.Place
 import net.timafe.letsgo2.repository.PlaceRepository
 import net.timafe.letsgo2.web.rest.errors.BadRequestAlertException
+
+import io.github.jhipster.web.util.HeaderUtil
+import io.github.jhipster.web.util.ResponseUtil
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
+
+import javax.validation.Valid
+import java.net.URI
+import java.net.URISyntaxException
 
 private const val ENTITY_NAME = "place"
-
 /**
  * REST controller for managing [net.timafe.letsgo2.domain.Place].
  */
@@ -70,19 +79,18 @@ class PlaceResource(
             .headers(
                 HeaderUtil.createEntityUpdateAlert(
                     applicationName, true, ENTITY_NAME,
-                    place.id.toString()
+                     place.id.toString()
                 )
             )
             .body(result)
     }
-
     /**
      * `GET  /places` : get all the places.
      *
 
      * @return the [ResponseEntity] with status `200 (OK)` and the list of places in body.
      */
-    @GetMapping("/places")
+    @GetMapping("/places")    
     fun getAllPlaces(): MutableList<Place> {
         log.debug("REST request to get all Places")
         return placeRepository.findAll()
@@ -100,7 +108,6 @@ class PlaceResource(
         val place = placeRepository.findById(id)
         return ResponseUtil.wrapOrNotFound(place)
     }
-
     /**
      *  `DELETE  /places/:id` : delete the "id" place.
      *

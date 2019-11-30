@@ -1,6 +1,7 @@
 package net.timafe.letsgo2.repository
 import net.timafe.letsgo2.domain.Place
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 /**
@@ -8,4 +9,5 @@ import org.springframework.stereotype.Repository
  */
 @Suppress("unused")
 @Repository
-interface PlaceRepository : JpaRepository<Place, Long>
+interface PlaceRepository : JpaRepository<Place, Long> {
+}

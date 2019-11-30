@@ -21,7 +21,7 @@ export class PlaceDeleteDialogComponent {
   }
 
   confirmDelete(id: number) {
-    this.placeService.delete(id).subscribe(() => {
+    this.placeService.delete(id).subscribe(response => {
       this.eventManager.broadcast({
         name: 'placeListModification',
         content: 'Deleted an place'
@@ -46,11 +46,11 @@ export class PlaceDeletePopupComponent implements OnInit, OnDestroy {
         this.ngbModalRef = this.modalService.open(PlaceDeleteDialogComponent as Component, { size: 'lg', backdrop: 'static' });
         this.ngbModalRef.componentInstance.place = place;
         this.ngbModalRef.result.then(
-          () => {
+          result => {
             this.router.navigate(['/place', { outlets: { popup: null } }]);
             this.ngbModalRef = null;
           },
-          () => {
+          reason => {
             this.router.navigate(['/place', { outlets: { popup: null } }]);
             this.ngbModalRef = null;
           }

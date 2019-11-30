@@ -4,7 +4,7 @@ APPID=letsgo2
 .ONESHELL:
 .SHELL := /usr/bin/bash
 #A phony target is one that is not really the name of a file; rather it is just a name for a recipe to be executed when you make an explicit request. There are two reasons to use a phony target: to avoid a conflict with a file of the same name, and to improve performance.
-.PHONY: help init plan apply dns stop start status login build webpack builddev deployjar deployui upload json-server localstack clean
+.PHONY: help init plan apply dns ec2-stop ec2-start ec2-status login build webpack builddev deployjar deployui upload json-server mock-start  mock-daemon mock-stop clean
 .SILENT: help ## no @s needed
 .EXPORT_ALL_VARIABLES:
 AWS_PROFILE = timafe
@@ -22,13 +22,13 @@ help:
 	echo "  dns         Syncs the DNS entry with the instances current public IP (auto-approve)"
 	echo
 	echo "EC2 Targets:"
-	echo "  stop        Stops the EC2 instance"
-	echo "  start       Starts the EC2 instance"
-	echo "  status      Current Status of ec2 instance"
+	echo "  ec2-stop    Stops the EC2 instance"
+	echo "  ec2-start   Starts the EC2 instance"
+	echo "  ec2-status  Current Status of ec2 instance"
 	echo "  login       ssh login to instance"
 	echo
 	echo "Gradle / Docker Build Targets:"
-	echo "  docker      Run docker build"
+#	echo "  docker      Run docker build"
 	echo "  build       Create bootJar optimized for production"
 	echo "  webpack     Runs webpack build for frontend"
 	echo "  builddev    Create bootJar optimized for dev "
@@ -37,8 +37,10 @@ help:
 	echo "  upload      Uploads Artifacts s3"
 	echo
 	echo "Mock / Local Dev Targets:"
-	echo "  localstack  Runs dynambodb / s3 mocks for spring boot"
-	echo "  json-server Runs json-server to mock rest api for ui"
+	echo "  mock-start  Runs dynambodb / s3 mocks in foreground"
+	echo "  mock-daemon Runs dynambodb / s3 mocks in daemon mode"
+	echo "  mock-stop   Stops dynambodb / s3 mock docker containers"
+#	echo "  json-server Runs json-server to mock rest api for ui"
 	echo "  clean       Cleanup build / dist directories"
 	echo
 
@@ -48,11 +50,12 @@ plan: init
 apply: ; cd terraform; terraform apply --auto-approve
 dns: ; cd terraform; terraform apply -target=aws_route53_record.instance_dns --auto-approve
 
-stop: ; aws ec2 stop-instances --instance-ids $(shell grep "^instance_id" terraform/local/setenv.sh |cut -d= -f2)
-start: ; aws ec2 start-instances --instance-ids $(shell grep "^instance_id" terraform/local/setenv.sh |cut -d= -f2)
-status: ; aws ec2 describe-instances --instance-ids $(shell grep "^instance_id" terraform/local/setenv.sh |cut -d= -f2) --query 'Reservations[].Instances[].State[].Name' --output text
+## ec2
+ec2-stop: ; aws ec2 stop-instances --instance-ids $(shell grep "^instance_id" terraform/local/setenv.sh |cut -d= -f2)
+ec2-start: ; aws ec2 start-instances --instance-ids $(shell grep "^instance_id" terraform/local/setenv.sh |cut -d= -f2)
+ec2-status: ; aws ec2 describe-instances --instance-ids $(shell grep "^instance_id" terraform/local/setenv.sh |cut -d= -f2) --query 'Reservations[].Instances[].State[].Name' --output text
 login: ; ssh -i mykey.pem -o StrictHostKeyChecking=no ec2-user@$(shell grep "^public_ip" terraform/local/setenv.sh |cut -d= -f2)
-
+ssh: login ##alias
 build: ; gradle -Pprod clean bootJar
 webpack: ; npm run webpack:build
 builddev: ; gradle clean bootJar
@@ -62,9 +65,12 @@ upload: ; cd terraform; terraform apply -target=aws_s3_bucket_object.appservicee
           -target=aws_s3_bucket_object.nginxconf -target=aws_s3_bucket_object.webapp \
           -target=aws_s3_bucket_object.bootjar --auto-approve
 
-localstack: ; docker-compose -f src/main/docker/localstack.yml up
+## Mocks
+mock-start: ; docker-compose -f src/mock/docker-compose.yml up
+mock-daemon: ; docker-compose -f src/mock/docker-compose.yml up -d
+mock-stop: ; docker-compose -f src/mock/docker-compose.yml stop
 # docker-run: ; docker run -p 8080:8080 --env-file local/env.list --name $(APPID) $(APPID):latest
-json-server: ; cd ui; ./mock.sh
+#json-server: ; cd ui; ./mock.sh
 deployui:
 	$(AWS_CMD) s3 sync ui/dist/webapp s3://${S3_BUCKET_LOCATION}/deploy/webapp  --delete --size-only
 	$(AWS_CMD) s3 cp ui/dist/webapp/index.html s3://${S3_BUCKET_LOCATION}/deploy//webapp/index.html
