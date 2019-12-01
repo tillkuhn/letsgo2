@@ -4,7 +4,8 @@ APPID=letsgo2
 .ONESHELL:
 .SHELL := /usr/bin/bash
 #A phony target is one that is not really the name of a file; rather it is just a name for a recipe to be executed when you make an explicit request. There are two reasons to use a phony target: to avoid a conflict with a file of the same name, and to improve performance.
-.PHONY: help init plan apply dns ec2-stop ec2-start ec2-status login build webpack builddev deployjar deployui upload json-server mock-start  mock-daemon mock-stop clean
+.PHONY: help init plan apply dns ec2-stop ec2-start ec2-status login jardev jarprod \
+        webdev webprod jardev deployjar deployui upload json-server mock  mockd mockstop clean
 .SILENT: help ## no @s needed
 .EXPORT_ALL_VARIABLES:
 AWS_PROFILE = timafe
@@ -29,17 +30,20 @@ help:
 	echo
 	echo "Gradle / Docker Build Targets:"
 #	echo "  docker      Run docker build"
-	echo "  build       Create bootJar optimized for production"
-	echo "  webpack     Runs webpack build for frontend"
-	echo "  builddev    Create bootJar optimized for dev "
+	echo "  jardev      Create bootJar optimized for production"
+	echo "  jarprod     Create bootJar optimized for production"
+	echo "  jarrun      Runs jar file with java "
+	echo "  jardev      Create bootJar optimized for dev "
+	echo "  webdev      Runs webpack build for frontend dev"
+	echo "  webprod     Runs webpack build for frontend prod"
 	echo "  deployjar   Deploys app.jar to s3"
 	echo "  deployui    Runs spring boot app in api"
 	echo "  upload      Uploads Artifacts s3"
 	echo
 	echo "Mock / Local Dev Targets:"
-	echo "  mock-start  Runs dynambodb / s3 mocks in foreground"
-	echo "  mock-daemon Runs dynambodb / s3 mocks in daemon mode"
-	echo "  mock-stop   Stops dynambodb / s3 mock docker containers"
+	echo "  mock       Runs dynambodb / s3 mocks in foreground"
+	echo "  mockd      Runs dynambodb / s3 mocks in daemon mode"
+	echo "  mockstop   Stops dynambodb / s3 mock docker containers"
 #	echo "  json-server Runs json-server to mock rest api for ui"
 	echo "  clean       Cleanup build / dist directories"
 	echo
@@ -56,9 +60,13 @@ ec2-start: ; aws ec2 start-instances --instance-ids $(shell grep "^instance_id" 
 ec2-status: ; aws ec2 describe-instances --instance-ids $(shell grep "^instance_id" terraform/local/setenv.sh |cut -d= -f2) --query 'Reservations[].Instances[].State[].Name' --output text
 login: ; ssh -i mykey.pem -o StrictHostKeyChecking=no ec2-user@$(shell grep "^public_ip" terraform/local/setenv.sh |cut -d= -f2)
 ssh: login ##alias
-build: ; gradle -Pprod clean bootJar
-webpack: ; npm run webpack:build
-builddev: ; gradle clean bootJar
+
+## builds
+jardev: ; gradle clean bootJar; ls -l build/libs/app.jar
+jarprod: ; gradle -Pprod clean bootJar
+jarrun: ; java -Dspring.profiles.active=prod,localstack -jar  build/libs/app.jar
+webdev: ; npm run webpack:build
+webprod: ; npm run webpack:prod
 ## not target wildcars possible yet :-(
 upload: ; cd terraform; terraform apply -target=aws_s3_bucket_object.appserviceenv \
           -target=aws_s3_bucket_object.appservice -target=aws_s3_bucket_object.installscript \
@@ -66,9 +74,9 @@ upload: ; cd terraform; terraform apply -target=aws_s3_bucket_object.appservicee
           -target=aws_s3_bucket_object.bootjar --auto-approve
 
 ## Mocks
-mock-start: ; docker-compose -f src/mock/docker-compose.yml up
-mock-daemon: ; docker-compose -f src/mock/docker-compose.yml up -d
-mock-stop: ; docker-compose -f src/mock/docker-compose.yml stop
+mock: ; docker-compose -f src/mock/docker-compose.yml up
+mockd: ; docker-compose -f src/mock/docker-compose.yml up -d
+mockstop: ; docker-compose -f src/mock/docker-compose.yml stop
 # docker-run: ; docker run -p 8080:8080 --env-file local/env.list --name $(APPID) $(APPID):latest
 #json-server: ; cd ui; ./mock.sh
 deployui:

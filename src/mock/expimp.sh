@@ -8,5 +8,6 @@ for T in place region; do
     sleep 2
     aws dynamodb --endpoint-url http://localhost:8000 batch-write-item --request-items file://samples/letsgo2-$T.json
     aws dynamodb --endpoint-url http://localhost:8000 scan --table-name letsgo2-$T
-
 done
+# AWS_PROFILE=yummy aws dynamodb --endpoint-url http://localhost:8000 batch-write-item --request-items file://samples/letsgo2-$T.json
+# AWS_PROFILE=yummy aws dynamodb --endpoint-url http://localhost:8000 scan --table-name letsgo2-$T

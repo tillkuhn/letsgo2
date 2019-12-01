@@ -47,7 +47,9 @@ export class MapComponent implements OnInit {
   }
 
   onClick(evt: MapLayerMouseEvent) {
-    this.selectedPoint = evt.features![0];
+    // this.selectedPoint = evt.features![0];
+    // 50:26  error    This assertion is unnecessary ... typescript-eslint/no-unnecessary-type-assertion ß?
+    this.selectedPoint = evt.features[0];
   }
 
 }
