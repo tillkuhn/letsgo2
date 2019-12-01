@@ -1,5 +1,8 @@
 dependencies {
-    testImplementation "com.h2database:h2"
+    // tk also add h2 to prod profile
+    // as we rely on dynamodb, but can't go completly w/o JPA
+    // testImplementation "com.h2database:h2"
+    implementation "com.h2database:h2"
 }
 
 def profiles = "prod"

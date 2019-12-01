@@ -33,15 +33,20 @@ spring:
       enabled: false
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/letsgo2
+    # tk-needle remove postgres
+    # url: jdbc:postgresql://localhost:5432/letsgo2
+    url: jdbc:h2:file:./build/h2db/db/letsgo2;DB_CLOSE_DELAY=-1
     username: letsgo2
     password:
     hikari:
       poolName: Hikari
       auto-commit: false
   jpa:
-    database-platform: io.github.jhipster.domain.util.FixedPostgreSQL95Dialect
-    database: POSTGRESQL
+    # tk-needle remove postgres from prod
+    database-platform: io.github.jhipster.domain.util.FixedH2Dialect
+    database: H2
+    #database-platform: io.github.jhipster.domain.util.FixedPostgreSQL95Dialect
+    #database: POSTGRESQL
     show-sql: false
     properties:
       hibernate.id.new_generator_mappings: true

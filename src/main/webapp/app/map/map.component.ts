@@ -49,6 +49,6 @@ export class MapComponent implements OnInit {
   onClick(evt: MapLayerMouseEvent) {
     this.selectedPoint = evt.features![0];
   }
-  
+
 }
 
