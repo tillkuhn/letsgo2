@@ -16,5 +16,5 @@ for T in place; do
     aws dynamodb --endpoint-url http://localhost:8000 batch-write-item --request-items file://$IMPORTFILE
     echo "Dynamodb Table $PREFIX$T now contains $(aws dynamodb --endpoint-url http://localhost:8000 scan --table-name $PREFIX$T | grep '"id"'|wc -l) records"
 done
-# AWS_PROFILE=yummy aws dynamodb --endpoint-url http://localhost:8000 batch-write-item --request-items file://samples/letsgo2-$T.json
-# AWS_PROFILE=yummy aws dynamodb --endpoint-url http://localhost:8000 scan --table-name letsgo2-$T
+# AWS_PROFILE=timafe aws dynamodb --endpoint-url http://localhost:8000 batch-write-item --request-items file://samples/letsgo2-$T.json
+# AWS_PROFILE=timafe aws dynamodb --endpoint-url http://localhost:8000 scan --table-name letsgo2-$T

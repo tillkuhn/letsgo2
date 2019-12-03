@@ -5,7 +5,7 @@
   "letsgo2App": {
     "place": {
       "home": {
-        "title": "Places",
+        "title": "Places to visit some day ...",
         "createLabel": "Create a new Place",
         "createOrEditLabel": "Create or edit a Place",
         "notFound": "No Places found"
@@ -21,7 +21,7 @@
       },
       "name": "Name",
       "summary": "Summary",
-      "imageUrl": "Image Url",
+      "imageUrl": "First Impression",
       "rating": "Rating",
       "lotype": "Lotype",
       "country": "Country",

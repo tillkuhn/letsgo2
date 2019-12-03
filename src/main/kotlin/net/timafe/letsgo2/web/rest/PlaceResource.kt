@@ -6,6 +6,7 @@ import net.timafe.letsgo2.web.rest.errors.BadRequestAlertException
 
 import io.github.jhipster.web.util.HeaderUtil
 import io.github.jhipster.web.util.ResponseUtil
+import net.timafe.letsgo2.domain.Region
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.ResponseEntity
@@ -90,9 +91,10 @@ class PlaceResource(
 
      * @return the [ResponseEntity] with status `200 (OK)` and the list of places in body.
      */
-    @GetMapping("/places")    
-    fun getAllPlaces(): MutableList<Place> {
-        log.debug("REST request to get all Places")
+    @GetMapping("/places")
+    fun getAllPlaces():  MutableIterable<Place> {
+    log.debug("REST request to get all Places")
+        // var  p  = Place()
         return placeRepository.findAll()
     }
 
@@ -103,7 +105,7 @@ class PlaceResource(
      * @return the [ResponseEntity] with status `200 (OK)` and with body the place, or with status `404 (Not Found)`.
      */
     @GetMapping("/places/{id}")
-    fun getPlace(@PathVariable id: Long): ResponseEntity<Place> {
+    fun getPlace(@PathVariable id: String): ResponseEntity<Place> {
         log.debug("REST request to get Place : {}", id)
         val place = placeRepository.findById(id)
         return ResponseUtil.wrapOrNotFound(place)
@@ -115,7 +117,7 @@ class PlaceResource(
      * @return the [ResponseEntity] with status `204 (NO_CONTENT)`.
      */
     @DeleteMapping("/places/{id}")
-    fun deletePlace(@PathVariable id: Long): ResponseEntity<Void> {
+    fun deletePlace(@PathVariable id: String): ResponseEntity<Void> {
         log.debug("REST request to delete Place : {}", id)
 
         placeRepository.deleteById(id)

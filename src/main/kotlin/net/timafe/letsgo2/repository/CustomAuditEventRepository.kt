@@ -1,6 +1,5 @@
 package net.timafe.letsgo2.repository
 
-import java.time.Instant
 import net.timafe.letsgo2.config.ANONYMOUS_USER
 import net.timafe.letsgo2.config.audit.AuditEventConverter
 import net.timafe.letsgo2.domain.PersistentAuditEvent
@@ -10,6 +9,7 @@ import org.springframework.boot.actuate.audit.AuditEventRepository
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
+import java.time.Instant
 
 private const val AUTHORIZATION_FAILURE = "AUTHORIZATION_FAILURE"
 
