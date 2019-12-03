@@ -34,9 +34,10 @@ import org.springframework.validation.Validator
  *
  * @see RegionResource
  */
-@SpringBootTest(classes = [Letsgo2App::class, TestSecurityConfiguration::class])
+// Disabled as we moved from JPA to Dynamodb
+// @SpringBootTest(classes = [Letsgo2App::class, TestSecurityConfiguration::class])
 class RegionResourceIT {
-
+/*
     @Autowired
     private lateinit var regionRepository: RegionRepository
 
@@ -332,4 +333,6 @@ class RegionResourceIT {
             return region
         }
     }
+    */
+    
 }
