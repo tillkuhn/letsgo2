@@ -1,4 +1,4 @@
-package net.timafe.letsgo2.dynamo
+package net.timafe.letsgo2.repository
 
 import net.timafe.letsgo2.domain.Country
 import org.socialsignin.spring.data.dynamodb.repository.EnableScan

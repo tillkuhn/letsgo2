@@ -61,14 +61,17 @@ module.exports = (options) => ({
                 // If this URL is left empty (""), then it will be relative to the current context.
                 // If you use an API server, in `prod` mode, you will need to enable CORS
                 // (see the `jhipster.cors` common JHipster property in the `application-*.yml` configurations)
-                SERVER_API_URL: `''`
+                SERVER_API_URL: `''`,
+              // tk needle
+              MAPBOX_GL_ACCESS_TOKEN: `'${process.env.hasOwnProperty('MAPBOX_GL_ACCESS_TOKEN') ? process.env.MAPBOX_GL_ACCESS_TOKEN : 'PLEASE SET ENV MAPBOX_GL_ACCESS_TOKEN'}'`
             }
         }),
         new CopyWebpackPlugin([
-            { from: './node_modules/swagger-ui/dist/css', to: 'swagger-ui/dist/css' },
-            { from: './node_modules/swagger-ui/dist/lib', to: 'swagger-ui/dist/lib' },
-            { from: './node_modules/swagger-ui/dist/swagger-ui.min.js', to: 'swagger-ui/dist/swagger-ui.min.js' },
-            { from: './src/main/webapp/swagger-ui/', to: 'swagger-ui' },
+          // structure changes with new version so no css and lin subdirectory
+       //     { from: './node_modules/swagger-ui/dist/swagger-ui.css', to: 'swagger-ui/dist/css' },
+        //    { from: './node_modules/swagger-ui/dist/lib', to: 'swagger-ui/dist/lib' },
+     //       { from: './node_modules/swagger-ui/dist/swagger-ui.min.js', to: 'swagger-ui/dist/swagger-ui.min.js' },
+       //     { from: './src/main/webapp/swagger-ui/', to: 'swagger-ui' },
             { from: './src/main/webapp/content/', to: 'content' },
             { from: './src/main/webapp/favicon.ico', to: 'favicon.ico' },
             { from: './src/main/webapp/manifest.webapp', to: 'manifest.webapp' },

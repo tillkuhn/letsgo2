@@ -21,6 +21,7 @@
             <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
             <th scope="col" ><span jhiTranslate="letsgo2App.region.code">Code</span></th>
             <th scope="col" ><span jhiTranslate="letsgo2App.region.name">Name</span></th>
+            <th scope="col" ><span jhiTranslate="letsgo2App.region.parentCode">Parent Code</span></th>
             <th scope="col"></th>
             </tr>
             </thead>
@@ -29,6 +30,7 @@
                 <td><a [routerLink]="['/region', region.id, 'view' ]">{{region.id}}</a></td>
                 <td>{{region.code}}</td>
                 <td>{{region.name}}</td>
+                <td>{{region.parentCode}}</td>
                 <td class="text-right">
                     <div class="btn-group">
                         <button type="submit"

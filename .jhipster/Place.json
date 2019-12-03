@@ -17,6 +17,38 @@
         {
             "fieldName": "imageUrl",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "rating",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "lotype",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "country",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "updatedBy",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "coordinates",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "notes",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "updatedAt",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "primaryUrl",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20191119085923",

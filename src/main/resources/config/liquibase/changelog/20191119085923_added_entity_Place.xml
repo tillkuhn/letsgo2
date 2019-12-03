@@ -24,8 +24,33 @@
             <column name="image_url" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="rating" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="lotype" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="country" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="updated_by" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="coordinates" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="notes" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="updated_at" type="datetime">
+                <constraints nullable="true" />
+            </column>
+            <column name="primary_url" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
+        <dropDefaultValue tableName="place" columnName="updated_at" columnDataType="datetime"/>
     </changeSet>
 
     <changeSet id="20191119085923-1-relations" author="jhipster">
@@ -50,6 +75,14 @@
             <column name="name" type="string"/>
             <column name="summary" type="string"/>
             <column name="image_url" type="string"/>
+            <column name="rating" type="numeric"/>
+            <column name="lotype" type="string"/>
+            <column name="country" type="string"/>
+            <column name="updated_by" type="string"/>
+            <column name="coordinates" type="string"/>
+            <column name="notes" type="string"/>
+            <column name="updated_at" type="datetime"/>
+            <column name="primary_url" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

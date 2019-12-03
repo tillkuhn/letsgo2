@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, Routes } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
 import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { Place } from 'app/shared/model/place.model';
 import { PlaceService } from './place.service';
 import { PlaceComponent } from './place.component';
@@ -16,10 +16,13 @@ import { IPlace } from 'app/shared/model/place.model';
 export class PlaceResolve implements Resolve<IPlace> {
   constructor(private service: PlaceService) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IPlace> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<IPlace> {
     const id = route.params['id'];
     if (id) {
-      return this.service.find(id).pipe(map((place: HttpResponse<Place>) => place.body));
+      return this.service.find(id).pipe(
+        filter((response: HttpResponse<Place>) => response.ok),
+        map((place: HttpResponse<Place>) => place.body)
+      );
     }
     return of(new Place());
   }

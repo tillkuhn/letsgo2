@@ -18,6 +18,10 @@
             "fieldValidateRules": [
                 "required"
             ]
+        },
+        {
+            "fieldName": "parentCode",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20191119142215",

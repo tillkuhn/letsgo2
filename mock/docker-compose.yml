@@ -2,6 +2,7 @@ version: '2.1'
 services:
   localstack:
     image: localstack/localstack
+    container_name: localstack
     ports:
       # S3 at http://localhost:4572
       # SNS at http://localhost:4575

@@ -11,4 +11,9 @@ eg $input-color: red;
 @import '~bootstrap/scss/bootstrap';
 @import '~bootswatch/dist/sandstone/bootswatch';
 
+/* tk needle :-) */
+// https://github.com/Wykks/ngx-mapbox-gl
+@import "~mapbox-gl/dist/mapbox-gl.css";
+@import "~@mapbox/mapbox-gl-geocoder/lib/mapbox-gl-geocoder.css";
+
 /* jhipster-needle-scss-add-vendor JHipster will add new css style */

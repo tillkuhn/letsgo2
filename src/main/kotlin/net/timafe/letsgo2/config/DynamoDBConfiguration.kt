@@ -9,21 +9,30 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput
 import com.amazonaws.services.dynamodbv2.model.ResourceInUseException
+import io.github.jhipster.config.JHipsterConstants
 import kotlin.reflect.KClass
 import net.timafe.letsgo2.domain.Country
-import net.timafe.letsgo2.dynamo.CountryRepository
+import net.timafe.letsgo2.domain.Place
+import net.timafe.letsgo2.domain.Region
+import net.timafe.letsgo2.repository.CountryRepository
+import net.timafe.letsgo2.repository.PlaceRepository
+import net.timafe.letsgo2.repository.RegionRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.socialsignin.spring.data.dynamodb.repository.config.EnableDynamoDBRepositories
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Profile
+import org.springframework.context.annotation.*
+import org.springframework.core.env.Profiles
+import org.springframework.core.env.Environment
 
 @Configuration
 // see https://github.com/derjust/spring-data-dynamodb-examples/blob/master/README-multirepo.md
-@EnableDynamoDBRepositories(basePackageClasses = [CountryRepository::class])
-class DynamoDBConfiguration {
+@EnableDynamoDBRepositories(basePackageClasses = [CountryRepository::class],
+    includeFilters = [ComponentScan.Filter(value = [CountryRepository::class], type = FilterType.ASSIGNABLE_TYPE),
+        ComponentScan.Filter(value = [RegionRepository::class], type = FilterType.ASSIGNABLE_TYPE),
+        ComponentScan.Filter(value = [PlaceRepository::class], type = FilterType.ASSIGNABLE_TYPE)
+    ])
+class DynamoDBConfiguration(private val env: Environment) {
 
     private val log: Logger = LoggerFactory.getLogger(this.javaClass)
 
@@ -44,7 +53,13 @@ class DynamoDBConfiguration {
             .withCredentials(AWSStaticCredentialsProvider(BasicAWSCredentials("key", "secret")))
             .withEndpointConfiguration(AwsClientBuilder.EndpointConfiguration(amazonDynamoDBEndpoint, Regions.EU_CENTRAL_1.toString()))
             .build()
-        createTableForEntity(client, Country::class)
+        // todo remove should be done by terraform
+        if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
+            log.info("Profile {} detected, creating tables in Dynamodb",(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))
+            createTableForEntity(client, Country::class)
+            createTableForEntity(client, Region::class)
+            createTableForEntity(client, Place::class)
+        }
         return client
     }
 

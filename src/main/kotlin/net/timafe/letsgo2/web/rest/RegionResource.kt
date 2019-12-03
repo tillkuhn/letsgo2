@@ -11,10 +11,16 @@ import net.timafe.letsgo2.web.rest.errors.BadRequestAlertException
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 private const val ENTITY_NAME = "region"
-
 /**
  * REST controller for managing [net.timafe.letsgo2.domain.Region].
  */
@@ -70,12 +76,11 @@ class RegionResource(
             .headers(
                 HeaderUtil.createEntityUpdateAlert(
                     applicationName, true, ENTITY_NAME,
-                    region.id.toString()
+                     region.id.toString()
                 )
             )
             .body(result)
     }
-
     /**
      * `GET  /regions` : get all the regions.
      *
@@ -83,7 +88,8 @@ class RegionResource(
      * @return the [ResponseEntity] with status `200 (OK)` and the list of regions in body.
      */
     @GetMapping("/regions")
-    fun getAllRegions(): MutableList<Region> {
+    // fun getAllRegions(): MutableList<Region> {
+    fun getAllRegions(): MutableIterable<Region> {
         log.debug("REST request to get all Regions")
         return regionRepository.findAll()
     }
@@ -95,12 +101,11 @@ class RegionResource(
      * @return the [ResponseEntity] with status `200 (OK)` and with body the region, or with status `404 (Not Found)`.
      */
     @GetMapping("/regions/{id}")
-    fun getRegion(@PathVariable id: Long): ResponseEntity<Region> {
+    fun getRegion(@PathVariable id: String): ResponseEntity<Region> {
         log.debug("REST request to get Region : {}", id)
         val region = regionRepository.findById(id)
         return ResponseUtil.wrapOrNotFound(region)
     }
-
     /**
      *  `DELETE  /regions/:id` : delete the "id" region.
      *
@@ -108,7 +113,7 @@ class RegionResource(
      * @return the [ResponseEntity] with status `204 (NO_CONTENT)`.
      */
     @DeleteMapping("/regions/{id}")
-    fun deleteRegion(@PathVariable id: Long): ResponseEntity<Void> {
+    fun deleteRegion(@PathVariable id: String): ResponseEntity<Void> {
         log.debug("REST request to delete Region : {}", id)
 
         regionRepository.deleteById(id)

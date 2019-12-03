@@ -27,14 +27,16 @@ if [ -d /etc/letsencrypt/live ]; then
 elif aws s3api head-object --bucket ${bucket_name} --key letsencrypt/letsencrypt.tar.gz; then
   echo "[INFO] local /etc/letsencrypt missing, downloading letsencrypt config from sr"
   aws s3 cp s3://${bucket_name}/letsencrypt/letsencrypt.tar.gz ${appdir}/
+  chown -R ec2-user:ec2-user ${appdir}/letsencrypt.tar.gz
   cd /etc
   tar -xvf ${appdir}/letsencrypt.tar.gz
 else
   echo "[INFO] No local or remote letsencrypt  nginx config found, new one will be requested"
 fi
-echo "[INFO] Launching nginx via systemd and start certbot for ${domain_name}"
+echo "[INFO] Making sure nginx is registered as nginx service and restarted if running"
 systemctl enable nginx
 systemctl start nginx
+echo "[INFO] Launching certbot for ${domain_name}"
 certbot --nginx -m ${certbot_mail} --agree-tos --redirect -n -d ${domain_name}
 
 echo "[INFO] Backup /etc/letsencrypt to s3://${bucket_name}"
@@ -43,10 +45,13 @@ aws s3 cp --sse=AES256 /tmp/letsencrypt.tar.gz s3://${bucket_name}/letsencrypt/l
 
 echo "[INFO] Replacing system nginx.conf with enhanced version ..."
 cp  ${appdir}/nginx.conf /etc/nginx/nginx.conf
-# curl http://169.254.169.254/latest/user-data
+systemctl restart nginx
 
-##
 echo "[INFO] Registering and starting ${appid}.service as systemd service"
 cp  ${appdir}/app.service /etc/systemd/system/${appid}.service
 systemctl enable ${appid}
 systemctl start ${appid}
+
+echo "[INFO] Init comlete, check out https://${domain_name}"
+# curl http://169.254.169.254/latest/user-data
+# aws s3 sync s3://${bucket_name}/deploy ${appdir}

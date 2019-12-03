@@ -21,7 +21,8 @@
     "serviceDiscoveryType": false,
     "buildTool": "gradle",
     "enableSwaggerCodegen": false,
-    "embeddableLaunchScript": false
+    "embeddableLaunchScript": false,
+    "enableTranslation": true
   },
   "generator-jhipster": {
     "promptValues": {
@@ -47,7 +48,10 @@
     ],
     "enableTranslation": true,
     "nativeLanguage": "en",
-    "languages": ["en", "de"],
+    "languages": [
+      "en",
+      "de"
+    ],
     "blueprints": [
       {
         "name": "generator-jhipster-kotlin",

@@ -5,6 +5,8 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
+import * as moment from 'moment';
+import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 import { IPlace, Place } from 'app/shared/model/place.model';
 import { PlaceService } from './place.service';
 
@@ -17,8 +19,17 @@ export class PlaceUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    name: [null, [Validators.required, Validators.minLength(3)]],
-    summary: []
+    name: [null, [Validators.required]],
+    summary: [],
+    imageUrl: [],
+    rating: [],
+    lotype: [],
+    country: [],
+    updatedBy: [],
+    coordinates: [],
+    notes: [],
+    updatedAt: [],
+    primaryUrl: []
   });
 
   constructor(protected placeService: PlaceService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
@@ -34,7 +45,16 @@ export class PlaceUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: place.id,
       name: place.name,
-      summary: place.summary
+      summary: place.summary,
+      imageUrl: place.imageUrl,
+      rating: place.rating,
+      lotype: place.lotype,
+      country: place.country,
+      updatedBy: place.updatedBy,
+      coordinates: place.coordinates,
+      notes: place.notes,
+      updatedAt: place.updatedAt != null ? place.updatedAt.format(DATE_TIME_FORMAT) : null,
+      primaryUrl: place.primaryUrl
     });
   }
 
@@ -57,7 +77,17 @@ export class PlaceUpdateComponent implements OnInit {
       ...new Place(),
       id: this.editForm.get(['id']).value,
       name: this.editForm.get(['name']).value,
-      summary: this.editForm.get(['summary']).value
+      summary: this.editForm.get(['summary']).value,
+      imageUrl: this.editForm.get(['imageUrl']).value,
+      rating: this.editForm.get(['rating']).value,
+      lotype: this.editForm.get(['lotype']).value,
+      country: this.editForm.get(['country']).value,
+      updatedBy: this.editForm.get(['updatedBy']).value,
+      coordinates: this.editForm.get(['coordinates']).value,
+      notes: this.editForm.get(['notes']).value,
+      updatedAt:
+        this.editForm.get(['updatedAt']).value != null ? moment(this.editForm.get(['updatedAt']).value, DATE_TIME_FORMAT) : undefined,
+      primaryUrl: this.editForm.get(['primaryUrl']).value
     };
   }
 

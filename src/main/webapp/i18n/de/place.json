@@ -17,7 +17,16 @@
         "title": "Place"
       },
       "name": "Name",
-      "summary": "Summary"
+      "summary": "Summary",
+      "imageUrl": "Image Url",
+      "rating": "Rating",
+      "lotype": "Lotype",
+      "country": "Country",
+      "updatedBy": "Updated By",
+      "coordinates": "Coordinates",
+      "notes": "Notes",
+      "updatedAt": "Updated At",
+      "primaryUrl": "Primary Url"
     }
   }
 }

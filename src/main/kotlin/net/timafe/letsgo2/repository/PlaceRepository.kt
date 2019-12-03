@@ -1,11 +1,13 @@
 package net.timafe.letsgo2.repository
 import net.timafe.letsgo2.domain.Place
-import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.stereotype.Repository
+import org.socialsignin.spring.data.dynamodb.repository.EnableScan
+import org.springframework.data.repository.CrudRepository
 
 /**
  * Spring Data  repository for the [Place] entity.
  */
-@Suppress("unused")
-@Repository
-interface PlaceRepository : JpaRepository<Place, Long>
+//@Suppress("unused")
+//@Repository
+@EnableScan
+interface PlaceRepository : CrudRepository<Place, String> {
+}
