@@ -1,10 +1,10 @@
 package net.timafe.letsgo2.repository
 
-import java.time.Instant
 import net.timafe.letsgo2.domain.PersistentAuditEvent
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
+import java.time.Instant
 
 /**
  * Spring Data JPA repository for the [PersistentAuditEvent] entity.

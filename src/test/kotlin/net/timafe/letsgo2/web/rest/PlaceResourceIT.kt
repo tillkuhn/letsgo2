@@ -43,6 +43,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @SpringBootTest(classes = [Letsgo2App::class, TestSecurityConfiguration::class])
 class PlaceResourceIT {
 
+    /*
     @Autowired
     private lateinit var placeRepository: PlaceRepository
 
@@ -175,7 +176,7 @@ class PlaceResourceIT {
             .andExpect(jsonPath("$.[*].updatedAt").value(hasItem(DEFAULT_UPDATED_AT.toString())))
             .andExpect(jsonPath("$.[*].primaryUrl").value(hasItem(DEFAULT_PRIMARY_URL)))
     }
-    
+
     @Test
     @Transactional
     fun getPlace() {
@@ -400,4 +401,6 @@ class PlaceResourceIT {
             return place
         }
     }
+    */
+
 }
