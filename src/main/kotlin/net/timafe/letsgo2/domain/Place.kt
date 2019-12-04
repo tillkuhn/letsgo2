@@ -4,6 +4,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.*
 import net.timafe.letsgo2.config.DYNAMODB_PREFIX
 import org.hibernate.annotations.Cache
 import org.hibernate.annotations.CacheConcurrencyStrategy
+import org.springframework.data.annotation.CreatedBy
 
 import javax.persistence.CascadeType
 import javax.persistence.Column
@@ -65,6 +66,7 @@ class Place(
 
     // @Column(name = "updated_by")
     var updatedBy: String? = null,
+    var createdBy: String? = null,
 
     // @Column(name = "coordinates")
     @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.L)
@@ -77,8 +79,12 @@ class Place(
     //  Place[updatedAt]; could not unconvert attribute
     // maybe https://stackoverflow.com/questions/28077435/dynamodbmapper-for-java-time-localdatetime
     // or https://github.com/derjust/spring-data-dynamodb-examples/blob/master/src/main/java/com/github/derjust/spring_data_dynamodb_examples/custom/User.java
-    @DynamoDBIgnore
+    //@DynamoDBIgnore
+    @DynamoDBTypeConverted(converter = InstantNoodle::class)
     var updatedAt: Instant? = null,
+
+    @DynamoDBTypeConverted(converter = InstantNoodle::class)
+    var createdAt: Instant? = null,
 
     // @Column(name = "primary_url")
     var primaryUrl: String? = null
@@ -113,7 +119,10 @@ class Place(
         "}"
 
 
+    /*
     companion object {
         private const val serialVersionUID = 1L
     }
+    */
+
 }

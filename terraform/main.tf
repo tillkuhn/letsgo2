@@ -45,12 +45,12 @@ resource "aws_key_pair" "ssh_key" {
 ## NEW modules support
 module "table_country" {
     source = "./modules/dynamodb"
-    name = "${var.appid}-country"
+    name = "${var.dynamodb_table_prefix}country"
     tags =  map("appid", var.appid, "managedBy", "terraform")
 }
 
 module "table_region" {
     source = "./modules/dynamodb"
-    name = "${var.appid}-region"
+    name = "${var.dynamodb_table_prefix}region"
     tags =  map("appid", var.appid, "managedBy", "terraform")
 }

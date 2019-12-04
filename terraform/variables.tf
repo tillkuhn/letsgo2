@@ -77,3 +77,8 @@ variable oauth2_client_id {
 variable oauth2_client_secret {
     type = "string"
 }
+
+variable dynamodb_table_prefix {
+    description = "Prefix for your dynamodb table names e.g. myapp-, preferably use appid-"
+    type = "string"
+}
