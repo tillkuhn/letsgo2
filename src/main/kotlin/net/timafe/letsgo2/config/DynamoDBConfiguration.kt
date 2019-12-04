@@ -62,6 +62,7 @@ class DynamoDBConfiguration(private val env: Environment) {
         return client
     }
 
+
     private fun createTableForEntity(amazonDynamoDB: AmazonDynamoDB, entity: KClass<*>) {
 
         val tableRequest = DynamoDBMapper(amazonDynamoDB)

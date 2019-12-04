@@ -1,30 +1,25 @@
 package net.timafe.letsgo2.web.rest
 
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB
+import com.amazonaws.services.dynamodbv2.document.Item
+import io.github.jhipster.web.util.HeaderUtil
+import io.github.jhipster.web.util.ResponseUtil
+import net.timafe.letsgo2.domain.Coordinates
 import net.timafe.letsgo2.domain.Place
 import net.timafe.letsgo2.repository.PlaceRepository
 import net.timafe.letsgo2.web.rest.errors.BadRequestAlertException
-
-import io.github.jhipster.web.util.HeaderUtil
-import io.github.jhipster.web.util.ResponseUtil
-import net.timafe.letsgo2.domain.Region
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
-
-import javax.validation.Valid
+import org.springframework.web.bind.annotation.*
 import java.net.URI
 import java.net.URISyntaxException
+import java.util.*
+import javax.validation.Valid
+
 
 private const val ENTITY_NAME = "place"
+
 /**
  * REST controller for managing [net.timafe.letsgo2.domain.Place].
  */
@@ -32,7 +27,8 @@ private const val ENTITY_NAME = "place"
 @RequestMapping("/api")
 class PlaceResource(
     private val placeRepository: PlaceRepository
-) {
+
+    ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
     @Value("\${jhipster.clientApp.name}")
@@ -80,11 +76,12 @@ class PlaceResource(
             .headers(
                 HeaderUtil.createEntityUpdateAlert(
                     applicationName, true, ENTITY_NAME,
-                     place.id.toString()
+                    place.id.toString()
                 )
             )
             .body(result)
     }
+
     /**
      * `GET  /places` : get all the places.
      *
@@ -92,8 +89,8 @@ class PlaceResource(
      * @return the [ResponseEntity] with status `200 (OK)` and the list of places in body.
      */
     @GetMapping("/places")
-    fun getAllPlaces():  MutableIterable<Place> {
-    log.debug("REST request to get all Places")
+    fun getAllPlaces(): MutableIterable<Place> {
+        log.debug("REST request to get all Places")
         // var  p  = Place()
         return placeRepository.findAll()
     }
@@ -110,6 +107,7 @@ class PlaceResource(
         val place = placeRepository.findById(id)
         return ResponseUtil.wrapOrNotFound(place)
     }
+
     /**
      *  `DELETE  /places/:id` : delete the "id" place.
      *
@@ -124,4 +122,6 @@ class PlaceResource(
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build()
     }
+
+
 }
