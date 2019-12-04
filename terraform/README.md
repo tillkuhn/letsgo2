@@ -53,3 +53,4 @@ Bottom line: use SERVER_USE_FORWARD_HEADERS=true for spring boot and the followi
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 ```
+https://github.com/aws-actions/configure-aws-credentials

@@ -19,6 +19,7 @@ import net.timafe.letsgo2.repository.PlaceRepository
 import net.timafe.letsgo2.repository.RegionRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.socialsignin.spring.data.dynamodb.repository.EnableScan
 import org.socialsignin.spring.data.dynamodb.repository.config.EnableDynamoDBRepositories
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.*
@@ -27,11 +28,9 @@ import org.springframework.core.env.Environment
 
 @Configuration
 // see https://github.com/derjust/spring-data-dynamodb-examples/blob/master/README-multirepo.md
+// Table name overwrite? https://github.com/derjust/spring-data-dynamodb/wiki/Alter-table-name-during-runtime
 @EnableDynamoDBRepositories(basePackageClasses = [CountryRepository::class],
-    includeFilters = [ComponentScan.Filter(value = [CountryRepository::class], type = FilterType.ASSIGNABLE_TYPE),
-        ComponentScan.Filter(value = [RegionRepository::class], type = FilterType.ASSIGNABLE_TYPE),
-        ComponentScan.Filter(value = [PlaceRepository::class], type = FilterType.ASSIGNABLE_TYPE)
-    ])
+    includeFilters = [ComponentScan.Filter(value = [EnableScan::class], type = FilterType.ANNOTATION)])
 class DynamoDBConfiguration(private val env: Environment) {
 
     private val log: Logger = LoggerFactory.getLogger(this.javaClass)
