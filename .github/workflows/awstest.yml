@@ -1,0 +1,17 @@
+name: awsdeploy-ci
+
+on:
+  push:
+    # Sequence of patterns matched against refs/heads
+    branches:
+      - dev         # Push events on master branch
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      #- uses: actions/checkout@v1
+
+      - name: show aws version
+        run: |
+          aws --version
