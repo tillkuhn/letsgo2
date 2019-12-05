@@ -111,10 +111,11 @@ fun getRolesFromClaims(claims: Map<String, Any>): Collection<String> {
     // return claims.getOrDefault("groups", claims.getOrDefault("roles", listOf<String>())) as Collection<String>
 }
 
-fun extractRolesFromJSONArray(json: JSONArray): List<String> {
-    val roles = mutableListOf<String>()
-    // arn:aws:iam::xxxxxxxxxx:role/letsgo2-cognito-role-admin (-user and - guest)
-    json.iterator().forEach { roles.add(it.toString()) }
-    return roles
+fun extractRolesFromJSONArray(jsonArray: JSONArray): List<String> {
+    val iamRolePattern = "cognito-role-"
+    return jsonArray
+        .filter { it.toString().contains(iamRolePattern) }
+        .map { "ROLE_" + it.toString().substring(it.toString().indexOf(iamRolePattern)+iamRolePattern.length).toUpperCase() }
+
 }
 
