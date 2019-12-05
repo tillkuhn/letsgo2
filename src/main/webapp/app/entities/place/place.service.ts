@@ -33,7 +33,7 @@ export class PlaceService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
-  find(id: number): Observable<EntityResponseType> {
+  find(id: string): Observable<EntityResponseType> {
     return this.http
       .get<IPlace>(`${this.resourceUrl}/${id}`, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
@@ -46,13 +46,14 @@ export class PlaceService {
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
-  delete(id: number): Observable<HttpResponse<any>> {
+  delete(id: string): Observable<HttpResponse<any>> {
     return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
   protected convertDateFromClient(place: IPlace): IPlace {
     const copy: IPlace = Object.assign({}, place, {
-      updatedAt: place.updatedAt != null && place.updatedAt.isValid() ? place.updatedAt.toJSON() : null
+      updatedAt: place.updatedAt != null && place.updatedAt.isValid() ? place.updatedAt.toJSON() : null,
+      createdAt: place.createdAt != null && place.createdAt.isValid() ? place.createdAt.toJSON() : null
     });
     return copy;
   }
@@ -60,6 +61,7 @@ export class PlaceService {
   protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
     if (res.body) {
       res.body.updatedAt = res.body.updatedAt != null ? moment(res.body.updatedAt) : null;
+      res.body.createdAt = res.body.createdAt != null ? moment(res.body.createdAt) : null;
     }
     return res;
   }
@@ -68,6 +70,7 @@ export class PlaceService {
     if (res.body) {
       res.body.forEach((place: IPlace) => {
         place.updatedAt = place.updatedAt != null ? moment(place.updatedAt) : null;
+        place.createdAt = place.createdAt != null ? moment(place.createdAt) : null;
       });
     }
     return res;

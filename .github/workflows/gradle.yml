@@ -15,5 +15,6 @@ jobs:
       with:
         java-version: 11
     - name: Build with Gradle
+      # minimum: compileKotlin
       run: |
-        ./gradlew --no-daemon compileKotlin
+        ./gradlew --no-daemon clean bootJar

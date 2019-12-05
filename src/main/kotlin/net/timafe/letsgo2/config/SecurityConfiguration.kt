@@ -75,6 +75,7 @@ class SecurityConfiguration(
             .authorizeRequests()
             .antMatchers("/authorize").authenticated()
             .antMatchers("/api/auth-info").permitAll()
+            .antMatchers("/api/public/**").permitAll() // tku for unauthenticated users
             .antMatchers("/api/**").authenticated()
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/info").permitAll()

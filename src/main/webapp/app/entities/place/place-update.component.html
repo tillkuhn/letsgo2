@@ -1,9 +1,13 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <img src="https://images-na.ssl-images-amazon.com/images/I/518nKDWVafL._SY355_.jpg" />Tasse
             <h2 id="jhi-place-heading" jhiTranslate="letsgo2App.place.home.createOrEditLabel">Create or edit a Place</h2>
             <div>
                 <jhi-alert-error></jhi-alert-error>
+                hallo
+                <img [src]="editForm.get(['imageUrl']).value" alt="impression" height="100px"/>
+
                 <div class="form-group" [hidden]="!editForm.get('id').value">
                     <label for="id" jhiTranslate="global.field.id">ID</label>
                     <input type="text" class="form-control" id="id" name="id" formControlName="id"

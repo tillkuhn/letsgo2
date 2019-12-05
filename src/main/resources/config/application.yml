@@ -69,6 +69,11 @@ spring:
     jpa:
       repositories:
         bootstrap-mode: deferred
+  # tku  descrease default size as we barely need the db
+  datasource:
+    hikari:
+      minimum-idle: 2
+      maximum-pool-size: 4
   jpa:
     open-in-view: false
     properties:

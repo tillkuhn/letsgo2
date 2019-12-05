@@ -20,7 +20,7 @@ export class PlaceDeleteDialogComponent {
     this.activeModal.dismiss('cancel');
   }
 
-  confirmDelete(id: number) {
+  confirmDelete(id: string) {
     this.placeService.delete(id).subscribe(response => {
       this.eventManager.broadcast({
         name: 'placeListModification',
