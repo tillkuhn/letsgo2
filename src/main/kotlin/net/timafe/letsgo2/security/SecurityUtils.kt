@@ -91,7 +91,7 @@ fun extractAuthorityFromClaims(claims: Map<String, Any>): List<GrantedAuthority>
 // take a list of simple names role strings, and map it into a list of GrantedAuthority objects if pattern machtes
 fun mapRolesToGrantedAuthorities(roles: Collection<String>): List<GrantedAuthority> {
     return roles
-        .filterIndexed() {  index,rolename -> rolename.startsWith("ROLE_") }
+        .filter {  it.startsWith("ROLE_") }
         .map { SimpleGrantedAuthority(it) }
 }
 
