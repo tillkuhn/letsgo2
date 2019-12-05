@@ -2,7 +2,7 @@
 
 package net.timafe.letsgo2.security
 
-import java.util.*
+import net.minidev.json.JSONArray
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
+import java.util.*
 
 /**
  * Get the login of the current user.
@@ -23,7 +24,12 @@ fun getCurrentUserLogin(): Optional<String> =
                 is UserDetails -> principal.username
                 is JwtAuthenticationToken -> (authentication as JwtAuthenticationToken).token.claims as String
                 is DefaultOidcUser -> {
-                    if (principal.attributes.containsKey("preferred_username")) {
+
+                    // principal.idToken.claims.get("cognito:username") = mail address
+                    // principal.idToken.claims.get("cognito:preferred_role") = arn:aws:iam::062960202541:role/cognito-empty-role-test
+                    if (principal.idToken.claims.containsKey("cognito:username")) {
+                        principal.idToken.claims.get("cognito:username").toString()
+                    } else if (principal.attributes.containsKey("preferred_username")) {
                         principal.attributes["preferred_username"].toString()
                     } else {
                         null
@@ -68,11 +74,11 @@ fun isCurrentUserInRole(authority: String): Boolean {
 }
 
 fun getAuthorities(authentication: Authentication): List<String> {
-    val authorities = when (val auth = authentication) {
+    val authorities = when (authentication) {
         is JwtAuthenticationToken ->
-            extractAuthorityFromClaims(auth.token.claims)
+            extractAuthorityFromClaims(authentication.token.claims)
         else ->
-            auth.authorities
+            authentication.authorities
     }
     return authorities
         .map(GrantedAuthority::getAuthority)
@@ -82,15 +88,32 @@ fun extractAuthorityFromClaims(claims: Map<String, Any>): List<GrantedAuthority>
     return mapRolesToGrantedAuthorities(getRolesFromClaims(claims))
 }
 
-@Suppress("UNCHECKED_CAST")
-fun getRolesFromClaims(claims: Map<String, Any>): Collection<String> {
-    // TODO Cognito Specific
-    return listOf<String>("ROLE_USER", "ROLE_ADMIN")
-    // return claims.getOrDefault("groups", claims.getOrDefault("roles", listOf<String>())) as Collection<String>
-}
-
 fun mapRolesToGrantedAuthorities(roles: Collection<String>): List<GrantedAuthority> {
     return roles
         .filter { it.startsWith("ROLE_") }
         .map { SimpleGrantedAuthority(it) }
 }
+
+@Suppress("UNCHECKED_CAST")
+fun getRolesFromClaims(claims: Map<String, Any>): Collection<String> {
+    return if (claims.containsKey("cognito:roles")) {
+        when (val coros = claims.get("cognito:roles")) {
+            is JSONArray -> extractRolesFromJSONArray(coros)
+            else -> listOf<String>()
+        }
+    } else {
+        listOf<String>()
+    }
+    // claims.get("cognito:roles") = JSONArray of arns
+    // cognito:preferred_role -> arn:aws:iam::062960202541:role/cognito-empty-role-test
+    // return listOf<String>("ROLE_USER", "ROLE_ADMIN")
+    // return claims.getOrDefault("groups", claims.getOrDefault("roles", listOf<String>())) as Collection<String>
+}
+
+fun extractRolesFromJSONArray(json: JSONArray): List<String> {
+    val roles = mutableListOf<String>()
+    // arn:aws:iam::062960202541:role/letsgo2-cognito-role-admin (-user and - guest)
+    json.iterator().forEach { roles.add(it.toString()) }
+    return roles
+}
+

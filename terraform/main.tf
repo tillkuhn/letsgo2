@@ -1,7 +1,12 @@
 ## Main Entry point for terraform infrastructure
 provider "aws" {
     region = "eu-central-1"
-    version = "~> 2.34"
+    version = "~> 2.41"
+}
+
+## A local value assigns a name to an expression, allowing it to be used multiple times within a module without repeating it.
+locals {
+    common_tags = map("appid", var.appid, "managedBy", "terraform")
 }
 
 ## see terraform-backend.tf.tmpl and remove extension
@@ -46,11 +51,20 @@ resource "aws_key_pair" "ssh_key" {
 module "table_country" {
     source = "./modules/dynamodb"
     name = "${var.dynamodb_table_prefix}country"
-    tags =  map("appid", var.appid, "managedBy", "terraform")
+    tags = local.common_tags
 }
 
 module "table_region" {
     source = "./modules/dynamodb"
     name = "${var.dynamodb_table_prefix}region"
-    tags =  map("appid", var.appid, "managedBy", "terraform")
+    tags = local.common_tags
+}
+
+## Cognito support
+
+module "cognito" {
+    source = "./modules/cognito"
+    appid = var.appid
+    user_pool_name = "yummy"
+    tags = local.common_tags
 }
