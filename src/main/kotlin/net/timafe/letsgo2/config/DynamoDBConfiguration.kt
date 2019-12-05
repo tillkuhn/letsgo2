@@ -31,7 +31,10 @@ import org.springframework.core.env.Environment
 // Table name overwrite? https://github.com/derjust/spring-data-dynamodb/wiki/Alter-table-name-during-runtime
 @EnableDynamoDBRepositories(basePackageClasses = [CountryRepository::class],
     includeFilters = [ComponentScan.Filter(value = [EnableScan::class], type = FilterType.ANNOTATION)])
-class DynamoDBConfiguration(private val env: Environment) {
+class DynamoDBConfiguration(
+    private val env: Environment,
+    private val appProperties: ApplicationProperties
+) {
 
     private val log: Logger = LoggerFactory.getLogger(this.javaClass)
 
@@ -54,7 +57,7 @@ class DynamoDBConfiguration(private val env: Environment) {
             .build()
         // todo remove should be done by terraform
         if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
-            log.info("Profile {} detected, creating tables in Dynamodb",(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))
+            log.info("Profile {} detected, creating tables in Dynamodb prefix {}",JHipsterConstants.SPRING_PROFILE_DEVELOPMENT,appProperties.aws.dynamodb.tablePrefix)
             createTableForEntity(client, Country::class)
             createTableForEntity(client, Region::class)
             createTableForEntity(client, Place::class)

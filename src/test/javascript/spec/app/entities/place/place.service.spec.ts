@@ -25,14 +25,14 @@ describe('Service Tests', () => {
       currentDate = moment();
 
       elemDefault = new Place(
-        0,
+        "0",
         'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
         0,
         'AAAAAAA',
         'AAAAAAA',
-        'AAAAAAA',
+        [1.2,3.4],
         'AAAAAAA',
         'AAAAAAA',
         currentDate,
@@ -49,7 +49,7 @@ describe('Service Tests', () => {
           elemDefault
         );
         service
-          .find(123)
+          .find("123")
           .pipe(take(1))
           .subscribe(resp => (expectedResult = resp));
 
@@ -61,7 +61,7 @@ describe('Service Tests', () => {
       it('should create a Place', () => {
         const returnedFromService = Object.assign(
           {
-            id: 0,
+            id: "0",
             updatedAt: currentDate.format(DATE_TIME_FORMAT)
           },
           elemDefault
@@ -151,7 +151,7 @@ describe('Service Tests', () => {
       });
 
       it('should delete a Place', () => {
-        service.delete(123).subscribe(resp => (expectedResult = resp.ok));
+        service.delete("123").subscribe(resp => (expectedResult = resp.ok));
 
         const req = httpMock.expectOne({ method: 'DELETE' });
         req.flush({ status: 200 });

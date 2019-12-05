@@ -20,7 +20,8 @@
             <tr>
             <!--<th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>-->
                 <th scope="col" ><span jhiTranslate="letsgo2App.place.name">Place2go</span></th>
-                <th scope="col" ><span jhiTranslate="letsgo2App.place.imageUrl">FirstImpression</span></th>
+                <!--
+                <th scope="col" ><span jhiTranslate="letsgo2App.place.imageUrl">FirstImpression</span></th>-->
             <th scope="col" ><span jhiTranslate="letsgo2App.place.summary">Summary</span></th>
             <th scope="col" ><span jhiTranslate="letsgo2App.place.rating">Rating</span></th>
             <th scope="col" ><span jhiTranslate="letsgo2App.place.lotype">Lotype</span></th>
@@ -40,7 +41,9 @@
             <tbody>
             <tr *ngFor="let place of places ;trackBy: trackId">
                 <td><a [routerLink]="['/place', place.id, 'view' ]">{{place.name}}</a></td>
+                <!--
                 <td><img [src]="place.imageUrl" alt="impression" height="100px"/></td>
+                -->
                 <!--<td>{{place.name}}</td>-->
                 <td>{{place.summary}}</td>
                 <td>{{place.rating}}</td>

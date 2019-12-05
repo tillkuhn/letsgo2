@@ -53,5 +53,17 @@ systemctl enable ${appid}
 systemctl start ${appid}
 
 echo "[INFO] Init comlete, check out https://${domain_name}"
+## get current user data
 # curl http://169.254.169.254/latest/user-data
+## run security updates
+# sudo yum --security --quiet update
+# echo "@reboot ec2-user /usr/bin/date >>/opt/letsgo2/logs/reboot.log" | sudo tee /etc/cron.d/reboot >/dev/null
+# syslog to file
+## https://stackoverflow.com/questions/37585758/how-to-redirect-output-of-systemd-service-to-a-file
+#:syslogtag, isequal, "[CLOUDINIT]" /var/log/cloud-init.log
+#
+# comment out the following line to allow CLOUDINIT messages through.
+# Doing so means you'll also get CLOUDINIT messages in /var/log/syslog
+#& stop
+## sync da bucket
 # aws s3 sync s3://${bucket_name}/deploy ${appdir}

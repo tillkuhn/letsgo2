@@ -4,8 +4,8 @@ APPID=letsgo2
 .ONESHELL:
 .SHELL := /usr/bin/bash
 #A phony target is one that is not really the name of a file; rather it is just a name for a recipe to be executed when you make an explicit request. There are two reasons to use a phony target: to avoid a conflict with a file of the same name, and to improve performance.
-.PHONY: help init plan apply dns ec2stop ec2start ec2status login jardev jarprod \
-        webdev webprod jardev deployjar deployui upload json-server \
+.PHONY: help init plan apply dns ec2stop ec2start ec2status login ssh \
+		jardev jarprod webdev webprod upload deploy  \
         mock  mockd mocklog mockload mockstop clean
 .SILENT: help ## no @s needed
 .EXPORT_ALL_VARIABLES:
@@ -31,13 +31,14 @@ help:
 	echo
 	echo "Gradle / Docker Build Targets:"
 #	echo "  docker      Run docker build"
-	echo "  jardev      Create bootJar optimized for production"
-	echo "  jarprod     Create bootJar optimized for production"
-	echo "  jarrun      Runs jar file with java "
+	echo "  jardev      Create bootJar with dev profile (default)"
+	echo "  jarprod     Create bootJar optimized for production (needed?)"
+	echo "  jarrun      Runs bootJar locally file with java "
 	echo "  jardev      Create bootJar optimized for dev "
 	echo "  webdev      Runs webpack build for frontend dev"
-	echo "  webprod     Runs webpack build for frontend prod"
-	echo "  upload      Uploads Artifacts s3"
+	echo "  webprod     Runs webpack build for frontend production"
+	echo "  upload      Uploads bootjar, webapp and other Artifacts s3"
+	echo "  deploy      Bundles jardev, webprod, upload"
 	echo
 	echo "Mock / Local Dev Targets:"
 	echo "  mock       Runs dynambodb / s3 mocks in foreground"
@@ -74,6 +75,7 @@ upload: ; cd terraform; terraform apply -target=aws_s3_bucket_object.appservicee
           -target=aws_s3_bucket_object.appservice -target=aws_s3_bucket_object.installscript \
           -target=aws_s3_bucket_object.nginxconf -target=aws_s3_bucket_object.webapp \
           -target=aws_s3_bucket_object.bootjar --auto-approve
+deploy: jardev webprod upload
 
 ## Mocks
 mock: ; docker-compose -f mock/docker-compose.yml up

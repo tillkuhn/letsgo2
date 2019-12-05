@@ -10,7 +10,7 @@ describe('Component Tests', () => {
   describe('Place Management Detail Component', () => {
     let comp: PlaceDetailComponent;
     let fixture: ComponentFixture<PlaceDetailComponent>;
-    const route = ({ data: of({ place: new Place(123) }) } as any) as ActivatedRoute;
+    const route = ({ data: of({ place: new Place("123") }) } as any) as ActivatedRoute;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -32,7 +32,7 @@ describe('Component Tests', () => {
         comp.ngOnInit();
 
         // THEN
-        expect(comp.place).toEqual(jasmine.objectContaining({ id: 123 }));
+        expect(comp.place).toEqual(jasmine.objectContaining({ id: "123" }));
       });
     });
   });
