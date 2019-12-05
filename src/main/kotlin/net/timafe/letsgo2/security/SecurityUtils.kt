@@ -88,9 +88,10 @@ fun extractAuthorityFromClaims(claims: Map<String, Any>): List<GrantedAuthority>
     return mapRolesToGrantedAuthorities(getRolesFromClaims(claims))
 }
 
+// take a list of simple names role strings, and map it into a list of GrantedAuthority objects if pattern machtes
 fun mapRolesToGrantedAuthorities(roles: Collection<String>): List<GrantedAuthority> {
     return roles
-        .filter { it.startsWith("ROLE_") }
+        .filterIndexed() {  index,rolename -> rolename.startsWith("ROLE_") }
         .map { SimpleGrantedAuthority(it) }
 }
 
@@ -105,14 +106,14 @@ fun getRolesFromClaims(claims: Map<String, Any>): Collection<String> {
         listOf<String>()
     }
     // claims.get("cognito:roles") = JSONArray of arns
-    // cognito:preferred_role -> arn:aws:iam::062960202541:role/cognito-empty-role-test
+    // cognito:preferred_role -> arn:aws:iam::xxxxxxx:role/cognito-empty-role-test
     // return listOf<String>("ROLE_USER", "ROLE_ADMIN")
     // return claims.getOrDefault("groups", claims.getOrDefault("roles", listOf<String>())) as Collection<String>
 }
 
 fun extractRolesFromJSONArray(json: JSONArray): List<String> {
     val roles = mutableListOf<String>()
-    // arn:aws:iam::062960202541:role/letsgo2-cognito-role-admin (-user and - guest)
+    // arn:aws:iam::xxxxxxxxxx:role/letsgo2-cognito-role-admin (-user and - guest)
     json.iterator().forEach { roles.add(it.toString()) }
     return roles
 }
