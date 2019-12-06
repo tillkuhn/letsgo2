@@ -69,6 +69,7 @@ jardev:  ; ./gradlew clean bootJar && ls -l build/libs/app.jar
 jarprod: ; ./gradlew -x webpack -Pprod bootJar && ls -l build/libs/app.jar
 jarrun: ; java -Dspring.profiles.active=prod,localstack  -jar build/libs/app.jar
 webdev: ; npm run webpack:build
+## keep in mind to set MAPBOX_GL_ACCESS_TOKEN
 webprod: ; npm run webpack:prod
 ## not target wildcars possible yet :-(
 upload: ; cd terraform; terraform apply -target=aws_s3_bucket_object.appserviceenv \

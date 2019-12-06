@@ -5,12 +5,13 @@ on:
     # Sequence of patterns matched against refs/heads
     branches:
       - master         # Push events on master branch
+      - dev
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [10.x]
+        node-version: [12.x]
     steps:
     - uses: actions/checkout@v1
     - name: Use Node.js ${{ matrix.node-version }}
@@ -24,3 +25,4 @@ jobs:
         ls -l  build/resources/main/static
       env:
         CI: true
+        MAPBOX_GL_ACCESS_TOKEN: ${{ secrets.MAPBOX_GL_ACCESS_TOKEN }}
