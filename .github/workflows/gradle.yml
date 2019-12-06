@@ -9,12 +9,38 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - name: checkout
+      uses: actions/checkout@v1
+
     - name: Set up JDK 11
       uses: actions/setup-java@v1
       with:
         java-version: 11
+
     - name: Build with Gradle
       # minimum: compileKotlin
       run: |
-        ./gradlew --no-daemon clean bootJar
+        ./gradlew --no-daemon -x webpack -Pprod bootJar
+      env:
+        CI: true
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-central-1
+
+    - name: Deploy to S3
+      # minimum: compileKotlin
+      run: |
+        ## https://help.github.com/en/actions/automating-your-workflow-with-github-actions/using-environment-variables
+        echo "GITHUB_SHA=$GITHUB_SHA" >$buildinfo
+        echo "GITHUB_REF=$GITHUB_REF" >>$buildinfo
+        echo "BUILD_DATE=$(date +%F_%T)" >>$buildinfo
+        cat $buildinfo
+        echo aws s3 cp build/libs/app.jar s3://${bucket}/deploy/app.jar
+        echo aws s3 cp $buildinfo s3://${bucket}/deploy/$buildinfo
+      env: # Or as an environment variable
+        bucket: ${{ secrets.AWS_DEPLOY_BUCKET_NAME }}
+        buildinfo: app.buildinfo
