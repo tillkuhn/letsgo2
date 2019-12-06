@@ -7,9 +7,6 @@ fi
 
 # Todo Enable Swap
 ## grep MemTotal /proc/meminfo |  awk '$1 == "MemTotal:" {printf "%.0f", $2 / 1024}'
-##https://aws.amazon.com/de/premiumsupport/knowledge-center/ec2-memory-swap-file/
-##https://stackoverflow.com/questions/17173972/how-do-you-add-swap-to-an-ec2-instance
-##
 ##[ec2-user@ip-172-31-15-88 letsgo2]$ java -XX:+PrintFlagsFinal  -version |grep -Ei "maxheapsize|maxram"
 ##   size_t MaxHeapSize                              = 132120576                                 {product} {ergonomic}
 
@@ -87,9 +84,10 @@ if [[  "$*" == *frontend*  ]]; then
     echo "[INFO] Cleaning /usr/share/nginx/html"
     rm -rf /usr/share/nginx/html/*
     echo "[INFO] Unzipping ${appdir}/webapp.zip"
-    unzip -o ${appdir}/webapp.zip -d /usr/share/nginx/html
+    unzip -q -o ${appdir}/webapp.zip -d /usr/share/nginx/html
     echo "[INFO] Restating nginx"
     systemctl restart nginx
+    systemctl status nginx
 fi
 
 if [[  "$*" == *help*  ]]; then
@@ -113,24 +111,24 @@ fi
 # systemctl show letsgo2
 # journalctl -u letsgo2 -n 100 --no-pager
 
+##https://stackoverflow.com/questions/17173972/how-do-you-add-swap-to-an-ec2-instance
 
-## swappi
-#To then create a swap file on this device do the following for a 4GB swapfile
-#
-#sudo dd if=/dev/zero of=/mnt/swapfile bs=1M count=4096
-#Make sure no other user can view the swap file
-#
-#sudo chown root:root /mnt/swapfile
-#sudo chmod 600 /mnt/swapfile
-#Make and Flag as swap
-#
-#sudo mkswap /mnt/swapfile
-#sudo swapon /mnt/swapfile
-#Add/Make sure the following are in your /etc/fstab
-#
-#/dev/xvda2      /mnt    auto    defaults,nobootwait,comment=cloudconfig 0   2
-#/mnt/swapfile swap swap defaults 0 0
+if [[  "$*" == *swapon*  ]] || [ "$*" == *all*   ]; then
+    if [ ! -f /mnt/swapfile ]; then
+        echo "[INFO] Enabling Swap Support "
+        dd if=/dev/zero of=/mnt/swapfile bs=1M count=1024
+        chown root:root /mnt/swapfile
+        chmod 600 /mnt/swapfile
+        mkswap /mnt/swapfile
+        swapon /mnt/swapfile  ## to disable run swapoff -a
+        swapon -a
+    fi
+    if ! egrep "^/mnt/swapfile" /etc/fstab >/dev/null; then
+        echo "[INFO] creating fstab enty for swap"
+        echo "/mnt/swapfile swap swap defaults 0 0" >>/etc/fstab
+    fi
+fi
 #lastly enable swap
 #
 #sudo swapon -a
-# aws s3 cp s3://timafe-letsgo2-data/deploy/cloud-init.sh . && chmod ugo +x cloud-init.sh
+# aws s3 cp s3://timafe-letsgo2-data/deploy/cloud-init.sh . && chmod ugo+x cloud-init.sh
