@@ -29,7 +29,8 @@ export class PlaceUpdateComponent implements OnInit {
     coordinates: [],
     notes: [],
     updatedAt: [],
-    primaryUrl: []
+    primaryUrl: [],
+    debug: []
   });
 
   constructor(protected placeService: PlaceService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
@@ -54,7 +55,8 @@ export class PlaceUpdateComponent implements OnInit {
       coordinates: place.coordinates,
       notes: place.notes,
       updatedAt: place.updatedAt != null ? place.updatedAt.format(DATE_TIME_FORMAT) : null,
-      primaryUrl: place.primaryUrl
+      primaryUrl: place.primaryUrl,
+      debug: 'hase'
     });
   }
 

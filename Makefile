@@ -6,7 +6,7 @@ APPID=letsgo2
 #A phony target is one that is not really the name of a file; rather it is just a name for a recipe to be executed when you make an explicit request. There are two reasons to use a phony target: to avoid a conflict with a file of the same name, and to improve performance.
 .PHONY: help init plan apply dns ec2stop ec2start ec2status login ssh \
 		jardev jarprod webdev webprod upload deploy  \
-        mock  mockd mocklog mockload mockstop clean
+        mock  mockd mocklog mockload mockstop amazonlinux clean
 .SILENT: help ## no @s needed
 .EXPORT_ALL_VARIABLES:
 AWS_PROFILE = timafe
@@ -18,35 +18,35 @@ help:
 	echo "Usage: make [target]"
 	echo
 	echo "Terraform Targets:"
-	echo "  init        Inits infrastructure in infra with terraform"
-	echo "  plan        Plans infrastructure in infra with terraform"
-	echo "  apply       Applies infrastructure in infra with terraform (auto-approve)"
-	echo "  dns         Syncs the DNS entry with the instances current public IP (auto-approve)"
+	echo "  init         Inits infrastructure in infra with terraform"
+	echo "  plan         Plans infrastructure in infra with terraform"
+	echo "  apply        Applies infrastructure in infra with terraform (auto-approve)"
+	echo "  dns          Syncs the DNS entry with the instances current public IP (auto-approve)"
 	echo
 	echo "EC2 Targets:"
-	echo "  ec2stop     Stops the EC2 instance"
-	echo "  ec2start    Starts the EC2 instance"
-	echo "  ec2status   Current Status of ec2 instance"
-	echo "  login       ssh login to instance (alias: ssh)"
+	echo "  ec2stop      Stops the EC2 instance"
+	echo "  ec2start     Starts the EC2 instance"
+	echo "  ec2status    Current Status of ec2 instance"
+	echo "  login        ssh login to instance (alias: ssh)"
 	echo
 	echo "Gradle / Docker Build Targets:"
 #	echo "  docker      Run docker build"
-	echo "  jardev      Create bootJar with dev profile (default)"
-	echo "  jarprod     Create bootJar optimized for production (needed?)"
-	echo "  jarrun      Runs bootJar locally file with java "
-	echo "  jardev      Create bootJar optimized for dev "
-	echo "  webdev      Runs webpack build for frontend dev"
-	echo "  webprod     Runs webpack build for frontend production"
-	echo "  upload      Uploads bootjar, webapp and other Artifacts s3"
-	echo "  deploy      Bundles jardev, webprod, upload"
+	echo "  jardev       Create bootJar with dev profile (default)"
+	echo "  jarprod      Create bootJar optimized for production (needed?)"
+	echo "  jarrun       Runs bootJar locally file with java "
+	echo "  jardev       Create bootJar optimized for dev "
+	echo "  webdev       Runs webpack build for frontend dev"
+	echo "  webprod      Runs webpack build for frontend production"
+	echo "  upload       Uploads bootjar, webapp and other Artifacts s3"
+	echo "  deploy       Bundles jardev, webprod, upload"
 	echo
 	echo "Mock / Local Dev Targets:"
-	echo "  mock       Runs dynambodb / s3 mocks in foreground"
-	echo "  mockd      Runs dynambodb / s3 mocks in daemon mode"
-	echo "  mocklog    Show localstack logs from current container"
-	echo "  mockload   Providion initial data into local dynamodb/s3 "
-	echo "  mockstop   Stops dynambodb / s3 mock docker containers"
-#	echo "  json-server Runs json-server to mock rest api for ui"
+	echo "  mock        Runs dynambodb / s3 mocks in foreground"
+	echo "  mockd       Runs dynambodb / s3 mocks in daemon mode"
+	echo "  mocklog     Show localstack logs from current container"
+	echo "  mockload    Providion initial data into local dynamodb/s3 "
+	echo "  mockstop    Stops dynambodb / s3 mock docker containers"
+	echo "  amazonlinux Starts amazonlinix container with /local mount"
 	echo "  clean       Cleanup build / dist directories"
 	echo
 
@@ -83,6 +83,7 @@ mockd: ; docker-compose -f mock/docker-compose.yml up -d
 mocklog: ; docker logs localstack
 mockload: ; mock/provision.sh
 mockstop: ; docker-compose -f mock/docker-compose.yml stop
+amazonlinux: ; docker run -it --rm -v $(PWD)/terraform/local:/local  --name amazonlinux amazonlinux bash
 
 # docker-run: ; docker run -p 8080:8080 --env-file local/env.list --name $(APPID) $(APPID):latest
 #json-server: ; cd ui; ./mock.sh

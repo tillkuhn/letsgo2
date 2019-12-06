@@ -1,26 +1,28 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-            <img src="https://images-na.ssl-images-amazon.com/images/I/518nKDWVafL._SY355_.jpg" />Tasse
-            <h2 id="jhi-place-heading" jhiTranslate="letsgo2App.place.home.createOrEditLabel">Create or edit a Place</h2>
+            <h2 id="jhi-place-heading" jhiTranslate="letsgo2App.place.home.createOrEditLabel">Create or edit a
+                Place</h2>
             <div>
                 <jhi-alert-error></jhi-alert-error>
-                hallo
                 <img [src]="editForm.get(['imageUrl']).value" alt="impression" height="100px"/>
 
+                <!--
+                <input type="text" class="form-control" id="hussa" name="hossa" formControlName="debug" />
+-->
                 <div class="form-group" [hidden]="!editForm.get('id').value">
                     <label for="id" jhiTranslate="global.field.id">ID</label>
                     <input type="text" class="form-control" id="id" name="id" formControlName="id"
-                        readonly />
+                           readonly/>
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="letsgo2App.place.name" for="field_name">Name</label>
-                    <input type="text" class="form-control" name="name" id="field_name"
-                           formControlName="name"/>
-                    <div *ngIf="editForm.get('name').invalid && (editForm.get('name').dirty || editForm.get('name').touched)">
+                    <input type="text" class="form-control" name="name" id="field_name" formControlName="name"/>
+                    <div
+                        *ngIf="editForm.get('name').invalid && (editForm.get('name').dirty || editForm.get('name').touched)">
                         <small class="form-text text-danger"
                                *ngIf="editForm.get('name').errors.required" jhiTranslate="entity.validation.required">
-                        This field is required.
+                            This field is required.
                         </small>
                     </div>
                 </div>
@@ -30,17 +32,20 @@
                            formControlName="summary"/>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="letsgo2App.place.imageUrl" for="field_imageUrl">Image Url</label>
+                    <label class="form-control-label" jhiTranslate="letsgo2App.place.imageUrl" for="field_imageUrl">Image
+                        Url</label>
                     <input type="text" class="form-control" name="imageUrl" id="field_imageUrl"
                            formControlName="imageUrl"/>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="letsgo2App.place.rating" for="field_rating">Rating</label>
+                    <label class="form-control-label" jhiTranslate="letsgo2App.place.rating"
+                           for="field_rating">Rating</label>
                     <input type="number" class="form-control" name="rating" id="field_rating"
                            formControlName="rating"/>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="letsgo2App.place.lotype" for="field_lotype">Lotype</label>
+                    <label class="form-control-label" jhiTranslate="letsgo2App.place.lotype"
+                           for="field_lotype">Lotype</label>
                     <input type="text" class="form-control" name="lotype" id="field_lotype"
                            formControlName="lotype"/>
                 </div>
@@ -50,38 +55,45 @@
                            formControlName="country"/>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="letsgo2App.place.updatedBy" for="field_updatedBy">Updated By</label>
+                    <label class="form-control-label" jhiTranslate="letsgo2App.place.updatedBy" for="field_updatedBy">Updated
+                        By</label>
                     <input type="text" class="form-control" name="updatedBy" id="field_updatedBy"
                            formControlName="updatedBy"/>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="letsgo2App.place.coordinates" for="field_coordinates">Coordinates</label>
+                    <label class="form-control-label" jhiTranslate="letsgo2App.place.coordinates"
+                           for="field_coordinates">Coordinates</label>
                     <input type="text" class="form-control" name="coordinates" id="field_coordinates"
-                           formControlName="coordinates"/>
+                           formControlName="coordinates" readonly/>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="letsgo2App.place.notes" for="field_notes">Notes</label>
+                    <label class="form-control-label" jhiTranslate="letsgo2App.place.notes"
+                           for="field_notes">Notes</label>
                     <input type="text" class="form-control" name="notes" id="field_notes"
                            formControlName="notes"/>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="letsgo2App.place.updatedAt" for="field_updatedAt">Updated At</label>
+                    <label class="form-control-label" jhiTranslate="letsgo2App.place.updatedAt" for="field_updatedAt">Updated
+                        At</label>
                     <div class="d-flex">
-                        <input id="field_updatedAt" type="datetime-local" class="form-control" name="updatedAt" formControlName="updatedAt" placeholder="YYYY-MM-DD HH:mm"/>
+                        <input id="field_updatedAt" type="datetime-local" class="form-control" name="updatedAt"
+                               formControlName="updatedAt" placeholder="YYYY-MM-DD HH:mm"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="letsgo2App.place.primaryUrl" for="field_primaryUrl">Primary Url</label>
+                    <label class="form-control-label" jhiTranslate="letsgo2App.place.primaryUrl" for="field_primaryUrl">Primary
+                        Url</label>
                     <input type="text" class="form-control" name="primaryUrl" id="field_primaryUrl"
                            formControlName="primaryUrl"/>
                 </div>
 
             </div>
             <div>
-                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
                     <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
                 </button>
-                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving"
+                        class="btn btn-primary">
                     <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
                 </button>
             </div>

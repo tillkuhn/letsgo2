@@ -5,6 +5,15 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
+# Todo Enable Swap
+## grep MemTotal /proc/meminfo |  awk '$1 == "MemTotal:" {printf "%.0f", $2 / 1024}'
+##https://aws.amazon.com/de/premiumsupport/knowledge-center/ec2-memory-swap-file/
+##https://stackoverflow.com/questions/17173972/how-do-you-add-swap-to-an-ec2-instance
+##
+##[ec2-user@ip-172-31-15-88 letsgo2]$ java -XX:+PrintFlagsFinal  -version |grep -Ei "maxheapsize|maxram"
+##   size_t MaxHeapSize                              = 132120576                                 {product} {ergonomic}
+
+## check out if [[ "$*" == *YOURSTRING* ]] https://superuser.com/questions/186272/check-if-any-of-the-parameters-to-a-bash-script-match-a-string
 echo "[INFO] Updating packages, installing openjdk11 and nginx"
 yum install -y -q deltarpm
 yum update -y -q
@@ -67,3 +76,27 @@ echo "[INFO] Init comlete, check out https://${domain_name}"
 #& stop
 ## sync da bucket
 # aws s3 sync s3://${bucket_name}/deploy ${appdir}
+# last log messages
+# systemctl show letsgo2
+# journalctl -u letsgo2 -n 100 --no-pager
+
+
+## swappi
+#To then create a swap file on this device do the following for a 4GB swapfile
+#
+#sudo dd if=/dev/zero of=/mnt/swapfile bs=1M count=4096
+#Make sure no other user can view the swap file
+#
+#sudo chown root:root /mnt/swapfile
+#sudo chmod 600 /mnt/swapfile
+#Make and Flag as swap
+#
+#sudo mkswap /mnt/swapfile
+#sudo swapon /mnt/swapfile
+#Add/Make sure the following are in your /etc/fstab
+#
+#/dev/xvda2      /mnt    auto    defaults,nobootwait,comment=cloudconfig 0   2
+#/mnt/swapfile swap swap defaults 0 0
+#lastly enable swap
+#
+#sudo swapon -a
