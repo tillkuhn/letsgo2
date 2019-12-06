@@ -58,14 +58,15 @@ resource "aws_s3_bucket_object" "nginxconf" {
     storage_class = "REDUCED_REDUNDANCY"
 }
 
-## bucket object resources from generated app artifacts
-resource "aws_s3_bucket_object" "bootjar" {
-    bucket = aws_s3_bucket.data.bucket
-    key = "deploy/app.jar"
-    source = "${path.module}/../build/libs/app.jar"
-    storage_class = "REDUCED_REDUNDANCY"
-    etag = filemd5("${path.module}/../build/libs/app.jar")
-}
+## delegate to github ci
+//## bucket object resources from generated app artifacts
+//resource "aws_s3_bucket_object" "bootjar" {
+//    bucket = aws_s3_bucket.data.bucket
+//    key = "deploy/app.jar"
+//    source = "${path.module}/../build/libs/app.jar"
+//    storage_class = "REDUCED_REDUNDANCY"
+//    etag = filemd5("${path.module}/../build/libs/app.jar")
+//}
 
 data "archive_file" "webapp" {
     type = "zip"

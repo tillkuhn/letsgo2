@@ -68,3 +68,12 @@ module "cognito" {
     user_pool_name = "yummy"
     tags = local.common_tags
 }
+
+## setup deployment
+module "deploy" {
+    source = "./modules/deploy"
+    appid = var.appid
+    bucket_name = aws_s3_bucket.data.bucket
+    bucket_path = "deploy/"
+    tags = local.common_tags
+}

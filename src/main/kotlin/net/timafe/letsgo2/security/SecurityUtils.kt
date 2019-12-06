@@ -22,7 +22,8 @@ fun getCurrentUserLogin(): Optional<String> =
         .map { authentication ->
             when (val principal = authentication.principal) {
                 is UserDetails -> principal.username
-                is JwtAuthenticationToken -> (authentication as JwtAuthenticationToken).token.claims as String
+                // disabled b/c of cast never succeed
+                // is JwtAuthenticationToken -> (authentication as JwtAuthenticationToken).token.claims as String
                 is DefaultOidcUser -> {
 
                     // principal.idToken.claims.get("cognito:username") = mail address
