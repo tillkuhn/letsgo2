@@ -65,9 +65,9 @@ login: ; ssh -i mykey.pem -o StrictHostKeyChecking=no ec2-user@$(shell grep "^pu
 ssh: login ##alias
 
 ## builds
-jardev: ; gradle clean bootJar; ls -l build/libs/app.jar
-jarprod: ; gradle -Pprod clean bootJar
-jarrun: ; java -Dspring.profiles.active=prod,localstack -jar  build/libs/app.jar
+jardev:  ; ./gradlew clean bootJar && ls -l build/libs/app.jar
+jarprod: ; ./gradlew -x webpack -Pprod bootJar && ls -l build/libs/app.jar
+jarrun: ; java -Dspring.profiles.active=prod,localstack  -jar build/libs/app.jar
 webdev: ; npm run webpack:build
 webprod: ; npm run webpack:prod
 ## not target wildcars possible yet :-(
@@ -93,4 +93,4 @@ amazonlinux: ; docker run -it --rm -v $(PWD)/terraform/local:/local  --name amaz
 
 #  aws ec2 describe-instances --filters "Name=tag:appid,Values=$APPID" --query "Reservations[].Instances[].InstanceId"
 clean:             ## Clean up (gradle + npm artifacts)
-	rm -rf build
+	./gradlew clean
