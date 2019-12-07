@@ -68,16 +68,16 @@ resource "aws_s3_bucket_object" "nginxconf" {
 //    etag = filemd5("${path.module}/../build/libs/app.jar")
 //}
 
-data "archive_file" "webapp" {
-    type = "zip"
-    output_path = "${path.module}/local/webapp.zip"
-    source_dir = "${path.module}/../build/resources/main/static"
-}
-
-resource "aws_s3_bucket_object" "webapp" {
-    bucket = aws_s3_bucket.data.bucket
-    key = "deploy/webapp.zip"
-    source = data.archive_file.webapp.output_path
-    storage_class = "REDUCED_REDUNDANCY"
-    etag = data.archive_file.webapp.output_md5
-}
+//data "archive_file" "webapp" {
+//    type = "zip"
+//    output_path = "${path.module}/local/webapp.zip"
+//    source_dir = "${path.module}/../build/resources/main/static"
+//}
+//
+//resource "aws_s3_bucket_object" "webapp" {
+//    bucket = aws_s3_bucket.data.bucket
+//    key = "deploy/webapp.zip"
+//    source = data.archive_file.webapp.output_path
+//    storage_class = "REDUCED_REDUNDANCY"
+//    etag = data.archive_file.webapp.output_md5
+//}

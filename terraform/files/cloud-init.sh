@@ -109,8 +109,9 @@ if [[  "$*" == *frontend*  ]]; then
     aws s3 sync s3://${bucket_name}/deploy ${appdir} --exclude "*" --include "nginx.conf" --include "webapp.*"
     echo "[INFO] Cleaning /usr/share/nginx/html"
     rm -rf /usr/share/nginx/html/*
-    echo "[INFO] Unzipping ${appdir}/webapp.zip"
-    unzip -q -o ${appdir}/webapp.zip -d /usr/share/nginx/html
+    echo "[INFO] Inflating ${appdir}/webapp.tgz"
+    tar -C /usr/share/nginx/html -xf ${appdir}/webapp.tgz
+    #unzip -q -o ${appdir}/webapp.zip -d /usr/share/nginx/html
     echo "[INFO] Restating nginx"
     systemctl restart nginx
     systemctl status nginx
