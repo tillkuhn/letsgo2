@@ -8,7 +8,7 @@ fi
 if [[  "$*" == *update*  ]]; then
     SCRIPT=$(basename $0)
     echo "[INFO] Upating $SCRIPT, please launch again after update"
-    aws s3 cp s3://${bucket_name}/deploy/$SCRIPT ${appdir}/$SCRIPT && ls -l ${appdir}/$SCRIPT
+    aws s3 cp s3://${bucket_name}/deploy/$SCRIPT ${appdir}/$SCRIPT && chmod ugo+x ${appdir}/$SCRIPT
     exit 0
 fi
 
@@ -20,7 +20,7 @@ if [[  "$*" == *swapon*  ]] || [ "$*" == *all*  ]; then
     ## rule of thumb for < 2GB memory: Take memory * 2
     SWAPSIZEMB=$(grep MemTotal /proc/meminfo | awk '$1 == "MemTotal:" {printf "%.0f", $2 / 512 }')
     if [ ! -f /mnt/swapfile ]; then
-        echo "[INFO] Enabling Swap Support with ${SWAPSIZEMB}MB"
+        echo "[INFO] Enabling Swap Support with $${SWAPSIZEMB}MB"
         dd if=/dev/zero of=/mnt/swapfile bs=1M count=1024
         chown root:root /mnt/swapfile
         chmod 600 /mnt/swapfile
@@ -28,7 +28,8 @@ if [[  "$*" == *swapon*  ]] || [ "$*" == *all*  ]; then
         swapon /mnt/swapfile  ## to disable run swapoff -a
         swapon -a
     else
-        echo "[DEBUG] Swap already enabled with ${SWAPSIZEMB}MB"
+        echo "[DEBUG] Swap already enabled with $${SWAPSIZEMB}MB"
+    fi
     if ! egrep "^/mnt/swapfile" /etc/fstab >/dev/null; then
         echo "[INFO] creating fstab enty for swap"
         echo "/mnt/swapfile swap swap defaults 0 0" >>/etc/fstab
@@ -118,6 +119,7 @@ fi
 if [[  "$*" == *help*  ]]; then
     echo "Help is arriving soon"
 fi
+
 # curl http://169.254.169.254/latest/user-data ## get current user data
 # sudo yum --security --quiet update ## run security updates
 # echo "@reboot ec2-user /usr/bin/date >>/opt/letsgo2/logs/reboot.log" | sudo tee /etc/cron.d/reboot >/dev/null
