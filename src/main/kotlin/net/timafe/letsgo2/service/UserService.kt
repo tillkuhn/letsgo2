@@ -1,6 +1,5 @@
 package net.timafe.letsgo2.service
 
-import java.util.*
 import net.timafe.letsgo2.config.ANONYMOUS_USER
 import net.timafe.letsgo2.config.DEFAULT_LANGUAGE
 import net.timafe.letsgo2.domain.Authority
@@ -19,6 +18,7 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.*
 
 /**
  * Service class for managing users.

@@ -1,11 +1,11 @@
 package net.timafe.letsgo2.domain
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*
+import net.timafe.letsgo2.config.DYNAMODB_PREFIX
 import java.io.Serializable
-import javax.persistence.*
+import javax.persistence.Column
 import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
-import net.timafe.letsgo2.config.DYNAMODB_PREFIX
 
 /**
  * A Region.

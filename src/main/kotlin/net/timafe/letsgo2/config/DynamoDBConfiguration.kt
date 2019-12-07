@@ -10,26 +10,23 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput
 import com.amazonaws.services.dynamodbv2.model.ResourceInUseException
 import io.github.jhipster.config.JHipsterConstants
-import kotlin.reflect.KClass
-import net.timafe.letsgo2.domain.Country
 import net.timafe.letsgo2.domain.Place
 import net.timafe.letsgo2.domain.Region
-import net.timafe.letsgo2.repository.CountryRepository
 import net.timafe.letsgo2.repository.PlaceRepository
-import net.timafe.letsgo2.repository.RegionRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.socialsignin.spring.data.dynamodb.repository.EnableScan
 import org.socialsignin.spring.data.dynamodb.repository.config.EnableDynamoDBRepositories
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.*
-import org.springframework.core.env.Profiles
 import org.springframework.core.env.Environment
+import org.springframework.core.env.Profiles
+import kotlin.reflect.KClass
 
 @Configuration
 // see https://github.com/derjust/spring-data-dynamodb-examples/blob/master/README-multirepo.md
 // Table name overwrite? https://github.com/derjust/spring-data-dynamodb/wiki/Alter-table-name-during-runtime
-@EnableDynamoDBRepositories(basePackageClasses = [CountryRepository::class],
+@EnableDynamoDBRepositories(basePackageClasses = [PlaceRepository::class],
     includeFilters = [ComponentScan.Filter(value = [EnableScan::class], type = FilterType.ANNOTATION)])
 class DynamoDBConfiguration(
     private val env: Environment,
@@ -42,7 +39,6 @@ class DynamoDBConfiguration(
     @Bean("amazonDynamoDB")
     fun dynamoDb(): AmazonDynamoDB {
         val client = AmazonDynamoDBClientBuilder.defaultClient()
-        createTableForEntity(client, Country::class)
         return client
     }
 
@@ -58,7 +54,6 @@ class DynamoDBConfiguration(
         // todo remove should be done by terraform
         if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
             log.info("Profile {} detected, creating tables in Dynamodb prefix {}",JHipsterConstants.SPRING_PROFILE_DEVELOPMENT,appProperties.aws.dynamodb.tablePrefix)
-            createTableForEntity(client, Country::class)
             createTableForEntity(client, Region::class)
             createTableForEntity(client, Place::class)
         }

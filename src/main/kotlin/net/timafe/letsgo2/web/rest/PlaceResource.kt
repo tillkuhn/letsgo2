@@ -1,10 +1,7 @@
 package net.timafe.letsgo2.web.rest
 
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB
-import com.amazonaws.services.dynamodbv2.document.Item
 import io.github.jhipster.web.util.HeaderUtil
 import io.github.jhipster.web.util.ResponseUtil
-import net.timafe.letsgo2.domain.Coordinates
 import net.timafe.letsgo2.domain.Place
 import net.timafe.letsgo2.repository.PlaceRepository
 import net.timafe.letsgo2.web.rest.errors.BadRequestAlertException
@@ -14,7 +11,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.net.URI
 import java.net.URISyntaxException
-import java.util.*
 import javax.validation.Valid
 
 

@@ -1,9 +1,6 @@
 package net.timafe.letsgo2.service
 
 import io.github.jhipster.config.JHipsterProperties
-import java.time.Instant
-import java.time.temporal.ChronoUnit
-import java.util.*
 import net.timafe.letsgo2.config.audit.AuditEventConverter
 import net.timafe.letsgo2.repository.PersistenceAuditEventRepository
 import org.slf4j.LoggerFactory
@@ -13,6 +10,9 @@ import org.springframework.data.domain.Pageable
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.Instant
+import java.time.temporal.ChronoUnit
+import java.util.*
 
 /**
  * Service for managing audit events.

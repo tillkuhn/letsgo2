@@ -1,9 +1,9 @@
 package net.timafe.letsgo2.web.rest.errors
 
-import java.net.URI
 import org.zalando.problem.AbstractThrowableProblem
 import org.zalando.problem.Exceptional
 import org.zalando.problem.Status
+import java.net.URI
 
 open class BadRequestAlertException(type: URI, defaultMessage: String, val entityName: String, val errorKey: String) :
     AbstractThrowableProblem(

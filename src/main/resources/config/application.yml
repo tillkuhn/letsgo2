@@ -14,6 +14,18 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+logging:
+  level:
+    ROOT: DEBUG
+    io.github.jhipster: DEBUG
+    net.timafe.letsgo2: DEBUG
+    ## X509Certificate: Alg:SHA256withRSA, (when interacting with cognito)
+    jdk.event.security: INFO
+    ## Your profile name includes a 'profile ' prefix.  blabla
+    com.amazonaws.auth.profile.internal.BasicProfileConfigLoader: ERROR
+    com.amazonaws.auth.AWS4Signer: INFO
+    com.amazonaws.requestId: INFO
+
 management:
   endpoints:
     web:
@@ -117,13 +129,12 @@ spring:
             clientId: please-overwrite
             clientSecret: please-overwrite
             scope: openid
-            redirectUriTemplate: "http://localhost:8080/login/oauth2/code/cognito"
+            redirectUriTemplate: 'http://localhost:8080/login/oauth2/code/cognito'
             clientName: kotlinbaer
         provider:
           cognito:
             issuerUri: https://cognito-idp.aws-region.amazonaws.com/please-overwrite
             usernameAttribute: cognito:username
-
 
   # And with that, we should have Spring and Amazon Cogni
 #  security:
@@ -192,5 +203,10 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-#application:
-#  hello: "world"
+application:
+  aws:
+    dynamodb:
+      ## APPLICATION_AWS_DYNAMODB_TABLE_PREFIX
+      table-prefix: 'horsti-'
+    s3:
+      bucket-name: 'bucki-'

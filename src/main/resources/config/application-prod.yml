@@ -13,16 +13,6 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-logging:
-  level:
-    ROOT: INFO
-    io.github.jhipster: INFO
-    net.timafe.letsgo2: INFO
-    jdk.event.security: INFO
-    ## Your profile name includes a 'profile ' prefix.  blabla
-    com.amazonaws.auth.profile.internal.BasicProfileConfigLoader: ERROR
-    com.amazonaws.auth.AWS4Signer: INFO
-
 management:
   metrics:
     export:

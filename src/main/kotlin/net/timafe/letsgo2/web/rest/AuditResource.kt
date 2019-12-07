@@ -2,8 +2,6 @@ package net.timafe.letsgo2.web.rest
 
 import io.github.jhipster.web.util.PaginationUtil
 import io.github.jhipster.web.util.ResponseUtil
-import java.time.LocalDate
-import java.time.ZoneId
 import net.timafe.letsgo2.service.AuditEventService
 import org.springframework.boot.actuate.audit.AuditEvent
 import org.springframework.data.domain.Pageable
@@ -11,6 +9,8 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
+import java.time.LocalDate
+import java.time.ZoneId
 
 /**
  * REST controller for getting the `AuditEvent`s.

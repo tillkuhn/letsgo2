@@ -1,7 +1,5 @@
 package net.timafe.letsgo2.config
 
-import io.github.jhipster.config.JHipsterDefaults
-import io.github.jhipster.config.JHipsterProperties
 import org.springframework.boot.context.properties.ConfigurationProperties
 
 /**
@@ -19,8 +17,12 @@ class ApplicationProperties {
 
     class Aws {
         val dynamodb = ApplicationProperties.Aws.Dynamodb()
+        val s3 = ApplicationProperties.Aws.S3()
         class Dynamodb {
-            var tablePrefix = "hase-"
+            var tablePrefix = ""
+        }
+        class S3 {
+            var bucketName = ""
         }
     }
 }

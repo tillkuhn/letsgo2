@@ -4,15 +4,6 @@ import io.github.jhipster.config.JHipsterConstants
 import io.github.jhipster.config.JHipsterProperties
 import io.github.jhipster.config.h2.H2ConfigurationHelper
 import io.github.jhipster.web.filter.CachingHttpHeadersFilter
-import java.io.File
-import java.io.UnsupportedEncodingException
-import java.net.URLDecoder.decode
-import java.nio.charset.StandardCharsets
-import java.nio.file.Paths
-import java.util.*
-import javax.servlet.DispatcherType
-import javax.servlet.ServletContext
-import javax.servlet.ServletException
 import org.slf4j.LoggerFactory
 import org.springframework.boot.web.server.MimeMappings
 import org.springframework.boot.web.server.WebServerFactory
@@ -26,6 +17,15 @@ import org.springframework.core.env.Profiles
 import org.springframework.http.MediaType
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import org.springframework.web.filter.CorsFilter
+import java.io.File
+import java.io.UnsupportedEncodingException
+import java.net.URLDecoder.decode
+import java.nio.charset.StandardCharsets
+import java.nio.file.Paths
+import java.util.*
+import javax.servlet.DispatcherType
+import javax.servlet.ServletContext
+import javax.servlet.ServletException
 
 /**
  * Configuration of web application with Servlet 3.0 APIs.

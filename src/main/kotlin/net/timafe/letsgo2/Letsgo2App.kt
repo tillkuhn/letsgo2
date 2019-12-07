@@ -1,8 +1,6 @@
 package net.timafe.letsgo2
 
 import io.github.jhipster.config.JHipsterConstants
-import java.net.InetAddress
-import java.net.UnknownHostException
 import net.timafe.letsgo2.config.ApplicationProperties
 import net.timafe.letsgo2.config.addDefaultProfile
 import org.slf4j.LoggerFactory
@@ -12,6 +10,8 @@ import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 import org.springframework.core.env.Environment
+import java.net.InetAddress
+import java.net.UnknownHostException
 
 @SpringBootApplication
 @EnableConfigurationProperties(LiquibaseProperties::class, ApplicationProperties::class)

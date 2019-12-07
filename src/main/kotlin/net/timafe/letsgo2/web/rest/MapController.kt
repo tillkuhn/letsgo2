@@ -3,7 +3,6 @@ package net.timafe.letsgo2.web.rest
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression
-import com.amazonaws.services.dynamodbv2.document.Item
 import net.timafe.letsgo2.domain.Coordinates
 import net.timafe.letsgo2.domain.Place
 import org.slf4j.LoggerFactory

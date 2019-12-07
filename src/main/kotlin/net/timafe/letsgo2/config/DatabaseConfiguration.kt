@@ -2,11 +2,7 @@ package net.timafe.letsgo2.config
 
 import io.github.jhipster.config.JHipsterConstants
 import io.github.jhipster.config.h2.H2ConfigurationHelper
-import java.sql.SQLException
-import net.timafe.letsgo2.repository.CountryRepository
 import net.timafe.letsgo2.repository.JPABasePackage
-import net.timafe.letsgo2.repository.PlaceRepository
-import net.timafe.letsgo2.repository.RegionRepository
 import org.slf4j.LoggerFactory
 import org.socialsignin.spring.data.dynamodb.repository.EnableScan
 import org.springframework.context.annotation.*
@@ -14,6 +10,7 @@ import org.springframework.core.env.Environment
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import org.springframework.transaction.annotation.EnableTransactionManagement
+import java.sql.SQLException
 
 @Configuration
 // See https://github.com/derjust/spring-data-dynamodb/wiki/Multi-Repository-configuration

@@ -1,12 +1,12 @@
 package net.timafe.letsgo2.service.dto
 
+import net.timafe.letsgo2.config.LOGIN_REGEX
+import net.timafe.letsgo2.domain.User
 import java.time.Instant
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Pattern
 import javax.validation.constraints.Size
-import net.timafe.letsgo2.config.LOGIN_REGEX
-import net.timafe.letsgo2.domain.User
 
 /**
  * A DTO representing a user, with his authorities.

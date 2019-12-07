@@ -2,8 +2,6 @@ package net.timafe.letsgo2.config
 
 import io.github.jhipster.config.JHipsterConstants
 import io.github.jhipster.config.liquibase.SpringLiquibaseUtil
-import java.util.concurrent.Executor
-import javax.sql.DataSource
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.ObjectProvider
 import org.springframework.beans.factory.annotation.Qualifier
@@ -14,6 +12,8 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.env.Environment
 import org.springframework.core.env.Profiles
+import java.util.concurrent.Executor
+import javax.sql.DataSource
 
 @Configuration
 class LiquibaseConfiguration(private val env: Environment) {

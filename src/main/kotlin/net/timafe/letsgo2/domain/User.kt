@@ -1,6 +1,10 @@
 package net.timafe.letsgo2.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import net.timafe.letsgo2.config.LOGIN_REGEX
+import org.hibernate.annotations.BatchSize
+import org.hibernate.annotations.Cache
+import org.hibernate.annotations.CacheConcurrencyStrategy
 import java.io.Serializable
 import java.time.Instant
 import java.util.*
@@ -9,10 +13,6 @@ import javax.validation.constraints.Email
 import javax.validation.constraints.NotNull
 import javax.validation.constraints.Pattern
 import javax.validation.constraints.Size
-import net.timafe.letsgo2.config.LOGIN_REGEX
-import org.hibernate.annotations.BatchSize
-import org.hibernate.annotations.Cache
-import org.hibernate.annotations.CacheConcurrencyStrategy
 
 /**
  * A user.

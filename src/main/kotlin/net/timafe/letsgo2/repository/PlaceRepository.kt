@@ -1,7 +1,6 @@
 package net.timafe.letsgo2.repository
 import net.timafe.letsgo2.domain.Place
 import org.socialsignin.spring.data.dynamodb.repository.EnableScan
-import org.socialsignin.spring.data.dynamodb.repository.Query
 import org.springframework.data.repository.CrudRepository
 
 

@@ -13,17 +13,6 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-logging:
-  level:
-    ROOT: DEBUG
-    io.github.jhipster: DEBUG
-    net.timafe.letsgo2: DEBUG
-    ## X509Certificate: Alg:SHA256withRSA, (when interacting with cognito)
-    jdk.event.security: INFO
-    ## Your profile name includes a 'profile ' prefix.  blabla
-    com.amazonaws.auth.profile.internal.BasicProfileConfigLoader: ERROR
-    com.amazonaws.auth.AWS4Signer: INFO
-
 spring:
   profiles:
     active: dev

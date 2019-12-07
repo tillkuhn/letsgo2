@@ -16,10 +16,10 @@ resource "aws_s3_bucket_object" "appserviceenv" {
         oauth2_client_id = var.oauth2_client_id,
         oauth2_client_secret = var.oauth2_client_secret,
         oauth2_issuer_uri = var.oauth2_issuer_uri
+        dynamodb_table_prefix = var.dynamodb_table_prefix
     })
     storage_class = "REDUCED_REDUNDANCY"
 }
-
 
 resource "aws_s3_bucket_object" "appservice" {
     bucket = aws_s3_bucket.data.bucket
