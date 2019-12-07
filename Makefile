@@ -65,7 +65,7 @@ login: ; ssh -i mykey.pem -o StrictHostKeyChecking=no ec2-user@$(shell grep "^pu
 ssh: login ##alias
 
 ## builds
-jardev:  ; ./gradlew clean bootJar && ls -l build/libs/app.jar
+jardev:  ; ./gradlew  bootJar && ls -l build/libs/app.jar
 jarprod: ; ./gradlew -x webpack -Pprod bootJar && ls -l build/libs/app.jar
 jarrun: ; java -Dspring.profiles.active=prod,localstack  -jar build/libs/app.jar
 webdev: ; npm run webpack:build
