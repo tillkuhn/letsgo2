@@ -41,7 +41,7 @@ jobs:
         echo "GITHUB_REF=$GITHUB_REF" >>$buildinfo
         echo "BUILD_DATE=$(date +%F_%T)" >>$buildinfo
         #  tar -C /etc -zcf /tmp/letsencrypt.tar.gz letsencrypt
-        tar -C build/resources/main/static -zcf webapp.tgz *
+        tar -C build/resources/main/static -zcf webapp.tgz .
         aws s3 cp --quiet webapp.tgz s3://${bucket}/deploy/webapp.tgz
         aws s3 cp --quiet $buildinfo s3://${bucket}/deploy/$buildinfo
       env: # Or as an environment variable
