@@ -19,9 +19,10 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: npm install, build, and test
+      ## webpack will populate version to UI if APP_VERSION is present so we grab it from build.gradle
       run: |
         npm ci
-        npm run webpack:prod --if-present
+        APP_VERSION=$(egrep ^version build.gradle|cut -d '=' -f2|tr -d ' ') npm run webpack:prod --if-present
         ls -l  build/resources/main/static
       env:
         CI: true
@@ -40,6 +41,7 @@ jobs:
         echo "GITHUB_SHA=$GITHUB_SHA" >$buildinfo
         echo "GITHUB_REF=$GITHUB_REF" >>$buildinfo
         echo "BUILD_DATE=$(date +%F_%T)" >>$buildinfo
+        echo "APP_VERSION=$(egrep ^version build.gradle|cut -d '=' -f2|tr -d ' ')" >>$buildinfo
         #  tar -C /etc -zcf /tmp/letsencrypt.tar.gz letsencrypt
         tar -C build/resources/main/static -zcf webapp.tgz .
         aws s3 cp --quiet webapp.tgz s3://${bucket}/deploy/webapp.tgz

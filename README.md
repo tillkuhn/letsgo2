@@ -4,7 +4,7 @@
 
 # Let's go to ...
 
-This (almost) purely educational application manages places I'd like to visit some day. Key technologies: Angular 8 based single-page app with Mapbox GL, AWS Cognito, S3, DynamoDB and Spring Boot backend written in Kotlin, all created on AWS Infrastructure with Terraform.
+This (almost) purely educational application manages places I'd like to visit some day. Key technologies: Angular 8 based single-page app with Mapbox GL, AWS Cognito, S3, DynamoDB for persistence and Spring Boot backend written in Kotlin, all created on AWS Infrastructure with Terraform.
 
 ## Infrastructure
 
@@ -41,7 +41,7 @@ Add the `help` flag on any command to see how you can use it. For example, `npm 
 
 The `npm run` command will list all of the scripts available to run for this project.
 
-## OAuth 2.0 / OpenID Connect
+## OAuth 2.0 / OpenID Connect (todo: update for Cognito)
 
 Congratulations! You've selected an excellent way to secure your JHipster application. If you're not sure what OAuth and OpenID Connect (OIDC) are, please see [What the Heck is OAuth?](https://developer.okta.com/blog/2017/06/21/what-the-heck-is-oauth)
 
