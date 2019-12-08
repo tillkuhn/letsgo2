@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
-echo "[INFO] Running cloud-init custom script in $1 mode"
+if [ $# -lt 1 ]; then
+    set -- help
+fi
+
 if [ "$EUID" -ne 0 ]
   then echo "[FATAL] Detected UID $UID, please run with sudo"
+  ## todo: make more friendly, require sudo onlx where necessary
+  ## https://askubuntu.com/questions/20578/redirect-the-output-using-sudo
+  ## use echo hase|sudo tee protected_file >/dev/null 
   exit
 fi
 
@@ -12,6 +18,8 @@ if [[  "$*" == *update*  ]]; then
     exit 0
 fi
 
+## common
+mkdir -p ${appdir}
 
 ################
 # Enable Swap
@@ -36,7 +44,7 @@ if [[  "$*" == *swapon*  ]] || [ "$*" == *all*  ]; then
     fi
 fi
 
-if [[ "$*" == *all* ]]; then
+if [[  "$*" == *install*  ]] || [[ "$*" == *all* ]]; then
     ## check out if [[ "$*" == *YOURSTRING* ]] https://superuser.com/questions/186272/check-if-any-of-the-parameters-to-a-bash-script-match-a-string
     echo "[INFO] Updating packages, installing openjdk11 and nginx"
     yum install -y -q deltarpm
@@ -47,22 +55,23 @@ if [[ "$*" == *all* ]]; then
     rpm -Uvh dl.fedoraproject.org/pub/epel/7/x86_64/Packages/e/epel-release-*.rpm
     yum-config-manager --enable epel*
     yum install -y -q certbot python2-certbot-nginx unzip
+fi
 
-    echo "[INFO] Downloading all deploy artifacts from s3://${bucket_name}/deploy to ${appdir}"
-    mkdir -p ${appdir}
-    aws s3 sync s3://${bucket_name}/deploy ${appdir}
-    chown -R ec2-user:ec2-user /opt/letsgo2/
-    unzip -o ${appdir}/webapp.zip -d /usr/share/nginx/html
+if [[  "$*" == *certbot*  ]] || [[ "$*" == *all* ]]; then
+
+#    echo "[INFO] Downloading all deploy artifacts from s3://${bucket_name}/deploy to ${appdir}"
+#    mkdir -p ${appdir}
+#    aws s3 sync s3://${bucket_name}/deploy ${appdir}
+#    chown -R ec2-user:ec2-user /opt/letsgo2/
 
     echo "[INFO] Checking letsencrypt status "
     if [ -d /etc/letsencrypt/live ]; then
-      echo "[INFO] /etc/letsencrypt already exists with contend, nothing do do"
+      echo "[INFO] /etc/letsencrypt already exists with content (wip: care for changed domain names)"
     elif aws s3api head-object --bucket ${bucket_name} --key letsencrypt/letsencrypt.tar.gz; then
       echo "[INFO] local /etc/letsencrypt missing, downloading letsencrypt config from sr"
       aws s3 cp s3://${bucket_name}/letsencrypt/letsencrypt.tar.gz ${appdir}/
       chown -R ec2-user:ec2-user ${appdir}/letsencrypt.tar.gz
-      cd /etc
-      tar -xvf ${appdir}/letsencrypt.tar.gz
+      tar -C /etc -xvf ${appdir}/letsencrypt.tar.gz
     else
       echo "[INFO] No local or remote letsencrypt  nginx config found, new one will be requested"
     fi
@@ -72,25 +81,14 @@ if [[ "$*" == *all* ]]; then
     echo "[INFO] Launching certbot for ${domain_name}"
     certbot --nginx -m ${certbot_mail} --agree-tos --redirect -n -d ${domain_name}
 
-    echo "[INFO] Backup /etc/letsencrypt to s3://${bucket_name}"
+    echo "[INFO] Backup updated /etc/letsencrypt folder to s3://${bucket_name}"
     tar -C /etc -zcf /tmp/letsencrypt.tar.gz letsencrypt
     aws s3 cp --sse=AES256 /tmp/letsencrypt.tar.gz s3://${bucket_name}/letsencrypt/letsencrypt.tar.gz
-
-    echo "[INFO] Replacing system nginx.conf with enhanced version ..."
-    cp  ${appdir}/nginx.conf /etc/nginx/nginx.conf
-    systemctl restart nginx
-
-    echo "[INFO] Registering and starting ${appid}.service as systemd service"
-    #cp  ${appdir}/app.service /etc/systemd/system/${appid}.service
-    ln ${appdir}/app.service /etc/systemd/system/${appid}.service
-    systemctl enable ${appid}
-    systemctl start ${appid}
-
-    echo "[INFO] Init comlete, check out https://${domain_name}"
+    echo "[INFO] Certbox init comlete, check out https://${domain_name}"
 fi
 
 #if [[ "$*" == *all* ]] || [[  "$*" == *backend*  ]]; then
-if [[  "$*" == *backend*  ]]; then
+if [[  "$*" == *backend*  ]] || [ "$*" == *all*  ]; then
     echo "[INFO] Stopping ${appid}"
     systemctl stop ${appid}
     echo "[INFO] Pulling app.* artifacts from ${bucket_name}"
@@ -104,21 +102,33 @@ if [[  "$*" == *backend*  ]]; then
     systemctl status ${appid}
 fi
 
-if [[  "$*" == *frontend*  ]]; then
+if [[  "$*" == *frontend*  ]] || [ "$*" == *all*  ]; then
     echo "[INFO] Pulling frontend and nginx.config from ${bucket_name}"
     aws s3 sync s3://${bucket_name}/deploy ${appdir} --exclude "*" --include "nginx.conf" --include "webapp.*"
     echo "[INFO] Cleaning /usr/share/nginx/html"
     rm -rf /usr/share/nginx/html/*
     echo "[INFO] Inflating ${appdir}/webapp.tgz"
     tar -C /usr/share/nginx/html -xf ${appdir}/webapp.tgz
-    #unzip -q -o ${appdir}/webapp.zip -d /usr/share/nginx/html
+    echo "[INFO] Replacing system nginx.conf with enhanced version ..."
+    cp  ${appdir}/nginx.conf /etc/nginx/nginx.conf
     echo "[INFO] Restating nginx"
     systemctl restart nginx
     systemctl status nginx
 fi
 
 if [[  "$*" == *help*  ]]; then
-    echo "Help is arriving soon"
+	echo "Usage: $0 [target]"
+	echo
+	echo "Targets:"
+	echo "  all         Runs all target except help and update"
+	echo "  frontend    Redeploys frontend"
+	echo "  backend     Redeploys backend"
+	echo "  install     Installes required yum packages"
+	echo "  certbot     Handles certbot certification for SSL certs"
+	echo "  swapon      Checks swap status and activates if necessary"
+	echo "  help        This help"
+	echo "  update      Update version of this tool"
+
 fi
 
 # curl http://169.254.169.254/latest/user-data ## get current user data
