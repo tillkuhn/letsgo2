@@ -6,7 +6,7 @@ if [ "$EUID" -ne 0 ]
 fi
 
 if [[  "$*" == *update*  ]]; then
-    SCRIPT=$(basename $0)
+    SCRIPT=$(basename $${BASH_SOURCE[0]})
     echo "[INFO] Upating $SCRIPT, please launch again after update"
     aws s3 cp s3://${bucket_name}/deploy/$SCRIPT ${appdir}/$SCRIPT && chmod ugo+x ${appdir}/$SCRIPT
     exit 0
@@ -15,7 +15,7 @@ fi
 
 ################
 # Enable Swap
-##https://stackoverflow.com/questions/17173972/how-do-you-add-swap-to-an-ec2-instance
+# https://stackoverflow.com/questions/17173972/how-do-you-add-swap-to-an-ec2-instance
 if [[  "$*" == *swapon*  ]] || [ "$*" == *all*  ]; then
     ## rule of thumb for < 2GB memory: Take memory * 2
     SWAPSIZEMB=$(grep MemTotal /proc/meminfo | awk '$1 == "MemTotal:" {printf "%.0f", $2 / 512 }')
