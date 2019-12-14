@@ -5,7 +5,7 @@
 resource "aws_security_group" "instance_sg" {
     name = "${var.appid}-instance-sg"
     description = "Security group for ${var.appid} instances"
-    vpc_id = "${data.aws_vpc.vpc.id}"
+    vpc_id = data.aws_vpc.vpc.id
     ## we used dedicated SG to manage inbound ssh access
     //  ingress {
     //    # ingress rule for SSH communication
@@ -68,7 +68,7 @@ resource "aws_instance" "instance" {
     tags = map("Name", "${var.appid}-instance", "appid", var.appid, "managedBy", "terraform")
     volume_tags = map("Name", "${var.appid}-volume", "appid", var.appid, "managedBy", "terraform")
     lifecycle {
-        ignore_changes = ["ami"]
+        ignore_changes = [ami]
     }
 }
 
