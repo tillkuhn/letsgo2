@@ -44,12 +44,7 @@ if [[  "$*" == *swapon*  ]] || [ "$*" == *all*  ]; then
     fi
 fi
 
-<<<<<<< HEAD
 if [[  "$*" == *install*  ]] || [[ "$*" == *all* ]]; then
-=======
-
-if [[ "$*" == *all* ]]; then
->>>>>>> dev
     ## check out if [[ "$*" == *YOURSTRING* ]] https://superuser.com/questions/186272/check-if-any-of-the-parameters-to-a-bash-script-match-a-string
     echo "[INFO] Updating packages, installing openjdk11 and nginx"
     yum install -y -q deltarpm
@@ -100,7 +95,7 @@ if [[  "$*" == *backend*  ]] || [ "$*" == *all*  ]; then
     aws s3 sync s3://${bucket_name}/deploy ${appdir} --exclude "*" --include "app.*"
     if [ ! -f  /etc/systemd/system/${appid}.service ]; then
         echo "[INFO] Creating symlink /etc/systemd/system/${appid}.service"
-        ln ${appdir}/app.service /etc/systemd/system/${appid}.service
+        ln -s ${appdir}/app.service /etc/systemd/system/${appid}.service
     fi
     ###################
     ## file logging
@@ -144,6 +139,7 @@ if [[  "$*" == *help*  ]]; then
 	echo "  swapon      Checks swap status and activates if necessary"
 	echo "  help        This help"
 	echo "  update      Update version of this tool"
+fi
 
 ## experimental goals (call explicity, not run by all)
 if [[  "$*" == *security* ]]; then
