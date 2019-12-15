@@ -11,7 +11,7 @@ services:
       # host-port:container-port
       - "4572:4572"
       - "8000:8000" ## default is 4569 but see SERVICES
-      - "9000:${PORT_WEB_UI-8080}"
+      - "8999:${PORT_WEB_UI-8080}"
     environment:
       - SERVICES=s3,dynamodb:8000
       - DEBUG=${DEBUG- }
