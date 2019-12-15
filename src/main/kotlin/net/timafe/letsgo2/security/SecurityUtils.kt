@@ -102,6 +102,7 @@ fun mapRolesToGrantedAuthorities(roles: Collection<String>): List<GrantedAuthori
 
 @Suppress("UNCHECKED_CAST")
 fun getRolesFromClaims(claims: Map<String, Any>): Collection<String> {
+    // Cognito groups gibts auch noch ...
     return if (claims.containsKey("cognito:roles")) {
         when (val coros = claims.get("cognito:roles")) {
             is JSONArray -> extractRolesFromJSONArray(coros)
