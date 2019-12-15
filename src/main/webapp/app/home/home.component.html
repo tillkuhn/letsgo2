@@ -8,8 +8,9 @@
 
         <div [ngSwitch]="isAuthenticated()">
             <div class="alert alert-success" *ngSwitchCase="true">
+                <!-- account.login is only id -->
                 <span id="home-logged-message" *ngIf="account" jhiTranslate="home.logged.message"
-                    [translateValues]="{username: account.login}"> You are logged in as user "{{account.login}}". </span>
+                    [translateValues]="{name1: account.firstName,name2: account.lastName}"> You are logged in as user "{{account.firstName}} {{account.lastName}}". </span>
             </div>
 
             <div class="alert alert-warning" *ngSwitchCase="false">
@@ -25,6 +26,7 @@
         <ul>
             <li><a href="https://timafe.wordpress.com" target="_blank" rel="noopener noreferrer" jhiTranslate="home.link.homepage">Blog</a></li>
             <li><a href="https://github.com/tillkuhn/letsgo2-khipster" target="_blank" rel="noopener noreferrer" jhiTranslate="home.link.github">Letsgo2 on github</a></li>
+            <li><a href="https://500px.com/tillkuhn" target="_blank" rel="noopener noreferrer" >500px Photo Galleries</a></li>
         </ul>
 
         <p>

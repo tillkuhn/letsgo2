@@ -36,6 +36,7 @@ if [[  "$*" == *swapon*  ]] || [ "$*" == *all*  ]; then
     fi
 fi
 
+
 if [[ "$*" == *all* ]]; then
     ## check out if [[ "$*" == *YOURSTRING* ]] https://superuser.com/questions/186272/check-if-any-of-the-parameters-to-a-bash-script-match-a-string
     echo "[INFO] Updating packages, installing openjdk11 and nginx"
@@ -99,6 +100,16 @@ if [[  "$*" == *backend*  ]]; then
         echo "[INFO] Creating symlink /etc/systemd/system/${appid}.service"
         ln ${appdir}/app.service /etc/systemd/system/${appid}.service
     fi
+    ###################
+    ## file logging
+    if [ ! -f /etc/rsyslog.d/25-${appid}.conf ]; then
+        ## https://stackoverflow.com/questions/37585758/how-to-redirect-output-of-systemd-service-to-a-file
+        ## https://www.rsyslog.com/doc/v8-stable/configuration/filters.html can also use :syslogtag
+         echo ":programname, isequal, \"${appid}\" ${appdir}/logs/stdout.log" >/etc/rsyslog.d/25-${appid}.conf ## create
+         echo "& stop" >>/etc/rsyslog.d/25-${appid}.conf ## no need for a copy in s in /var/log/syslog
+         echo "[INFO] File logging configured in /etc/rsyslog.d/25-${appid}.conf"
+         systemctl restart rsyslog
+    fi
     systemctl daemon-reload
     systemctl start ${appid}
     systemctl status ${appid}
@@ -117,17 +128,21 @@ if [[  "$*" == *frontend*  ]]; then
     systemctl status nginx
 fi
 
-if [[  "$*" == *help*  ]]; then
+## experimental goals (call explicity, not run by all)
+if [[  "$*" == *help* ]]; then
     echo "Help is arriving soon"
 fi
 
+if [[  "$*" == *security* ]]; then
+     yum --security --quiet update # security updates only
+fi
+
+
+
 # curl http://169.254.169.254/latest/user-data ## get current user data
-# sudo yum --security --quiet update ## run security updates
 # echo "@reboot ec2-user /usr/bin/date >>/opt/letsgo2/logs/reboot.log" | sudo tee /etc/cron.d/reboot >/dev/null
-## https://stackoverflow.com/questions/37585758/how-to-redirect-output-of-systemd-service-to-a-file
-#:syslogtag, isequal, "[CLOUDINIT]" /var/log/cloud-init.log
+
 # comment out the following line to allow CLOUDINIT messages through.
-# Doing so means you'll also get CLOUDINIT messages in /var/log/syslog
 # systemctl show letsgo2 # last log messages
 # journalctl -u letsgo2 -n 100 --no-pager
 
