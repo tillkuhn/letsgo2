@@ -4,7 +4,7 @@ After=syslog.target
 
 [Service]
 User=ec2-user
-ExecStart=/usr/bin/java $${JAVA_OPTS} -Duser.timezone=UTC -Djava.security.egd=file:/dev/./urandom -jar ${appdir}/app.jar
+ExecStart=/usr/bin/java $$ {JAVA_OPTS} -Duser.timezone=UTC -Djava.security.egd=file:/dev/./urandom -jar ${appdir}/app.jar
 SuccessExitStatus=143
 ## loging see https://stackoverflow.com/questions/37585758/how-to-redirect-output-of-systemd-service-to-a-file
 SyslogIdentifier=${appid}

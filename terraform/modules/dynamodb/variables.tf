@@ -13,7 +13,7 @@ variable "rcu" {
 }
 
 variable "tags" {
-    type = "map"
+    type = map
     description = "Tags to attached to the table, Name tag will be added by the module"
     default = {}
 }

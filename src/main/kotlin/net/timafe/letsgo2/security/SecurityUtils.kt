@@ -28,7 +28,11 @@ fun getCurrentUserLogin(): Optional<String> =
 
                     // principal.idToken.claims.get("cognito:username") = mail address
                     // principal.idToken.claims.get("cognito:preferred_role") = arn:aws:iam::062960202541:role/cognito-empty-role-test
-                    if (principal.idToken.claims.containsKey("cognito:username")) {
+                    // in case of Facebook, username looks like Faceboo_44477777
+                    // but we get emai, name (first last), given_name and family_name
+                    if (principal.idToken.claims.containsKey("email")) {
+                        principal.idToken.claims.get("email").toString()
+                    } else if (principal.idToken.claims.containsKey("cognito:username")) {
                         principal.idToken.claims.get("cognito:username").toString()
                     } else if (principal.attributes.containsKey("preferred_username")) {
                         principal.attributes["preferred_username"].toString()
@@ -98,6 +102,7 @@ fun mapRolesToGrantedAuthorities(roles: Collection<String>): List<GrantedAuthori
 
 @Suppress("UNCHECKED_CAST")
 fun getRolesFromClaims(claims: Map<String, Any>): Collection<String> {
+    // Cognito groups gibts auch noch ...
     return if (claims.containsKey("cognito:roles")) {
         when (val coros = claims.get("cognito:roles")) {
             is JSONArray -> extractRolesFromJSONArray(coros)

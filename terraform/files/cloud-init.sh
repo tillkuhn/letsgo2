@@ -7,12 +7,12 @@ if [ "$EUID" -ne 0 ]
   then echo "[FATAL] Detected UID $UID, please run with sudo"
   ## todo: make more friendly, require sudo onlx where necessary
   ## https://askubuntu.com/questions/20578/redirect-the-output-using-sudo
-  ## use echo hase|sudo tee protected_file >/dev/null 
+  ## use echo hase|sudo tee protected_file >/dev/null
   exit
 fi
 
 if [[  "$*" == *update*  ]]; then
-    SCRIPT=$(basename $0)
+    SCRIPT=$(basename $${BASH_SOURCE[0]})
     echo "[INFO] Upating $SCRIPT, please launch again after update"
     aws s3 cp s3://${bucket_name}/deploy/$SCRIPT ${appdir}/$SCRIPT && chmod ugo+x ${appdir}/$SCRIPT
     exit 0
@@ -23,7 +23,7 @@ mkdir -p ${appdir}
 
 ################
 # Enable Swap
-##https://stackoverflow.com/questions/17173972/how-do-you-add-swap-to-an-ec2-instance
+# https://stackoverflow.com/questions/17173972/how-do-you-add-swap-to-an-ec2-instance
 if [[  "$*" == *swapon*  ]] || [ "$*" == *all*  ]; then
     ## rule of thumb for < 2GB memory: Take memory * 2
     SWAPSIZEMB=$(grep MemTotal /proc/meminfo | awk '$1 == "MemTotal:" {printf "%.0f", $2 / 512 }')
@@ -44,7 +44,12 @@ if [[  "$*" == *swapon*  ]] || [ "$*" == *all*  ]; then
     fi
 fi
 
+<<<<<<< HEAD
 if [[  "$*" == *install*  ]] || [[ "$*" == *all* ]]; then
+=======
+
+if [[ "$*" == *all* ]]; then
+>>>>>>> dev
     ## check out if [[ "$*" == *YOURSTRING* ]] https://superuser.com/questions/186272/check-if-any-of-the-parameters-to-a-bash-script-match-a-string
     echo "[INFO] Updating packages, installing openjdk11 and nginx"
     yum install -y -q deltarpm
@@ -97,6 +102,17 @@ if [[  "$*" == *backend*  ]] || [ "$*" == *all*  ]; then
         echo "[INFO] Creating symlink /etc/systemd/system/${appid}.service"
         ln ${appdir}/app.service /etc/systemd/system/${appid}.service
     fi
+    ###################
+    ## file logging
+    if [ ! -f /etc/rsyslog.d/25-${appid}.conf ]; then
+        ## https://stackoverflow.com/questions/37585758/how-to-redirect-output-of-systemd-service-to-a-file
+        ## https://www.rsyslog.com/doc/v8-stable/configuration/filters.html can also use :syslogtag
+         touch "${appdir}/logs/stdout.log" && chown ec2-user:ec2-user "${appdir}/logs/stdout.log"
+         echo ":programname, isequal, \"${appid}\" ${appdir}/logs/stdout.log" >/etc/rsyslog.d/25-${appid}.conf ## create
+         echo "& stop" >>/etc/rsyslog.d/25-${appid}.conf ## no need for a copy in s in /var/log/syslog
+         echo "[INFO] File logging configured in /etc/rsyslog.d/25-${appid}.conf"
+         systemctl restart rsyslog
+    fi
     systemctl daemon-reload
     systemctl start ${appid}
     systemctl status ${appid}
@@ -129,15 +145,17 @@ if [[  "$*" == *help*  ]]; then
 	echo "  help        This help"
 	echo "  update      Update version of this tool"
 
+## experimental goals (call explicity, not run by all)
+if [[  "$*" == *security* ]]; then
+     yum --security --quiet update # security updates only
 fi
 
+
+
 # curl http://169.254.169.254/latest/user-data ## get current user data
-# sudo yum --security --quiet update ## run security updates
 # echo "@reboot ec2-user /usr/bin/date >>/opt/letsgo2/logs/reboot.log" | sudo tee /etc/cron.d/reboot >/dev/null
-## https://stackoverflow.com/questions/37585758/how-to-redirect-output-of-systemd-service-to-a-file
-#:syslogtag, isequal, "[CLOUDINIT]" /var/log/cloud-init.log
+
 # comment out the following line to allow CLOUDINIT messages through.
-# Doing so means you'll also get CLOUDINIT messages in /var/log/syslog
 # systemctl show letsgo2 # last log messages
 # journalctl -u letsgo2 -n 100 --no-pager
 
