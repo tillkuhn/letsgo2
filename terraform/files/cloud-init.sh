@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
-echo "[INFO] Running cloud-init custom script in $1 mode"
+SCRIPT=$(basename $${BASH_SOURCE[0]})
+
+if [ $# -lt 1 ]; then
+    set -- help
+fi
+
 if [ "$EUID" -ne 0 ]
   then echo "[FATAL] Detected UID $UID, please run with sudo"
   exit
 fi
 
 if [[  "$*" == *update*  ]]; then
-    SCRIPT=$(basename $${BASH_SOURCE[0]})
     echo "[INFO] Upating $SCRIPT, please launch again after update"
     aws s3 cp s3://${bucket_name}/deploy/$SCRIPT ${appdir}/$SCRIPT && chmod ugo+x ${appdir}/$SCRIPT
     exit 0
@@ -137,7 +141,12 @@ if [[  "$*" == *security* ]]; then
      yum --security --quiet update # security updates only
 fi
 
+if [[  "$*" == *alias* ]]; then
+    ## /todo for ec2-user
+    grep -q "alias go2ctl" /home/ec2-user/.bashrc || echo "alias go2ctl=\"sudo ${appdir}/$SCRIPT\"" >>/home/ec2-user/.bashrc
+fi
 
+alias go2ctl="sudo /opt/letsgo2/cloud-init.sh"
 
 # curl http://169.254.169.254/latest/user-data ## get current user data
 # echo "@reboot ec2-user /usr/bin/date >>/opt/letsgo2/logs/reboot.log" | sudo tee /etc/cron.d/reboot >/dev/null

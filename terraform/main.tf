@@ -58,6 +58,7 @@ module "table_region" {
     source = "./modules/dynamodb"
     name = "${var.dynamodb_table_prefix}region"
     tags = local.common_tags
+    primary_key = "code"
 }
 
 ## Cognito support

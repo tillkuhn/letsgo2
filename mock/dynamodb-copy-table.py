@@ -54,8 +54,8 @@ try:
                      )
 
     table_struct = new_logs.describe()
-    print 'Table %s already exists' % dst_table
-    sys.exit(0)
+    #print 'Table %s already exists' % dst_table
+    #sys.exit(0)
 except JSONResponseError:
     schema = [HashKey(hash_key)]
     if range_key != '':
