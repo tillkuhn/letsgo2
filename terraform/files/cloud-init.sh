@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
-<<<<<<< HEAD
-=======
 SCRIPT=$(basename $${BASH_SOURCE[0]})
-
->>>>>>> dev
 if [ $# -lt 1 ]; then
     set -- help
 fi
@@ -16,14 +12,16 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
+if [[  "$*" == *common*  ]] || [ "$*" == *all*  ]; then
+    mkdir -p ${appdir}
+    grep -q "alias go2ctl" /home/ec2-user/.bashrc || echo "alias go2ctl=\"sudo ${appdir}/$SCRIPT\"" >>/home/ec2-user/.bashrc
+fi
+
 if [[  "$*" == *update*  ]]; then
     echo "[INFO] Upating $SCRIPT, please launch again after update"
     aws s3 cp s3://${bucket_name}/deploy/$SCRIPT ${appdir}/$SCRIPT && chmod ugo+x ${appdir}/$SCRIPT
     exit 0
 fi
-
-## common
-mkdir -p ${appdir}
 
 ################
 # Enable Swap
@@ -98,8 +96,7 @@ fi
 if [[  "$*" == *backend*  ]] || [ "$*" == *all*  ]; then
     ## todo check systemctl list-units --full -all |grep -Fq letsgo2
     ## then install on demand
-    echo "[INFO] Stopping ${appid}"
-    systemctl stop ${appid}
+    echo "[INFO] Stopping ${appid}" && systemctl stop ${appid}
     echo "[INFO] Pulling app.* artifacts from ${bucket_name}"
     aws s3 sync s3://${bucket_name}/deploy ${appdir} --exclude "*" --include "app.*"
     if [ ! -f  /etc/systemd/system/${appid}.service ]; then
@@ -108,17 +105,18 @@ if [[  "$*" == *backend*  ]] || [ "$*" == *all*  ]; then
     fi
     ###################
     ## file logging
+    echo "[DEBUG] Checking /etc/rsyslog.d/25-${appid}.conf"
     if [ ! -f /etc/rsyslog.d/25-${appid}.conf ]; then
         ## https://stackoverflow.com/questions/37585758/how-to-redirect-output-of-systemd-service-to-a-file
         ## https://www.rsyslog.com/doc/v8-stable/configuration/filters.html can also use :syslogtag
          touch "${appdir}/logs/stdout.log" && chown ec2-user:ec2-user "${appdir}/logs/stdout.log"
          echo ":programname, isequal, \"${appid}\" ${appdir}/logs/stdout.log" >/etc/rsyslog.d/25-${appid}.conf ## create
          echo "& stop" >>/etc/rsyslog.d/25-${appid}.conf ## no need for a copy in s in /var/log/syslog
-         echo "[INFO] File logging configured in /etc/rsyslog.d/25-${appid}.conf"
+         echo "[INFO] File logging configured in /etc/rsyslog.d/25-${appid}.conf, restarting rsyslogd"
          systemctl restart rsyslog
     fi
     systemctl daemon-reload
-    systemctl start ${appid}
+    echo "[INFO] Starting ${appid}" && systemctl start ${appid}
     systemctl status ${appid}
 fi
 
@@ -131,9 +129,14 @@ if [[  "$*" == *frontend*  ]] || [ "$*" == *all*  ]; then
     tar -C /usr/share/nginx/html -xf ${appdir}/webapp.tgz
     echo "[INFO] Replacing system nginx.conf with enhanced version ..."
     cp  ${appdir}/nginx.conf /etc/nginx/nginx.conf
-    echo "[INFO] Restating nginx"
-    systemctl restart nginx
+    echo "[INFO] Reloading nginx" && systemctl reload nginx
     systemctl status nginx
+fi
+
+## on demand tarfgets, not for all
+if [[  "$*" == *status*  ]]; then
+    systemctl status ${appid}  --lines=6
+    systemctl status nginx  --lines=2
 fi
 
 if [[  "$*" == *help*  ]]; then
@@ -148,19 +151,14 @@ if [[  "$*" == *help*  ]]; then
 	echo "  swapon      Checks swap status and activates if necessary"
 	echo "  help        This help"
 	echo "  update      Update version of this tool"
+	echo "  status      Display status of ${appid} services"
+	echo
 fi
 
 ## experimental goals (call explicity, not run by all)
 if [[  "$*" == *security* ]]; then
      yum --security --quiet update # security updates only
 fi
-
-if [[  "$*" == *alias* ]]; then
-    ## /todo for ec2-user
-    grep -q "alias go2ctl" /home/ec2-user/.bashrc || echo "alias go2ctl=\"sudo ${appdir}/$SCRIPT\"" >>/home/ec2-user/.bashrc
-fi
-
-alias go2ctl="sudo /opt/letsgo2/cloud-init.sh"
 
 # curl http://169.254.169.254/latest/user-data ## get current user data
 # echo "@reboot ec2-user /usr/bin/date >>/opt/letsgo2/logs/reboot.log" | sudo tee /etc/cron.d/reboot >/dev/null
