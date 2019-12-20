@@ -5,7 +5,7 @@
     "logged": {
       "message": "You are logged in as user \"{{name1}} {{name2}}\"."
     },
-    "question": "If you have any question on Letsgo2:",
+    "question": "Check out the neighborhood ...",
     "link": {
       "homepage": "TiMaFe on Tour Blog",
       "stackoverflow": "JHipster on Stack Overflow",
