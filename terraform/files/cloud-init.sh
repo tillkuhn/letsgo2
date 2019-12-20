@@ -96,6 +96,8 @@ fi
 
 #if [[ "$*" == *all* ]] || [[  "$*" == *backend*  ]]; then
 if [[  "$*" == *backend*  ]]; then
+    ## todo check systemctl list-units --full -all |grep -Fq letsgo2
+    ## then install on demand
     echo "[INFO] Stopping ${appid}"
     systemctl stop ${appid}
     echo "[INFO] Pulling app.* artifacts from ${bucket_name}"
@@ -145,6 +147,10 @@ if [[  "$*" == *alias* ]]; then
     ## /todo for ec2-user
     grep -q "alias go2ctl" /home/ec2-user/.bashrc || echo "alias go2ctl=\"sudo ${appdir}/$SCRIPT\"" >>/home/ec2-user/.bashrc
 fi
+
+# https://serverfault.com/questions/790772/cron-job-for-lets-encrypt-renewal
+## CRON
+## sudo certbot renew --post-hook "systemctl reload nginx"
 
 alias go2ctl="sudo /opt/letsgo2/cloud-init.sh"
 

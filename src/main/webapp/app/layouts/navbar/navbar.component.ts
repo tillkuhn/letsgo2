@@ -9,6 +9,9 @@ import { AccountService } from 'app/core/auth/account.service';
 import { LoginService } from 'app/core/login/login.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 
+/**
+ * Manage the navigation bar ....
+ */
 @Component({
   selector: 'jhi-navbar',
   templateUrl: './navbar.component.html',
