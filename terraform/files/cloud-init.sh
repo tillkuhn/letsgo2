@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+<<<<<<< HEAD
+=======
+SCRIPT=$(basename $${BASH_SOURCE[0]})
+
+>>>>>>> dev
 if [ $# -lt 1 ]; then
     set -- help
 fi
@@ -12,7 +17,6 @@ if [ "$EUID" -ne 0 ]
 fi
 
 if [[  "$*" == *update*  ]]; then
-    SCRIPT=$(basename $${BASH_SOURCE[0]})
     echo "[INFO] Upating $SCRIPT, please launch again after update"
     aws s3 cp s3://${bucket_name}/deploy/$SCRIPT ${appdir}/$SCRIPT && chmod ugo+x ${appdir}/$SCRIPT
     exit 0
@@ -85,10 +89,15 @@ if [[  "$*" == *certbot*  ]] || [[ "$*" == *all* ]]; then
     tar -C /etc -zcf /tmp/letsencrypt.tar.gz letsencrypt
     aws s3 cp --sse=AES256 /tmp/letsencrypt.tar.gz s3://${bucket_name}/letsencrypt/letsencrypt.tar.gz
     echo "[INFO] Certbox init comlete, check out https://${domain_name}"
+
+    # add me https://serverfault.com/questions/790772/cron-job-for-lets-encrypt-renewal
+    ## CRON
+    ## sudo certbot renew --post-hook "systemctl reload nginx"
 fi
 
-#if [[ "$*" == *all* ]] || [[  "$*" == *backend*  ]]; then
 if [[  "$*" == *backend*  ]] || [ "$*" == *all*  ]; then
+    ## todo check systemctl list-units --full -all |grep -Fq letsgo2
+    ## then install on demand
     echo "[INFO] Stopping ${appid}"
     systemctl stop ${appid}
     echo "[INFO] Pulling app.* artifacts from ${bucket_name}"
@@ -146,7 +155,12 @@ if [[  "$*" == *security* ]]; then
      yum --security --quiet update # security updates only
 fi
 
+if [[  "$*" == *alias* ]]; then
+    ## /todo for ec2-user
+    grep -q "alias go2ctl" /home/ec2-user/.bashrc || echo "alias go2ctl=\"sudo ${appdir}/$SCRIPT\"" >>/home/ec2-user/.bashrc
+fi
 
+alias go2ctl="sudo /opt/letsgo2/cloud-init.sh"
 
 # curl http://169.254.169.254/latest/user-data ## get current user data
 # echo "@reboot ec2-user /usr/bin/date >>/opt/letsgo2/logs/reboot.log" | sudo tee /etc/cron.d/reboot >/dev/null

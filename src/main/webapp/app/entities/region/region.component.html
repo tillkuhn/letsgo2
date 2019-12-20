@@ -18,7 +18,8 @@
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
             <tr>
-            <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
+            <th scope="col" ><span jhiTranslate="global.field.id">Code</span></th>
+                <th scope="col" ><span>Flag</span></th>
             <th scope="col" ><span jhiTranslate="letsgo2App.region.name">Name</span></th>
             <th scope="col" ><span jhiTranslate="letsgo2App.region.parentCode">Parent Code</span></th>
             <th scope="col"></th>
@@ -27,6 +28,7 @@
             <tbody>
             <tr *ngFor="let region of regions ;trackBy: trackId">
                 <td><a [routerLink]="['/region', region.id, 'view' ]">{{region.id}}</a></td>
+                <td><span class="flag-icon flag-icon-{{region.id}}"></span></td>
                 <td>{{region.name}}</td>
                 <td>{{region.parentCode}}</td>
                 <td class="text-right">

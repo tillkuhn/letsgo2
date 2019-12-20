@@ -20,9 +20,10 @@ variable "tags" {
 
 variable "primary_key" {
     default = "id"
+    description = "Primary key used as value for hashkey, defaults to id"
 }
-
 
 variable "primary_key_type" {
     default = "S"
+    description = "Default datatype for hashkey, defaults to String"
 }

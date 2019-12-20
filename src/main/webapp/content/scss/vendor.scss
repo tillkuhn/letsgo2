@@ -13,7 +13,9 @@ eg $input-color: red;
 
 /* tk needle :-) */
 // https://github.com/Wykks/ngx-mapbox-gl
-@import "~mapbox-gl/dist/mapbox-gl.css";
-@import "~@mapbox/mapbox-gl-geocoder/lib/mapbox-gl-geocoder.css";
+@import '~mapbox-gl/dist/mapbox-gl.css';
+@import '~@mapbox/mapbox-gl-geocoder/lib/mapbox-gl-geocoder.css';
+// https://docs.angularactivity.com/angular-7-flag-icon-css flagge zeigen
+@import '~flag-icon-css/css/flag-icon.min.css';
 
 /* jhipster-needle-scss-add-vendor JHipster will add new css style */
