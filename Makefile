@@ -93,5 +93,7 @@ amazonlinux: ; docker run -it --rm -v $(PWD)/terraform/local:/local  --name amaz
 #	$(AWS_CMD) s3 cp ui/dist/webapp/index.html s3://${S3_BUCKET_LOCATION}/deploy//webapp/index.html
 
 #  aws ec2 describe-instances --filters "Name=tag:appid,Values=$APPID" --query "Reservations[].Instances[].InstanceId"
+
+tag: ; git describe --abbrev=0
 clean:             ## Clean up (gradle + npm artifacts)
 	./gradlew clean
