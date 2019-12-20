@@ -15,13 +15,13 @@ services:
     environment:
       - SERVICES=s3,dynamodb:8000
       - DEBUG=${DEBUG- }
-      - DATA_DIR=/tmp/localstack/data
+   #   - DATA_DIR=/tmp/localstack/data
       - PORT_WEB_UI=${PORT_WEB_UI- }
    #   - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR- }
    #   - KINESIS_ERROR_PROBABILITY=${KINESIS_ERROR_PROBABILITY- }
       - DOCKER_HOST=unix:///var/run/docker.sock
-    volumes:
-      - "/private$TMPDIR:/tmp/localstack"
+    #volumes:
+    #  - "/private$TMPDIR:/tmp/localstack"
 
 ## AWS_PROFILE=localstack aws dynamodb --endpoint-url  http://localhost:8000 scan --table-name letsgo2-place
 ## AWS_PROFILE=localstack aws s3 --endpoint-url http://localhost:4572  mb s3://letsgo2-data

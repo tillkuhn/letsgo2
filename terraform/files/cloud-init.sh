@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 SCRIPT=$(basename $${BASH_SOURCE[0]})
+# chown $(id -u):$(id -g) file instead of ec2-user
 if [ $# -lt 1 ]; then
     set -- help
 fi
@@ -93,6 +94,7 @@ if [[  "$*" == *certbot*  ]] || [[ "$*" == *all* ]]; then
     ## sudo certbot renew --post-hook "systemctl reload nginx"
 fi
 
+## Manage backend
 if [[  "$*" == *backend*  ]] || [ "$*" == *all*  ]; then
     ## todo check systemctl list-units --full -all |grep -Fq letsgo2
     ## then install on demand
@@ -109,7 +111,8 @@ if [[  "$*" == *backend*  ]] || [ "$*" == *all*  ]; then
     if [ ! -f /etc/rsyslog.d/25-${appid}.conf ]; then
         ## https://stackoverflow.com/questions/37585758/how-to-redirect-output-of-systemd-service-to-a-file
         ## https://www.rsyslog.com/doc/v8-stable/configuration/filters.html can also use :syslogtag
-         touch "${appdir}/logs/stdout.log" && chown ec2-user:ec2-user "${appdir}/logs/stdout.log"
+         echo "[INFO] Logging not set up, registering ${appid} file logging via rsyslogd"
+         touch "${appdir}/logs/stdout.log" && chown $(id -u):$(id -g) "${appdir}/logs/stdout.log"
          echo ":programname, isequal, \"${appid}\" ${appdir}/logs/stdout.log" >/etc/rsyslog.d/25-${appid}.conf ## create
          echo "& stop" >>/etc/rsyslog.d/25-${appid}.conf ## no need for a copy in s in /var/log/syslog
          echo "[INFO] File logging configured in /etc/rsyslog.d/25-${appid}.conf, restarting rsyslogd"
@@ -120,6 +123,7 @@ if [[  "$*" == *backend*  ]] || [ "$*" == *all*  ]; then
     systemctl status ${appid}
 fi
 
+## Manage frontend
 if [[  "$*" == *frontend*  ]] || [ "$*" == *all*  ]; then
     echo "[INFO] Pulling frontend and nginx.config from ${bucket_name}"
     aws s3 sync s3://${bucket_name}/deploy ${appdir} --exclude "*" --include "nginx.conf" --include "webapp.*"
@@ -139,19 +143,20 @@ if [[  "$*" == *status*  ]]; then
     systemctl status nginx  --lines=2
 fi
 
+## display usage
 if [[  "$*" == *help*  ]]; then
 	echo "Usage: $0 [target]"
 	echo
 	echo "Targets:"
 	echo "  all         Runs all target except help and update"
-	echo "  frontend    Redeploys frontend"
-	echo "  backend     Redeploys backend"
+	echo "  update      Update version of this tool"
 	echo "  install     Installes required yum packages"
 	echo "  certbot     Handles certbot certification for SSL certs"
+	echo "  frontend    Redeploys frontend"
+	echo "  backend     Redeploys backend"
 	echo "  swapon      Checks swap status and activates if necessary"
-	echo "  help        This help"
-	echo "  update      Update version of this tool"
 	echo "  status      Display status of ${appid} services"
+	echo "  help        This help"
 	echo
 fi
 

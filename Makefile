@@ -79,8 +79,13 @@ upload: ; cd terraform; terraform apply -target=aws_s3_bucket_object.appservicee
 deploy: jardev webprod upload
 
 ## Mocks
-mock: ; docker-compose -f mock/docker-compose.yml up
-mockd: ; docker-compose -f mock/docker-compose.yml up -d
+mock: ;	docker-compose -f mock/docker-compose.yml up
+
+mockd:
+	docker-compose -f mock/docker-compose.yml up -d
+	while ! nc -z localhost 8000; do echo "Waiting for port 8000 to open", sleep 0.5; done
+	mock/provision.sh
+
 mocklog: ; docker logs localstack
 mockload: ; mock/provision.sh
 mockstop: ; docker-compose -f mock/docker-compose.yml stop
