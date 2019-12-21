@@ -167,9 +167,12 @@ fi
 
 # curl http://169.254.169.254/latest/user-data ## get current user data
 # echo "@reboot ec2-user /usr/bin/date >>/opt/letsgo2/logs/reboot.log" | sudo tee /etc/cron.d/reboot >/dev/null
-
 # comment out the following line to allow CLOUDINIT messages through.
 # systemctl show letsgo2 # last log messages
+# https://unix.stackexchange.com/questions/87223/rsyslog-execute-script-on-matching-log-event
+# https://stackoverflow.com/questions/34137616/pass-comand-line-parameters-to-shell-script-via-omprog-rsyslog-module
 # journalctl -u letsgo2 -n 100 --no-pager
-
+# echo "BIN SDABEI" |logger -t klaus2; sudo tail /var/log/messages;
+# Dec 21 11:39:52 ip-172-31-15-88 klaus2: BIN SDABEI
+#aws dynamodb put-item --table-name loggin --item '{"Artist": {"S": "Obscure Indie Band"},"SongTitle": {"S": "Call Me Today"}}'
 # aws s3 cp s3://timafe-letsgo2-data/deploy/cloud-init.sh . && chmod ugo+x cloud-init.sh
