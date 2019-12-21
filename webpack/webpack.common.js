@@ -13,7 +13,10 @@ module.exports = (options) => ({
         alias: utils.mapTypescriptAliasToWebpackAlias()
     },
     stats: {
-        children: false
+      children: false,
+      // https://github.com/webpack/webpack/issues/1191
+      //https://webpack.js.org/configuration/stats/
+      chunks: false
     },
     module: {
         rules: [
