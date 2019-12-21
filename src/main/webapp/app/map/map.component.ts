@@ -5,6 +5,8 @@ import { PoiService } from 'app/map/poi.service';
 import { IPoi } from 'app/shared/model/poi.model';
 import { HttpResponse } from '@angular/common/http';
 import { filter, map } from 'rxjs/operators';
+import { Feature } from 'geojson';
+
 // check https://medium.com/@timo.baehr/using-mapbox-in-angular-application-bc3b2b38592
 @Component({
   selector: 'jhi-map',
@@ -12,14 +14,15 @@ import { filter, map } from 'rxjs/operators';
   styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements OnInit {
-  // The latitude of Bangkok, Thailand is 13.736717, and the longitude is 100.523186.
+  // zoom into ... The latitude of Bangkok, Thailand is 13.736717, and the longitude is 100.523186.
   coordinates = [100.523186, 13.736717];
   zoom = 5;
   accessToken = MAPBOX_GL_ACCESS_TOKEN;
   points: GeoJSON.FeatureCollection<GeoJSON.Point>;
   selectedPoint: MapboxGeoJSONFeature | null;
   cursorStyle: string;
-  pois: IPoi[];
+
+  // pois: IPoi[];
 
   constructor(protected poiService: PoiService) {}
 
@@ -31,9 +34,39 @@ export class MapComponent implements OnInit {
         map((res: HttpResponse<IPoi[]>) => res.body)
       )
       .subscribe((res: IPoi[]) => {
-        this.pois = res;
+        const features: Array<Feature<GeoJSON.Point>> = [];
+        res.forEach(poi => {
+          if (!poi.coordinates) {
+            console.warn(poi.id + ' empty coordinates');
+            return;
+          }
+          features.push({
+            type: 'Feature',
+            properties: {
+              // tslint:disable-next-line:max-line-length
+              description:
+                '<strong>' +
+                poi.name +
+                '</strong><p>Visit it <a href="/place/' +
+                poi.id +
+                '/view" target="_place" title="Opens">' +
+                'here</a> </p>',
+              // https://labs.mapbox.com/maki-icons/
+              icon: 'attraction'
+            },
+            geometry: {
+              type: 'Point',
+              coordinates: poi.coordinates
+            }
+          });
+        });
+        this.points = {
+          type: 'FeatureCollection',
+          features
+        };
       });
 
+    /*
     this.points = {
       type: 'FeatureCollection',
       features: [
@@ -64,8 +97,8 @@ export class MapComponent implements OnInit {
           }
         }
       ]
-    };
-  }
+    }; */
+  } // end of on-init
 
   onClick(evt: MapLayerMouseEvent) {
     // this.selectedPoint = evt.features![0];

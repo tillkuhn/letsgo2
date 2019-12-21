@@ -1,11 +1,14 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <div *ngIf="place">
-            <h2><span jhiTranslate="letsgo2App.place.detail.title">Place</span> {{place.id}}</h2>
+            <h2><span jhiTranslate="letsgo2App.place.detail.title">Let's go to</span> {{place.name}}</h2>
             <hr>
             <jhi-alert-error></jhi-alert-error>
             <dl class="row-md jh-entity-details">
-                <dt><span jhiTranslate="letsgo2App.place.name">Name</span></dt>
+                <img [src]="place.imageUrl" alt="impression" height="250px"/>
+                <dt>
+                 <span jhiTranslate="letsgo2App.place.name">Name</span>
+                </dt>
                 <dd>
                     <span>{{place.name}}</span>
                 </dd>

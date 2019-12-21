@@ -24,10 +24,10 @@ jobs:
     - name: Build and test frontend using npm
       ## webpack will populate version to UI if APP_VERSION is present so we grab it from build.gradle
       run: |
+        VERSION="$(git describe --abbrev=0) $(date +%F_%T)"
+        echo "Building new frtonend version $VERSION"
         npm ci
-        LATEST_TAG=$(git describe --abbrev=0)
-        echo "Building version $LATEST_TAG"
-        APP_VERSION=$LATEST_TAG npm run webpack:prod --if-present
+        APP_VERSION="$VERSION" npm run webpack:prod --if-present
         ls -l  build/resources/main/static
       env:
         CI: true
@@ -45,8 +45,8 @@ jobs:
       run: |
         echo "GITHUB_SHA=$GITHUB_SHA" >$buildinfo
         echo "GITHUB_REF=$GITHUB_REF" >>$buildinfo
-        echo "BUILD_DATE=$(date +%F_%T)" >>$buildinfo
-        echo "APP_VERSION=$(git describe --abbrev=0)" >>$buildinfo
+        # echo "BUILD_DATE=$(date +%F_%T)" >>$buildinfo
+        echo "APP_VERSION=$(git describe --abbrev=0) $(date +%F_%T)" >>$buildinfo
         tar -C build/resources/main/static -zcf webapp.tgz .
         aws s3 cp --quiet webapp.tgz s3://${bucket}/deploy/webapp.tgz
         aws s3 cp --quiet $buildinfo s3://${bucket}/deploy/$buildinfo

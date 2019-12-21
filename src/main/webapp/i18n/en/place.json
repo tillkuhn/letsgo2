@@ -17,7 +17,7 @@
         "question": "Are you sure you want to delete Place {{ id }}?"
       },
       "detail": {
-        "title": "Place"
+        "title": "Let's go to"
       },
       "name": "Name",
       "summary": "Summary",
