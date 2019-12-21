@@ -90,6 +90,9 @@ mocklog: ; docker logs localstack
 mockload: ; mock/provision.sh
 mockstop: ; docker-compose -f mock/docker-compose.yml stop
 amazonlinux: ; docker run -it --rm -v $(PWD)/terraform/local:/local  --name amazonlinux amazonlinux bash
+tag: ; git describe --abbrev=0
+clean:             ## Clean up (gradle + npm artifacts)
+	./gradlew clean
 
 # docker-run: ; docker run -p 8080:8080 --env-file local/env.list --name $(APPID) $(APPID):latest
 #json-server: ; cd ui; ./mock.sh
@@ -99,6 +102,3 @@ amazonlinux: ; docker run -it --rm -v $(PWD)/terraform/local:/local  --name amaz
 
 #  aws ec2 describe-instances --filters "Name=tag:appid,Values=$APPID" --query "Reservations[].Instances[].InstanceId"
 
-tag: ; git describe --abbrev=0
-clean:             ## Clean up (gradle + npm artifacts)
-	./gradlew clean
