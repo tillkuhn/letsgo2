@@ -74,16 +74,6 @@ class Place(
 ) : Serializable {
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is Place) return false
-        if (other.id == null || id == null) return false
-
-        return id == other.id
-    }
-
-    override fun hashCode() = 31
-
     override fun toString() = "Place{" +
         "id=$id" +
         ", name='$name'" +
@@ -98,6 +88,48 @@ class Place(
         ", updatedAt='$updatedAt'" +
         ", primaryUrl='$primaryUrl'" +
         "}"
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Place
+
+        if (id != other.id) return false
+        if (name != other.name) return false
+        if (summary != other.summary) return false
+        if (imageUrl != other.imageUrl) return false
+        if (rating != other.rating) return false
+        if (lotype != other.lotype) return false
+        if (country != other.country) return false
+        if (updatedBy != other.updatedBy) return false
+        if (createdBy != other.createdBy) return false
+        if (coordinates != other.coordinates) return false
+        if (notes != other.notes) return false
+        if (updatedAt != other.updatedAt) return false
+        if (createdAt != other.createdAt) return false
+        if (primaryUrl != other.primaryUrl) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id?.hashCode() ?: 0
+        result = 31 * result + (name?.hashCode() ?: 0)
+        result = 31 * result + (summary?.hashCode() ?: 0)
+        result = 31 * result + (imageUrl?.hashCode() ?: 0)
+        result = 31 * result + (rating ?: 0)
+        result = 31 * result + (lotype?.hashCode() ?: 0)
+        result = 31 * result + (country?.hashCode() ?: 0)
+        result = 31 * result + (updatedBy?.hashCode() ?: 0)
+        result = 31 * result + (createdBy?.hashCode() ?: 0)
+        result = 31 * result + (coordinates?.hashCode() ?: 0)
+        result = 31 * result + (notes?.hashCode() ?: 0)
+        result = 31 * result + (updatedAt?.hashCode() ?: 0)
+        result = 31 * result + (createdAt?.hashCode() ?: 0)
+        result = 31 * result + (primaryUrl?.hashCode() ?: 0)
+        return result
+    }
 
 
     /*

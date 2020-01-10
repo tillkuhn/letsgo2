@@ -20,6 +20,10 @@ export class PlaceComponent implements OnInit, OnDestroy {
 
   constructor(protected placeService: PlaceService, protected eventManager: JhiEventManager, protected accountService: AccountService) {}
 
+  refresh() {
+    this.loadAll();
+  }
+
   loadAll() {
     this.placeService
       .query()

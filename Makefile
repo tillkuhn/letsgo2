@@ -35,8 +35,8 @@ help:
 	echo "  jarprod      Create bootJar optimized for production (needed?)"
 	echo "  jarrun       Runs bootJar locally file with java "
 	echo "  jardev       Create bootJar optimized for dev "
-	echo "  webdev       Runs webpack build for frontend dev"
-	echo "  webprod      Runs webpack build for frontend production"
+	echo "  webdev       npm run webpack:build, same as npm start"
+	echo "  webprod      npm run webpack:prod, same as npm build"
 	echo "  upload       Uploads bootjar, webapp and other Artifacts s3"
 	echo "  deploy       Bundles jardev, webprod, upload"
 	echo
@@ -79,11 +79,12 @@ upload: ; cd terraform; terraform apply -target=aws_s3_bucket_object.appservicee
 deploy: jardev webprod upload
 
 ## Mocks
-mock: ;	docker-compose -f mock/docker-compose.yml up
+#mock: ;	docker-compose -f mock/docker-compose.yml up
+mock: ; SERVICES=s3,dynamodb:8000 DEBUG=1 DATA_DIR=$(PWD)/mock/data localstack start --host
 
 mockd:
 	docker-compose -f mock/docker-compose.yml up -d
-	while ! nc -z localhost 8000; do echo "Waiting for port 8000 to open", sleep 0.5; done
+	while ! nc -z localhost 8000; do echo "Waiting for port 8000 to open"; sleep 0.5; done
 	mock/provision.sh
 
 mocklog: ; docker logs localstack
