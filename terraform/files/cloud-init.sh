@@ -71,22 +71,26 @@ if [[  "$*" == *certbot*  ]] || [[ "$*" == *all* ]]; then
     if [ -d /etc/letsencrypt/live ]; then
       echo "[INFO] /etc/letsencrypt already exists with content (wip: care for changed domain names)"
     elif aws s3api head-object --bucket ${bucket_name} --key letsencrypt/letsencrypt.tar.gz; then
-      echo "[INFO] local /etc/letsencrypt missing, downloading letsencrypt config from sr"
+      echo "[INFO] local /etc/letsencrypt missing, downloading backup letsencrypt config from s3"
       aws s3 cp s3://${bucket_name}/letsencrypt/letsencrypt.tar.gz ${appdir}/
       chown -R ec2-user:ec2-user ${appdir}/letsencrypt.tar.gz
       tar -C /etc -xvf ${appdir}/letsencrypt.tar.gz
     else
-      echo "[INFO] No local or remote letsencrypt  nginx config found, new one will be requested"
+      echo "[INFO] No local or remote letsencrypt nginx config found, new one will be requested"
     fi
+
     echo "[INFO] Making sure nginx is registered as nginx service and restarted if running"
     systemctl enable nginx
     systemctl start nginx
     echo "[INFO] Launching certbot for ${domain_name}"
     certbot --nginx -m ${certbot_mail} --agree-tos --redirect -n -d ${domain_name}
-
-    echo "[INFO] Backup updated /etc/letsencrypt folder to s3://${bucket_name}"
-    tar -C /etc -zcf /tmp/letsencrypt.tar.gz letsencrypt
-    aws s3 cp --sse=AES256 /tmp/letsencrypt.tar.gz s3://${bucket_name}/letsencrypt/letsencrypt.tar.gz
+    if [ $? -eq 0 ]; then
+        echo "[INFO] Backup succeded, backup /etc/letsencrypt folder to s3://${bucket_name}"
+        tar -C /etc -zcf /tmp/letsencrypt.tar.gz letsencrypt
+        aws s3 cp --sse=AES256 /tmp/letsencrypt.tar.gz s3://${bucket_name}/letsencrypt/letsencrypt.tar.gz
+     else
+         echo "cerbot exit with status $? so something went wrong, checkout cerbot output for info"
+    fi
     echo "[INFO] Certbox init comlete, check out https://${domain_name}"
 
     # add me https://serverfault.com/questions/790772/cron-job-for-lets-encrypt-renewal
