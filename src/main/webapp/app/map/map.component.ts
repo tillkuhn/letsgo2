@@ -15,6 +15,27 @@ import { Feature } from 'geojson';
 })
 export class MapComponent implements OnInit {
   // zoom into ... The latitude of Bangkok, Thailand is 13.736717, and the longitude is 100.523186.
+  //  check https://docs.mapbox.com/mapbox-gl-js/example/setstyle/ for alternative styles, streets-v11,
+  // https://docs.mapbox.com/api/maps/#styles
+  mapstyles = [
+    {
+      description: 'Outdoor',
+      id: 'outdoors-v11'
+    },
+    {
+      description: 'Street',
+      id: 'streets-v11'
+    },
+    {
+      description: 'Satellite',
+      id: 'satellite-v9'
+    },
+    {
+      description: 'Satellite Streets',
+      id: 'satellite-streets-v11'
+    }
+  ];
+  mapstyle = 'mapbox://styles/mapbox/' + this.mapstyles[0].id;
   coordinates = [100.523186, 13.736717];
   zoom = 5;
   accessToken = MAPBOX_GL_ACCESS_TOKEN;
@@ -104,5 +125,13 @@ export class MapComponent implements OnInit {
     // this.selectedPoint = evt.features![0];
     // 50:26  error    This assertion is unnecessary ... typescript-eslint/no-unnecessary-type-assertion ß?
     this.selectedPoint = evt.features[0];
+  }
+
+  onMapboxStyleChange(entry: { [key: string]: any }) {
+    // clone the object for immutability
+    // clone the object for immutability
+    // eslint-disable-next-line no-console
+    console.log('Switch to mapbox://styles/mapbox/' + entry.id);
+    this.mapstyle = 'mapbox://styles/mapbox/' + entry.id;
   }
 }

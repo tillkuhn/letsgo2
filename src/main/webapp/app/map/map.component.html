@@ -1,8 +1,12 @@
 <div>
     <pre *ngIf="false">{{points|json}}</pre>
+
+    <ng-container *ngFor="let entry of mapstyles; let idx = index">
+        <input type="radio" name="radiogroup" (change)="onMapboxStyleChange(entry)" [checked]="(idx === 0)" [value]="entry.id"> {{ entry.description }}&nbsp;
+    </ng-container>
     <mgl-map
 
-        [style]="'mapbox://styles/mapbox/streets-v9'"
+        [style]="mapstyle"
         [zoom]="zoom"
         [center]="coordinates"
         [accessToken]="accessToken"
@@ -28,8 +32,6 @@
             <span [innerHTML]="selectedPoint.properties?.description"></span>
         </mgl-popup>
 
-        <mgl-control
-            mglNavigation
-        ></mgl-control>
+        <mgl-control mglNavigation></mgl-control>
     </mgl-map>
 </div>
