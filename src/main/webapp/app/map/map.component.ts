@@ -19,20 +19,16 @@ export class MapComponent implements OnInit {
   // https://docs.mapbox.com/api/maps/#styles
   mapstyles = [
     {
+      description: 'Satellite',
+      id: 'satellite-streets-v11' // 'satellite-v9' is w/o streets
+    },
+    {
       description: 'Outdoor',
       id: 'outdoors-v11'
     },
     {
       description: 'Street',
       id: 'streets-v11'
-    },
-    {
-      description: 'Satellite',
-      id: 'satellite-v9'
-    },
-    {
-      description: 'Satellite Streets',
-      id: 'satellite-streets-v11'
     }
   ];
   mapstyle = 'mapbox://styles/mapbox/' + this.mapstyles[0].id;

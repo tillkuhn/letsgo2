@@ -16,8 +16,8 @@
         "settings": "Settings",
         "password": "Password",
         "sessions": "Sessions",
-        "login": "Sign in",
-        "logout": "Sign out",
+        "login": "Check in",
+        "logout": "Check out",
         "register": "Register"
       },
       "admin": {

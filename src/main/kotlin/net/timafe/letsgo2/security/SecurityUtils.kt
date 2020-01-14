@@ -25,10 +25,11 @@ fun getCurrentUserLogin(): Optional<String> =
                 // disabled b/c of cast never succeed
                 // is JwtAuthenticationToken -> (authentication as JwtAuthenticationToken).token.claims as String
                 is DefaultOidcUser -> {
+                    // See https://community.auth0.com/t/facebook-attributes/9378  for attributes
 
                     // principal.idToken.claims.get("cognito:username") = mail address
                     // principal.idToken.claims.get("cognito:preferred_role") = arn:aws:iam::062960202541:role/cognito-empty-role-test
-                    // in case of Facebook, username looks like Faceboo_44477777
+                    // in case of Facebook, username looks like Faceboo_444777774535456546
                     // but we get emai, name (first last), given_name and family_name
                     if (principal.idToken.claims.containsKey("email")) {
                         principal.idToken.claims.get("email").toString()

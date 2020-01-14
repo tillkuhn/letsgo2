@@ -1,5 +1,6 @@
 [Unit]
 Description=${appid} yet another Spring Boot application
+Before=nginx.target
 After=syslog.target
 
 [Service]
