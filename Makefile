@@ -80,7 +80,7 @@ deploy: jardev webprod upload
 
 ## Mocks
 #mock: ;	docker-compose -f mock/docker-compose.yml up
-mock: ; SERVICES=s3,dynamodb:8000 DEBUG=1 DATA_DIR=$(PWD)/mock/data localstack start --host
+mock: ; SERVICES=s3:4572,dynamodb:8000 PORT_WEB_UI=8999 DEBUG=1 DATA_DIR=$(PWD)/mock/data localstack start --host
 
 mockd:
 	docker-compose -f mock/docker-compose.yml up -d

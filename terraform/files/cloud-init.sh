@@ -49,7 +49,7 @@ fi
 
 if [[  "$*" == *install*  ]] || [[ "$*" == *all* ]]; then
     ## check out if [[ "$*" == *YOURSTRING* ]] https://superuser.com/questions/186272/check-if-any-of-the-parameters-to-a-bash-script-match-a-string
-    echo "[INFO] Updating packages, installing openjdk11 and nginx"
+    echo "[INFO] Updating packages, adding openjdk11 and nginx"
     yum install -y -q deltarpm
     yum update -y -q
     amazon-linux-extras install  -y -q java-openjdk11
@@ -60,18 +60,25 @@ if [[  "$*" == *install*  ]] || [[ "$*" == *all* ]]; then
     yum install -y -q certbot python2-certbot-nginx unzip
 fi
 
+if [[  "$*" == *install-security*  ]]; then
+    echo "[INFO] Updating security packages"
+    # yum list-security --security
+    sudo yum update -y -q --security
+    # https://medium.com/@vbmade2000/a-dead-simple-tutorial-on-how-to-forward-rsyslog-logs-to-a-file-130364c049fb
+    logger -t gotoctl "yum security up2date"
+    # more /etc/rsyslog.d/21-cloudinit.conf
+    ## Log cloudinit generated log messages to file
+    #:syslogtag, isequal, "[CLOUDINIT]" /var/log/cloud-init.log
+    #& stop
+    # sudo systemctl restart rsyslog
+fi
+
 if [[  "$*" == *certbot*  ]] || [[ "$*" == *all* ]]; then
-
-#    echo "[INFO] Downloading all deploy artifacts from s3://${bucket_name}/deploy to ${appdir}"
-#    mkdir -p ${appdir}
-#    aws s3 sync s3://${bucket_name}/deploy ${appdir}
-#    chown -R ec2-user:ec2-user /opt/letsgo2/
-
-    echo "[INFO] Checking letsencrypt status "
+  echo "[INFO] Checking letsencrypt status"
     if [ -d /etc/letsencrypt/live ]; then
       echo "[INFO] /etc/letsencrypt already exists with content (wip: care for changed domain names)"
     elif aws s3api head-object --bucket ${bucket_name} --key letsencrypt/letsencrypt.tar.gz; then
-      echo "[INFO] local /etc/letsencrypt missing, downloading backup letsencrypt config from s3"
+      echo "[INFO] local /etc/letsencrypt missing but s3 backup is availble, downloading archive"
       aws s3 cp s3://${bucket_name}/letsencrypt/letsencrypt.tar.gz ${appdir}/
       chown -R ec2-user:ec2-user ${appdir}/letsencrypt.tar.gz
       tar -C /etc -xvf ${appdir}/letsencrypt.tar.gz
