@@ -5,6 +5,7 @@ After=syslog.target
 
 [Service]
 User=ec2-user
+## multiple command lines are allowed and the commands are executed one after the other, serially. - tolerates failures
 ExecStartPre=/usr/bin/cp ${appdir}/app.jar ${appdir}/app-running.jar
 ExecStart=/usr/bin/java $${JAVA_OPTS} -Duser.timezone=UTC -Djava.security.egd=file:/dev/./urandom -jar ${appdir}/app-running.jar
 SuccessExitStatus=143
