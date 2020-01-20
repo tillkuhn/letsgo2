@@ -13,6 +13,11 @@ variable "bucket_arn" {
     description = "The bucket to grant permissions to send SNS Notifications "
 }
 
+variable "bucket_id" {
+    type = string
+    description = "The bucket to grant permissions to send SNS Notifications "
+}
+
 variable "message_retention_seconds" {
     type = number
     description = "The number of seconds to keep messages max 1209600 = 14d"

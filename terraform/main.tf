@@ -84,6 +84,7 @@ module "messaging" {
     source = "./modules/messaging"
     appid = var.appid
     bucket_arn = aws_s3_bucket.data.arn
+    bucket_id = aws_s3_bucket.data.id
     s3_notification_prefix = "deploy/"
     tags = local.common_tags
 }

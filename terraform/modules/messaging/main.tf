@@ -33,7 +33,7 @@ resource "aws_sqs_queue" "events" {
     name = "${var.appid}-events"
     message_retention_seconds = var.message_retention_seconds ## 14d (max)
     receive_wait_time_seconds = 20
-    redrive_policy = "{\"deadLetterTargetArn\":\"${aws_sqs_queue.events_dlq.arn}\",\"maxReceiveCount\":${var.max_receive_count}"
+    redrive_policy = "{\"deadLetterTargetArn\":\"${aws_sqs_queue.events_dlq.arn}\",\"maxReceiveCount\":${var.max_receive_count}}"
     tags = merge({"Name": "${var.appid}-events"},var.tags)
 }
 
@@ -73,8 +73,7 @@ resource "aws_sns_topic_subscription" "events_subscription" {
 # https://www.terraform.io/docs/providers/aws/r/s3_bucket_notification.html
 
 resource "aws_s3_bucket_notification" "docs_bucket_notification" {
-    bucket = var.bucket_arn
-
+    bucket = var.bucket_id
     topic {
         topic_arn     = aws_sns_topic.events.arn
         events        = ["s3:ObjectCreated:*"]
