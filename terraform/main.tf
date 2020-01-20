@@ -78,3 +78,12 @@ module "deploy" {
     bucket_path = "deploy/"
     tags = local.common_tags
 }
+
+## setup messaging
+module "messaging" {
+    source = "./modules/messaging"
+    appid = var.appid
+    bucket_arn = aws_s3_bucket.data.arn
+    s3_notification_prefix = "deploy/"
+    tags = local.common_tags
+}
