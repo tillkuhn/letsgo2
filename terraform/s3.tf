@@ -28,6 +28,7 @@ resource "aws_s3_bucket_object" "appservice" {
         domain_name = var.domain_name,
         appdir = "/opt/${var.appid}",
         appid = var.appid,
+        bucket_name = aws_s3_bucket.data.bucket,
         oauth2_client_id = var.oauth2_client_id,
         oauth2_client_secret = var.oauth2_client_secret,
         oauth2_issuer_uri = var.oauth2_issuer_uri
@@ -58,26 +59,3 @@ resource "aws_s3_bucket_object" "nginxconf" {
     storage_class = "REDUCED_REDUNDANCY"
 }
 
-## delegate to github ci
-//## bucket object resources from generated app artifacts
-//resource "aws_s3_bucket_object" "bootjar" {
-//    bucket = aws_s3_bucket.data.bucket
-//    key = "deploy/app.jar"
-//    source = "${path.module}/../build/libs/app.jar"
-//    storage_class = "REDUCED_REDUNDANCY"
-//    etag = filemd5("${path.module}/../build/libs/app.jar")
-//}
-
-//data "archive_file" "webapp" {
-//    type = "zip"
-//    output_path = "${path.module}/local/webapp.zip"
-//    source_dir = "${path.module}/../build/resources/main/static"
-//}
-//
-//resource "aws_s3_bucket_object" "webapp" {
-//    bucket = aws_s3_bucket.data.bucket
-//    key = "deploy/webapp.zip"
-//    source = data.archive_file.webapp.output_path
-//    storage_class = "REDUCED_REDUNDANCY"
-//    etag = data.archive_file.webapp.output_md5
-//}

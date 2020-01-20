@@ -7,6 +7,7 @@ After=syslog.target
 User=ec2-user
 ## multiple command lines are allowed and the commands are executed one after the other, serially. - tolerates failures
 ExecStartPre=/usr/bin/cp ${appdir}/app.jar ${appdir}/app-running.jar
+#ExecStartPre=aws s3 sync s3://${bucket_name}/deploy ${appdir} --exclude "*" --include "app.*"
 ExecStart=/usr/bin/java $${JAVA_OPTS} -Duser.timezone=UTC -Djava.security.egd=file:/dev/./urandom -jar ${appdir}/app-running.jar
 SuccessExitStatus=143
 SyslogIdentifier=${appid}

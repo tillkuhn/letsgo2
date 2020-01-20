@@ -1,7 +1,6 @@
 ## iam role for ec2 see also https://medium.com/@devopslearning/aws-iam-ec2-instance-role-using-terraform-fa2b21488536
 resource "aws_iam_role" "instance_role" {
     name = "${var.appid}-instance-role"
-
     assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -19,7 +18,6 @@ resource "aws_iam_role" "instance_role" {
 EOF
     tags = map("Name", "${var.appid}-instance-role", "appid", var.appid, "managedBy", "terraform")
 }
-
 
 resource "aws_iam_instance_profile" "instance_profile" {
     name = "${var.appid}-instance-profile"

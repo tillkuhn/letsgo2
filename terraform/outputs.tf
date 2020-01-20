@@ -11,7 +11,6 @@ output "ssh_string" {
     value = "ssh -i mykey.pem ec2-user@${aws_instance.instance.public_ip}"
 }
 
-
 ## convert files first to substitute variables
 resource "local_file" "setenv_sh" {
     content = "# ${var.appid} runtime variables\ninstance_id=${aws_instance.instance.id}\npublic_ip=${aws_instance.instance.public_ip}\n"
