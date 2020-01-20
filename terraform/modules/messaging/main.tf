@@ -1,7 +1,7 @@
 ## main SNS topic to which messages are pushed during 24 bukd
 resource "aws_sns_topic" "events" {
     name = "${var.appid}-events"
-    display_name = "Topic for fanning ${var.appid} events"
+    display_name = "${var.appid} Events"
     tags = merge({"Name": "${var.appid}-events"},var.tags)
     policy = <<POLICY
 {
