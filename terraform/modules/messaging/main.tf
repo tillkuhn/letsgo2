@@ -75,10 +75,18 @@ resource "aws_sns_topic_subscription" "events_subscription" {
 resource "aws_s3_bucket_notification" "docs_bucket_notification" {
     bucket = var.bucket_id
     topic {
+        id = "backend-upload-event"
         topic_arn     = aws_sns_topic.events.arn
         events        = ["s3:ObjectCreated:*"]
         filter_prefix = var.s3_notification_prefix
-        #filter_suffix = "grades.json"
+        filter_suffix = "app.jar"
+    }
+    topic {
+        id = "frontebd-upload-event"
+        topic_arn     = aws_sns_topic.events.arn
+        events        = ["s3:ObjectCreated:*"]
+        filter_prefix = var.s3_notification_prefix
+        filter_suffix = "webapp.tgz"
     }
 }
 
