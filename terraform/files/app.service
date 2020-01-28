@@ -6,15 +6,16 @@ After=syslog.target
 [Service]
 User=ec2-user
 ## multiple command lines are allowed and the commands are executed one after the other, serially. - tolerates failures
-ExecStartPre=/usr/bin/cp ${appdir}/app.jar ${appdir}/app-running.jar
-#ExecStartPre=aws s3 sync s3://${bucket_name}/deploy ${appdir} --exclude "*" --include "app.*"
-ExecStart=/usr/bin/java $${JAVA_OPTS} -Duser.timezone=UTC -Djava.security.egd=file:/dev/./urandom -jar ${appdir}/app-running.jar
+ExecStartPre=/usr/bin/mkdir -p ${appdir}/deploy
+ExecStartPre=/usr/bin/aws s3 sync s3://${bucket_name}/deploy ${appdir}/deploy
+ExecStartPre=-/usr/bin/chown -R ec2-user:ec2-user ${appdir}/deploy
+ExecStart=/usr/bin/java $${JAVA_OPTS} -Duser.timezone=UTC -Djava.security.egd=file:/dev/./urandom -jar ${appdir}/deploy/app.jar
 SuccessExitStatus=143
 SyslogIdentifier=${appid}
 ## we only have systemd 219, this was added in 236 https://unix.stackexchange.com/questions/321709/redirect-systemd-service-logs-to-file
 #StandardOutput=file:${appdir}/logs/stdout.log
 #StandardError=file:${appdir}/logs/stderr.log
-EnvironmentFile=${appdir}/app.service.env
+EnvironmentFile=${appdir}/deploy/app.service.env
 
 [Install]
 WantedBy=multi-user.target

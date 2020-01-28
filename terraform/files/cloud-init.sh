@@ -119,19 +119,19 @@ if [[ "$*" == *backend* ]] || [ "$*" == *all* ]; then
     ## todo check systemctl list-units --full -all |grep -Fq letsgo2
     ## then install on demand
     echo "[INFO] Pulling app.* artifacts from ${bucket_name}"
-    aws s3 sync s3://${bucket_name}/deploy ${appdir} --exclude "*" --include "app.*"
+    aws s3 sync s3://${bucket_name}/deploy ${appdir}/deploy
     ## todo react on changed config
     if [ ! -f /etc/systemd/system/${appid}.service ]; then
         echo "[INFO] Creating symlink /etc/systemd/system/${appid}.service"
-        ln -s ${appdir}/app.service /etc/systemd/system/${appid}.service
+        ln -s ${appdir}/deploy/app.service /etc/systemd/system/${appid}.service
     fi
     ##  ${appdir}/app.jar ${appdir}/app-running.jar
-    if [ -f ${appdir}/app-running.jar ] && ! cmp --silent ${appdir}/app-running.jar ${appdir}/app.jar; then
-        echo "[INFO] app.jar has changed, stopping ${appid} to force restart"
-        systemctl stop ${appid}
-    else
-        echo "[DEBUG] app.jar has not changed (or first run), skip stop"
-    fi
+    #if [ -f ${appdir}/app-running.jar ] && ! cmp --silent ${appdir}/app-running.jar ${appdir}/app.jar; then
+    #    echo "[INFO] app.jar has changed, stopping ${appid} to force restart"
+    #    systemctl stop ${appid}
+    #else
+    #    echo "[DEBUG] app.jar has not changed (or first run), skip stop"
+    #fi
     ###################
     ## file logging
     echo "[DEBUG] Checking /etc/rsyslog.d/25-${appid}.conf"
