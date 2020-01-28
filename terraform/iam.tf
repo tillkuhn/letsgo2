@@ -90,6 +90,24 @@ resource "aws_iam_role_policy" "instance_policy" {
             "dynamodb:PutItem"
         ],
         "Resource": "arn:aws:dynamodb:*:*:table/${var.appid}-*"
+    },
+    {
+      "Sid": "AppMessaging",
+      "Effect": "Allow",
+      "Action": [
+        "sns:Publish",
+        "sqs:SendMessage",
+        "sqs:SendMessageBatch",
+        "sqs:ReceiveMessage",
+        "sqs:GetQueueUrl",
+        "sqs:DeleteMessage",
+        "sqs:DeleteMessageBatch",
+        "sqs:ChangeMessageVisibility",
+        "sqs:ChangeMessageVisibilityBatch"
+      ],
+      "Resource": [
+        "${module.messaging.queue_arn}"
+      ]
     }
   ]
 }
