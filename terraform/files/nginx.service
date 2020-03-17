@@ -1,0 +1,25 @@
+# goes to /usr/lib/systemd/system/nginx.service
+# Systemd unit files distributed with installed RPM packages.
+[Unit]
+Description=The nginx HTTP and reverse proxy server
+After=network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=forking
+PIDFile=/run/nginx.pid
+ExecStartPre=/usr/bin/mkdir -p ${appdir}/deploy
+ExecStartPre=/usr/bin/aws s3 sync s3://${bucket_name}/deploy ${appdir}/deploy
+ExecStartPre=-/usr/bin/chown -R ec2-user:ec2-user ${appdir}/deploy
+ExecStartPre=/usr/bin/rm -rf /usr/share/nginx/html/*
+ExecStartPre=/usr/bin/tar -C /usr/share/nginx/html -xf ${appdir}/deploy/webapp.tgz
+ExecStartPre=/usr/bin/rm -f /run/nginx.pid
+ExecStartPre=/usr/sbin/nginx -t
+
+ExecStart=/usr/sbin/nginx -c ${appdir}/deploy/nginx/conf
+ExecReload=/bin/kill -s HUP $MAINPID
+KillSignal=SIGQUIT
+TimeoutStopSec=5
+KillMode=mixed
+PrivateTmp=true
+
+[Install]
