@@ -123,6 +123,11 @@ spring:
     ## https://www.baeldung.com/spring-security-oauth-cognito
     ## https://stackoverflow.com/questions/48327369/amazon-cognito-oauth2-with-spring-security
     ## https://docs.spring.io/spring-security/site/docs/current/reference/html/oauth2.html
+    ## overwrite via environment with
+    ## SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_COGNITO_ISSUER_URI=${oauth2_issuer_uri}
+    ## SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_COGNITO_CLIENT_SECRET=${oauth2_client_secret}
+    ## SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_COGNITO_CLIENT_ID=${oauth2_client_id}
+    ## SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_COGNITO_REDIRECT_URI_TEMPLATE=https://${domain_name}/login/oauth2/code/cognito
     oauth2:
       client:
         registration:
@@ -134,7 +139,8 @@ spring:
             clientName: kotlinbaer
         provider:
           cognito:
-            issuerUri: https://cognito-idp.aws-region.amazonaws.com/please-overwrite
+            #issuerUri: https://cognito-idp.aws-region.amazonaws.com/please-overwrite
+            issuerUri:
             usernameAttribute: cognito:username
 
   # And with that, we should have Spring and Amazon Cogni

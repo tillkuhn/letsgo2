@@ -20,7 +20,7 @@ class Letsgo2App(private val env: Environment) : InitializingBean {
     private val log = LoggerFactory.getLogger(javaClass)
 
     /**
-     * Initializes letsgo2.
+     * Initializes letsgo2. By default the profile dev is active
      *
      * Spring profiles can be configured with a program argument --spring.profiles.active=your-active-profile
      *
