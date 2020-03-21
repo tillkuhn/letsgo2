@@ -1,7 +1,8 @@
+## goes to /etc/systemd/system/${appid}.service
 [Unit]
 Description=${appid} yet another Spring Boot application
 Before=nginx.target
-After=syslog.target
+After=network.target remote-fs.target nss-lookup.target
 
 [Service]
 User=ec2-user

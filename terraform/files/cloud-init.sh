@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 SCRIPT=$(basename $${BASH_SOURCE[0]})
+# check https://docs.aws.amazon.com/AmazonECS/latest/developerguide/start_task_at_launch.html
+# created systemd service inline
 # chown $(id -u):$(id -g) file instead of ec2-user
 if [ $# -lt 1 ]; then
     set -- help
